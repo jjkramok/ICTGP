@@ -6,12 +6,12 @@
 class DisjointSet
 {
 public:
-	DisjointSet();
+	DisjointSet(int size);
 	~DisjointSet();
-	void Init(int size);
-	void Union(int element1, int element2);
+	int Union(int element1, int element2);
 	int Find(int element);
 	char *ToString();
+	int SetCount;
 
 protected:
 	int *setArray;

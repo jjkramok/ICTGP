@@ -3,6 +3,7 @@
 
 DisjointSet::DisjointSet(int size)
 {
+	calloc(4, 1);
 	setArray = (int*)calloc(size, sizeof(int));
 	
 	setArraySize = size;

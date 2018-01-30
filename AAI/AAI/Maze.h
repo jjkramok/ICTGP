@@ -1,4 +1,7 @@
 #include "DisjointSet.h"
+#include <stdlib.h>
+#include <tuple>
+#include <ctime>
 
 #pragma once
 class Maze
@@ -8,7 +11,14 @@ public:
 	~Maze();
 	void Create(int width, int height);
 
-protected:
-	long *Egdes;
+	int Width;
+	int Height;
+	std::tuple<int, int> *Edges;
+	int EdgesCount;
+	int EdgesCapacity;
+	char *ToString();
+private:
+	void CreateEdges();
+	void RemoveEdges();
 };
 
