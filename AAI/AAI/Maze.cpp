@@ -17,7 +17,7 @@ void Maze::Create(int width, int height)
 	Height = height;
 
 	CreateEdges();
-	RemoveEdges();
+	//RemoveEdges();
 }
 
 void Maze::CreateEdges() {
@@ -75,21 +75,52 @@ void Maze::RemoveEdges() {
 }
 
 char *Maze::ToString() {
-	char *result = (char*)calloc((Width + 3)*(Height + 2) + 1, sizeof(char));
-	for (int i = 0; i < (Width + 3)*(Height + 2) + 1; i++) {
+	int gridWidth = Width * 2 + 2;
+	int gridHeight = Height * 2 + 1;
+
+	int resultLength = gridWidth*gridHeight + 1;
+	char *result = (char*)calloc(resultLength * 2, sizeof(char));
+
+
+	for (int i = 0; i < resultLength; i++) {
 		result[i] = ' ';
 	}
 
 	// Border
-	for (int x = 0; x < Width + 2; x++) {
+	for (int x = 0; x < gridWidth - 1; x++) {
 		result[x] = '#';
-		result[x + (Width + 3)*(Height + 1)] = '#';
+		result[x + gridWidth*(gridHeight - 1)] = '#';
 	}
-	for (int y = 1; y < Height; y++) {
-		result[y * (Width + 3)] = '#';
-		result[y * (Width + 3) + Width + 1] = '#';
-		result[y * (Width + 3) + Width + 2] = '\n';
+	for (int y = 0; y < gridHeight; y++) {
+		result[y * gridWidth] = '#';
+		result[y * gridWidth + gridWidth - 2] = '#';
+		result[y * gridWidth + gridWidth - 1] = '\n';
 	}
 
+	// Static inside edge corner.
+	for (int x = 2; x < gridWidth - 2; x += 2) {
+		for (int y = 2; y < gridHeight - 2; y += 2) {
+			result[x + y*gridWidth] = '#';
+		}
+	}
+
+	// todo draw inner edges
+	for (int i = 0; i < EdgesCount; i++) {
+		int location1 = GetDrawingLocation(std::get<0>(Edges[i]));
+		int location2 = GetDrawingLocation(std::get<1>(Edges[i]));
+
+		int item = (location1 + location2) / 2;
+		result[item] = 'Q';
+	}
+
+
+	result[resultLength - 1] = '\0';
 	return result;
+}
+
+int Maze::GetDrawingLocation(int element)
+{
+	int location = (element % Width * 2 + 1) + ((element / Height) * 2 + 1 + (Width * 2)) + 2;
+	std::cout << location;
+	return location;
 }

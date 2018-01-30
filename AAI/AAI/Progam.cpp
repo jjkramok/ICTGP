@@ -5,9 +5,9 @@ int main() {
 	maze.Create(2, 2);
 
 
-	printf(maze.ToString());
+	std::cout << maze.ToString();
 
-	std::getchar();
+	//std::getchar();
 
 	return 0;
 }

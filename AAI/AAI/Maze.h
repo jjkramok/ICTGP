@@ -20,5 +20,6 @@ public:
 private:
 	void CreateEdges();
 	void RemoveEdges();
+	int GetDrawingLocation(int element);
 };
 
