@@ -17,17 +17,17 @@ void Maze::Create(int width, int height)
 	Height = height;
 
 	CreateEdges();
-	//RemoveEdges();
+	RemoveEdges();
 }
 
 void Maze::CreateEdges() {
 	EdgesCount = ((Width - 1) * Height) + ((Height - 1) * Width);
 	EdgesCapacity = EdgesCount;
 
-	Edges = (std::tuple<int, int>*)calloc(EdgesCount, sizeof(std::tuple_size<std::tuple<int, int>>::value));
+	Edges = (std::tuple<int, int>*)calloc(EdgesCount, 8);
 
 	int index = 0;
-	for (int i = 1; i < Width*Height; i++) {
+	for (int i = 0; i < Width*Height; i++) {
 		// Vertical edges.
 		if (i % Width != 0) {
 			Edges[index] = std::make_tuple(i - 1, i);
@@ -43,11 +43,11 @@ void Maze::CreateEdges() {
 }
 
 void Maze::RemoveEdges() {
-	DisjointSet set(EdgesCount);
+	DisjointSet set(Width * Height);
 
 	std::srand(std::time(nullptr));
 
-	std::tuple<int, int> *fixedEdges = (std::tuple<int, int>*)calloc(EdgesCount, sizeof(std::tuple_size<std::tuple<int, int>>::value));
+	std::tuple<int, int> *fixedEdges = (std::tuple<int, int>*)calloc(EdgesCount, 8);
 
 	int fixedEdgesIndex = 0;
 	while (set.SetCount > 1) {
@@ -71,46 +71,48 @@ void Maze::RemoveEdges() {
 	}
 
 	free(fixedEdges);
-	// delete &set;
 }
 
 char *Maze::ToString() {
+	char wall = '#';
+	char empty = ' ';
+
 	int gridWidth = Width * 2 + 2;
 	int gridHeight = Height * 2 + 1;
 
 	int resultLength = gridWidth*gridHeight + 1;
-	char *result = (char*)calloc(resultLength * 2, sizeof(char));
+	char *result = (char*)calloc(resultLength, sizeof(char));
 
 
 	for (int i = 0; i < resultLength; i++) {
-		result[i] = ' ';
+		result[i] = empty;
 	}
 
 	// Border
 	for (int x = 0; x < gridWidth - 1; x++) {
-		result[x] = '#';
-		result[x + gridWidth*(gridHeight - 1)] = '#';
+		result[x] = wall;
+		result[x + gridWidth*(gridHeight - 1)] = wall;
 	}
 	for (int y = 0; y < gridHeight; y++) {
-		result[y * gridWidth] = '#';
-		result[y * gridWidth + gridWidth - 2] = '#';
+		result[y * gridWidth] = wall;
+		result[y * gridWidth + gridWidth - 2] = wall;
 		result[y * gridWidth + gridWidth - 1] = '\n';
 	}
 
 	// Static inside edge corner.
 	for (int x = 2; x < gridWidth - 2; x += 2) {
 		for (int y = 2; y < gridHeight - 2; y += 2) {
-			result[x + y*gridWidth] = '#';
+			result[x + y*gridWidth] = wall;
 		}
 	}
 
-	// todo draw inner edges
+	// Draw inner edges.
 	for (int i = 0; i < EdgesCount; i++) {
-		int location1 = GetDrawingLocation(std::get<0>(Edges[i]));
-		int location2 = GetDrawingLocation(std::get<1>(Edges[i]));
+		int location1 = GetDrawingLocation(std::get<0>(Edges[i]), gridWidth);
+		int location2 = GetDrawingLocation(std::get<1>(Edges[i]), gridWidth);
 
 		int item = (location1 + location2) / 2;
-		result[item] = 'Q';
+		result[item] = wall;
 	}
 
 
@@ -118,9 +120,10 @@ char *Maze::ToString() {
 	return result;
 }
 
-int Maze::GetDrawingLocation(int element)
+int Maze::GetDrawingLocation(int element, int gridWidth)
 {
-	int location = (element % Width * 2 + 1) + ((element / Height) * 2 + 1 + (Width * 2)) + 2;
-	std::cout << location;
-	return location;
+	int heightOffset = ((element / Width) * 2 + 1) * gridWidth;
+	int widthOffset = ((element % Width) * 2 + 1);
+
+	return heightOffset + widthOffset;
 }

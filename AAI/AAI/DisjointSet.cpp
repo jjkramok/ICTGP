@@ -60,9 +60,12 @@ int DisjointSet::Find(int element)
 	for (; i >= 0; i--) {
 		setArray[elementsToChange[i]] = element;
 	}
-
-	free(elementsToChange);
-
+	try {
+		free(elementsToChange);
+	}
+	catch(std::exception *e){
+		std::cout << e;
+	}
 	return element;
 }
 
