@@ -74,7 +74,9 @@ void Maze::RemoveEdges() {
 }
 
 char *Maze::ToString() {
-	char wall = '#';
+	char outerWall = '1';
+	char staticInnerwall = '2';
+	char edgeWall = '3';
 	char empty = ' ';
 
 	int gridWidth = Width * 2 + 2;
@@ -90,19 +92,19 @@ char *Maze::ToString() {
 
 	// Border
 	for (int x = 0; x < gridWidth - 1; x++) {
-		result[x] = wall;
-		result[x + gridWidth*(gridHeight - 1)] = wall;
+		result[x] = outerWall;
+		result[x + gridWidth*(gridHeight - 1)] = outerWall;
 	}
 	for (int y = 0; y < gridHeight; y++) {
-		result[y * gridWidth] = wall;
-		result[y * gridWidth + gridWidth - 2] = wall;
+		result[y * gridWidth] = outerWall;
+		result[y * gridWidth + gridWidth - 2] = outerWall;
 		result[y * gridWidth + gridWidth - 1] = '\n';
 	}
 
 	// Static inside edge corner.
 	for (int x = 2; x < gridWidth - 2; x += 2) {
 		for (int y = 2; y < gridHeight - 2; y += 2) {
-			result[x + y*gridWidth] = wall;
+			result[x + y*gridWidth] = staticInnerwall;
 		}
 	}
 
@@ -112,7 +114,7 @@ char *Maze::ToString() {
 		int location2 = GetDrawingLocation(std::get<1>(Edges[i]), gridWidth);
 
 		int item = (location1 + location2) / 2;
-		result[item] = wall;
+		result[item] = edgeWall;
 	}
 
 

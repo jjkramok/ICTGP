@@ -2,7 +2,7 @@
 
 int main() {
 	Maze maze;
-	maze.Create(80, 20);
+	maze.Create(5, 5);
 
 
 	std::cout << maze.ToString();
