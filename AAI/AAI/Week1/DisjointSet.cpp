@@ -25,7 +25,7 @@ int DisjointSet::Union(int element1, int element2)
 
 	if (parent1 == parent2)
 	{
-		return 0;
+		return 1;
 	}
 
 	if (setArray[parent1] > setArray[parent2])
@@ -39,7 +39,7 @@ int DisjointSet::Union(int element1, int element2)
 		setArray[parent1] = parent2;
 	}
 	setCount--;
-	return 1;
+	return 0;
 }
 
 int DisjointSet::Find(int element)

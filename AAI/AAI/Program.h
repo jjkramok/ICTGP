@@ -8,4 +8,4 @@
 #pragma once
 
 // Set unittest to 1 for running tests, 0 for running the program
-#define UnitTest 0
+#define UnitTest 1

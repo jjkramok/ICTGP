@@ -51,7 +51,7 @@ void Maze::RemoveEdges() {
 	while (set.setCount > 1) {
 		int randomIndex = std::rand() % EdgesCount;
 
-		if (!set.Union(std::get<0>(Edges[randomIndex]), std::get<1>(Edges[randomIndex]))) {
+		if (set.Union(std::get<0>(Edges[randomIndex]), std::get<1>(Edges[randomIndex]))) {
 			// Union did not happen.
 			// Add edge to fixed edges array.
 			fixedEdges[fixedEdgesIndex] = Edges[randomIndex];
