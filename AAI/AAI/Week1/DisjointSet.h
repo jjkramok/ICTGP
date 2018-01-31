@@ -11,9 +11,8 @@ public:
 	int Union(int element1, int element2);
 	int Find(int element);
 	char *ToString();
-	int SetCount;
-
-protected:
+	int setCount;
+	
 	int *setArray;
 	int setArraySize;
 };

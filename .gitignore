@@ -38,4 +38,5 @@ AAI/AAI/Debug/*
 AAI/AAI/Release/*
 *.sln
 *.vcxproj
-*.vcxproj.filters
+*.vcxproj.*
+AAI/AAI/lib/*.hpp

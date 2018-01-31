@@ -2,8 +2,8 @@
 #include <iostream>
 #include <cstdio>
 
-#include "Maze.h"
-#include "DisjointSet.h"
+#include "Week1/Maze.h"
+#include "Week1/DisjointSet.h"
 
 #pragma once
 

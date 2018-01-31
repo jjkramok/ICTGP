@@ -112,16 +112,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DisjointSet.cpp">
+    <ClCompile Include="Test\Base.cpp" />
+    <ClCompile Include="Test\DisjointSetTest.cpp" />
+    <ClCompile Include="Test\MazeTest.cpp" />
+    <ClCompile Include="Week1\DisjointSet.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="Maze.cpp" />
+    <ClCompile Include="Week1\Maze.cpp" />
     <ClCompile Include="Progam.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DisjointSet.h" />
-    <ClInclude Include="Maze.h" />
+    <ClInclude Include="lib\catch.hpp" />
+    <ClInclude Include="Week1\DisjointSet.h" />
+    <ClInclude Include="Week1\Maze.h" />
     <ClInclude Include="Program.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="lib\info.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

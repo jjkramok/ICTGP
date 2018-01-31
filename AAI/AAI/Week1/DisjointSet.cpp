@@ -6,7 +6,7 @@ DisjointSet::DisjointSet(int size)
 	setArray = (int*)calloc(size, sizeof(int));
 	
 	setArraySize = size;
-	SetCount = size;
+	setCount = size;
 
 	for (int i = 0; i < setArraySize; i++) {
 		setArray[i] = -1;
@@ -38,7 +38,7 @@ int DisjointSet::Union(int element1, int element2)
 		setArray[parent2] += setArray[parent1];
 		setArray[parent1] = parent2;
 	}
-	SetCount--;
+	setCount--;
 	return 1;
 }
 
@@ -72,7 +72,7 @@ int DisjointSet::Find(int element)
 char * DisjointSet::ToString()
 {
 	// Maybe use std::string
-	char *result = (char*)calloc(setArraySize * 5 + 1, sizeof(char));
+	char *result = (char*)calloc(setArraySize * 5, sizeof(char));
 
 	for (int i = 0; i < setArraySize; i++) {
 		sprintf(&result[i * 5], "%d", setArray[i]);
@@ -83,7 +83,7 @@ char * DisjointSet::ToString()
 			}
 		}
 	}
-	result[setArraySize * 5 + 1] = '\0';
+	result[setArraySize * 5] = '\0';
 
 	return result;
 }

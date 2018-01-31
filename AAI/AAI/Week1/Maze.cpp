@@ -48,7 +48,7 @@ void Maze::RemoveEdges() {
 	std::tuple<int, int> *fixedEdges = (std::tuple<int, int>*)calloc(EdgesCount, 8);
 
 	int fixedEdgesIndex = 0;
-	while (set.SetCount > 1) {
+	while (set.setCount > 1) {
 		int randomIndex = std::rand() % EdgesCount;
 
 		if (!set.Union(std::get<0>(Edges[randomIndex]), std::get<1>(Edges[randomIndex]))) {
