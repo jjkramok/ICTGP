@@ -12,4 +12,6 @@
 #include "Maze.h"
 #include "DisjointSet.h"
 
+int week1();
+
 #endif //TIM_PROGRAM_H

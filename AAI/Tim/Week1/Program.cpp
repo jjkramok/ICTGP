@@ -4,7 +4,7 @@
 
 #include "Program.h"
 
-int main() {
+int week1() {
     Maze maze = Maze(5, 5);
 
     std::cout << "Hello World";
