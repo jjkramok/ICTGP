@@ -1,6 +1,6 @@
 #include "Program.h"
 
-#ifndef _DEBUG
+#if UnitTest == 0 
 
 int main() {
 	// todo: create instance pointer instead of on stack.
@@ -18,4 +18,4 @@ int main() {
 	return 0;
 }
 
-#endif // !_DEBUG
+#endif

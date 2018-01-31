@@ -1,3 +1,7 @@
+#include "../Program.h"
+
+#if UnitTest == 1
+
 #include "../lib/catch.hpp"
 #include "../Week1/Maze.h"
 
@@ -17,3 +21,5 @@ TEST_CASE("Maze Create EdgesCountCorrect") {
 	REQUIRE(maze.EdgesCount == 1);
 	REQUIRE(maze.EdgesCapacity == 4);
 }
+
+#endif

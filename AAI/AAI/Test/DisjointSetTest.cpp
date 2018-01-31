@@ -1,3 +1,7 @@
+#include "../Program.h"
+
+#if UnitTest == 1
+
 #include "../lib/catch.hpp"
 #include "../Week1/DisjointSet.h"
 
@@ -43,3 +47,5 @@ TEST_CASE("DisjointSet Find") {
 	REQUIRE(set.Find(2) == 2);
 	REQUIRE(set.Find(3) == 3);
 }
+
+#endif
