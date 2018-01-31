@@ -1,21 +1,18 @@
 #include "Maze.h"
 
-Maze::Maze()
+Maze::Maze(int width, int height)
 {
-
+	Width = width;
+	Height = height;
 }
-
 
 Maze::~Maze()
 {
 	free(Edges);
 }
 
-void Maze::Create(int width, int height)
+void Maze::Create()
 {
-	Width = width;
-	Height = height;
-
 	CreateEdges();
 	RemoveEdges();
 }
@@ -43,6 +40,7 @@ void Maze::CreateEdges() {
 }
 
 void Maze::RemoveEdges() {
+	// todo: create instance pointer instead of on stack.
 	DisjointSet set(Width * Height);
 
 	std::srand(std::time(nullptr));
@@ -69,6 +67,9 @@ void Maze::RemoveEdges() {
 		Edges[EdgesCount] = fixedEdges[i];
 		EdgesCount++;
 	}
+
+	// todo: realloc the edges array to reduce size.
+	// todo: check if disjointset needs to be freed here.
 
 	free(fixedEdges);
 }
