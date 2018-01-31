@@ -78,6 +78,9 @@ char *Maze::ToString() {
 	char staticInnerwall = '2';
 	char edgeWall = '3';
 	char empty = ' ';
+	char entrance = '4';
+	char exit = '5';
+
 
 	int gridWidth = Width * 2 + 2;
 	int gridHeight = Height * 2 + 1;
@@ -117,7 +120,8 @@ char *Maze::ToString() {
 		result[item] = edgeWall;
 	}
 
-
+	result[1] = entrance;
+	result[resultLength - 4] = exit;
 	result[resultLength - 1] = '\0';
 	return result;
 }
