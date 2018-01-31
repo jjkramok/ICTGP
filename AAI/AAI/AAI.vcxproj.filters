@@ -24,22 +24,37 @@
     <ClCompile Include="Progam.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DisjointSet.cpp">
+    <ClCompile Include="Week1\Maze.cpp">
       <Filter>Source Files\Week1</Filter>
     </ClCompile>
-    <ClCompile Include="Maze.cpp">
+    <ClCompile Include="Week1\DisjointSet.cpp">
       <Filter>Source Files\Week1</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\MazeTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\DisjointSetTest.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DisjointSet.h">
+    <ClInclude Include="Week1\DisjointSet.h">
       <Filter>Header Files\Week1</Filter>
     </ClInclude>
-    <ClInclude Include="Maze.h">
+    <ClInclude Include="Week1\Maze.h">
       <Filter>Header Files\Week1</Filter>
     </ClInclude>
+    <ClInclude Include="lib\catch.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="lib\info.txt" />
   </ItemGroup>
 </Project>

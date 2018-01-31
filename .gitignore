@@ -36,3 +36,7 @@
 AAI/AAI/.vs/*
 AAI/AAI/Debug/*
 AAI/AAI/Release/*
+*.sln
+*.vcxproj
+*.vcxproj.*
+AAI/AAI/lib/*.hpp

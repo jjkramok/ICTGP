@@ -1,21 +1,18 @@
 #include "Maze.h"
 
-Maze::Maze()
+Maze::Maze(int width, int height)
 {
-
+	Width = width;
+	Height = height;
 }
-
 
 Maze::~Maze()
 {
 	free(Edges);
 }
 
-void Maze::Create(int width, int height)
+void Maze::Create()
 {
-	Width = width;
-	Height = height;
-
 	CreateEdges();
 	RemoveEdges();
 }
@@ -43,6 +40,7 @@ void Maze::CreateEdges() {
 }
 
 void Maze::RemoveEdges() {
+	// todo: create instance pointer instead of on stack.
 	DisjointSet set(Width * Height);
 
 	std::srand(std::time(nullptr));
@@ -50,10 +48,10 @@ void Maze::RemoveEdges() {
 	std::tuple<int, int> *fixedEdges = (std::tuple<int, int>*)calloc(EdgesCount, 8);
 
 	int fixedEdgesIndex = 0;
-	while (set.SetCount > 1) {
+	while (set.setCount > 1) {
 		int randomIndex = std::rand() % EdgesCount;
 
-		if (!set.Union(std::get<0>(Edges[randomIndex]), std::get<1>(Edges[randomIndex]))) {
+		if (set.Union(std::get<0>(Edges[randomIndex]), std::get<1>(Edges[randomIndex]))) {
 			// Union did not happen.
 			// Add edge to fixed edges array.
 			fixedEdges[fixedEdgesIndex] = Edges[randomIndex];
@@ -69,6 +67,9 @@ void Maze::RemoveEdges() {
 		Edges[EdgesCount] = fixedEdges[i];
 		EdgesCount++;
 	}
+
+	// todo: realloc the edges array to reduce size.
+	// todo: check if disjointset needs to be freed here.
 
 	free(fixedEdges);
 }

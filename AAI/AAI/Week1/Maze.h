@@ -7,9 +7,9 @@
 class Maze
 {
 public:
-	Maze();
+	Maze(int width, int height);
 	~Maze();
-	void Create(int width, int height);
+	void Create();
 
 	int Width;
 	int Height;
