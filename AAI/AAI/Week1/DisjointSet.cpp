@@ -4,7 +4,8 @@
 DisjointSet::DisjointSet(int size)
 {
 	setArray = (int*)calloc(size, sizeof(int));
-	
+	setArrayOptimizer = (int*)calloc(size, sizeof(int));
+
 	setArraySize = size;
 	setCount = size;
 
@@ -16,6 +17,7 @@ DisjointSet::DisjointSet(int size)
 DisjointSet::~DisjointSet()
 {
 	free(this->setArray);
+	free(this->setArrayOptimizer);
 }
 
 int DisjointSet::Union(int element1, int element2)
@@ -39,18 +41,17 @@ int DisjointSet::Union(int element1, int element2)
 		setArray[parent1] = parent2;
 	}
 	setCount--;
-	return 0;
+	return 0;	
 }
 
 int DisjointSet::Find(int element)
 {
-	int *elementsToChange = (int *)calloc(setArraySize, sizeof(int));
 	int i = -1;
 	while (setArray[element] >= 0)
 	{
 		// Keep track of elements that need to be changed to reduce the tree height.
 		i++;
-		elementsToChange[i] = element;
+		setArrayOptimizer[i] = element;
 
 		// Find the actual parent.
 		element = setArray[element];
@@ -58,14 +59,9 @@ int DisjointSet::Find(int element)
 
 	// Reduce height of all elements in the specific tree that are encounterd.
 	for (; i >= 0; i--) {
-		setArray[elementsToChange[i]] = element;
+		setArray[setArrayOptimizer[i]] = element;
 	}
-	try {
-		free(elementsToChange);
-	}
-	catch(std::exception *e){
-		std::cout << e;
-	}
+	
 	return element;
 }
 

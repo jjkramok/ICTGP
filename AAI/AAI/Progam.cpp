@@ -3,17 +3,20 @@
 #if UnitTest == 0 
 
 int main() {
-	// todo: create instance pointer instead of on stack.
 	system("cls");
+	clock_t t1, t2;
+	t1 = clock();
 
-	Maze* maze = new Maze(80, 20);
-	maze->Create();
+	Maze maze(1000,1000);
+	maze.Create();
+	// maze->ToString();
 
+	t2 = clock();
+	float diff = ((float)t2 - (float)t1) / CLOCKS_PER_SEC;
+	std::cout << diff << std::endl;
+	//maze->Solve(0);
 
-	std::cout << maze->ToString();
-	maze->Solve(1);
-	
-	delete maze;
+	// delete maze;
 	return 0;
 }
 
