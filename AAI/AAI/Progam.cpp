@@ -4,17 +4,16 @@
 
 int main() {
 	// todo: create instance pointer instead of on stack.
+	system("cls");
 
-	Maze maze(5, 5);
-	maze.Create();
+	Maze* maze = new Maze(80, 20);
+	maze->Create();
 
 
-	std::cout << maze.ToString();
-
-	std::getchar();
-
-	// todo: free maze if not on stack.
-
+	std::cout << maze->ToString();
+	maze->Solve(1);
+	
+	delete maze;
 	return 0;
 }
 
