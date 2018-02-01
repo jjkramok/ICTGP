@@ -8,6 +8,7 @@
 #include <tuple>
 #include "DisjointSet.h"
 #include <ctime>
+#include <iostream>
 
 class Maze {
 public:
@@ -18,7 +19,6 @@ public:
     std::tuple<int, int> *edges;
     int amountOfEdges;
     char *ToString();
-
 };
 
 

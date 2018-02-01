@@ -63,6 +63,39 @@ Maze::~Maze() {
     free(this->edges);
 }
 
-char* Maze::ToString() {
+char *Maze::ToString() {
+    char edge = '1';
+    char empty = ' ';
+    int boardWidth = (width * 2 + 2); // or amount of columns
+    int boardHeight = (height * 2 + 1); // or amount of rows
+    int boardSize = boardWidth * boardHeight; // +1 for newline space
 
+    // Initialize an empty string representation of the maze
+    char* maze = (char*) malloc((boardSize + 1) * sizeof(char)); // + 1 string terminator
+
+    for (int i = 0; i < boardSize; i++) {
+        maze[i] = empty;
+    }
+
+    // Vertical borders and newline chars
+    for (int x = 0; x < boardHeight; x++) {
+        maze[x * boardWidth] = edge;
+        maze[x * boardWidth + boardWidth - 2] = edge;
+        maze[x * boardWidth + boardWidth - 1] = '\n';
+    }
+
+    // Horizontal borders
+    for (int y = 1; y < boardWidth - 1; y++) {
+        maze[y] = edge;
+        maze[y + boardWidth * (boardHeight - 1)] = edge;
+    }
+
+    // TODO draw inside edges and draw entrance/exit
+    for (int x = 0; x < boardWidth - 1; x++) {
+        for (int y = 0; y < boardHeight; y++) {
+            // do stuff
+        }
+    }
+
+    return maze;
 }
