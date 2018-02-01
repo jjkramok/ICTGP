@@ -40,3 +40,8 @@ AAI/AAI/Release/*
 *.vcxproj
 *.vcxproj.*
 AAI/AAI/lib/*.hpp
+
+# vs sjoerd 
+cpp/sjoerd/cpp/debug/*
+cpp/sjoerd/cpp/release/*
+cpp/sjoerd/cpp/.vs/*
