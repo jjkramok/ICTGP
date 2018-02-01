@@ -4,19 +4,20 @@
 
 #include "Maze.h"
 
-Maze::Maze(int height, int width) {
+Maze::Maze(int Height, int Width) {
+    height = Height;
+    width = Width;
+
     if (height < 5)
         height = 5;
     if (width < 5)
         width = 5;
-    this->height = height;
-    this->width = width;
-    this->amountOfEdges = (this->height - 1) * this->width + (this->width - 1) * this->height;
-    this->edges = (std::tuple<int, int>*) calloc(amountOfEdges, sizeof(std::tuple<int, int>));
+
+    amountOfEdges = (height - 1) * width + (width - 1) * height;
+    edges = (std::tuple<int, int>*) calloc(amountOfEdges, sizeof(std::tuple<int, int>));
 
     int topOfEdges = 0;
-    // loop over Maze
-    for (int i = 0; i < this->width * this->height; i++) {
+    for (int i = 0; i < width * height; i++) {
         // Add right and lower edge to edges if applicable
         // Check if vertical edge is inside the maze and add it to edges.
         if (i % width != width - 1) {
@@ -24,15 +25,17 @@ Maze::Maze(int height, int width) {
             topOfEdges++;
         }
         // Check if horizontal edge is inside the maze and add it to edges.
-        if (i / height != 4) {
-            edges[topOfEdges] = std::make_tuple(i, i + 5);
+        if (i / width < height - 1) {
+            edges[topOfEdges] = std::make_tuple(i, i + width);
             topOfEdges++;
         }
     }
 
     DisjointSet mazeState = DisjointSet(height * width);
 
-    std::srand(std::time(nullptr));
+    int seed = std::time(nullptr);
+    std::srand(seed);
+
     std::tuple<int, int> *checkedEdges = (std::tuple<int, int>*) calloc(amountOfEdges, sizeof(std::tuple<int, int>));
 
     int topOfCheckEdges = 0;
@@ -56,22 +59,24 @@ Maze::Maze(int height, int width) {
         amountOfEdges++;
     }
 
+    // delete temporary set
     free(checkedEdges);
 }
 
 Maze::~Maze() {
-    free(this->edges);
+    free(edges);
 }
 
 char *Maze::ToString() {
-    char edge = '1';
+    char edge = 223;
     char empty = ' ';
-    int boardWidth = (width * 2 + 2); // or amount of columns
-    int boardHeight = (height * 2 + 1); // or amount of rows
-    int boardSize = boardWidth * boardHeight; // +1 for newline space
+    char corner = 223;
+    int boardWidth = width * 2 + 2; // or amount of columns
+    int boardHeight = height * 2 + 1; // or amount of rows
+    int boardSize = boardWidth * boardHeight + 1; // +1 for newline space
 
     // Initialize an empty string representation of the maze
-    char* maze = (char*) malloc((boardSize + 1) * sizeof(char)); // + 1 string terminator
+    char *maze = (char*) malloc(boardSize * sizeof(char)); // + 1 string terminator
 
     for (int i = 0; i < boardSize; i++) {
         maze[i] = empty;
@@ -90,12 +95,29 @@ char *Maze::ToString() {
         maze[y + boardWidth * (boardHeight - 1)] = edge;
     }
 
-    // TODO draw inside edges and draw entrance/exit
-    for (int x = 0; x < boardWidth - 1; x++) {
-        for (int y = 0; y < boardHeight; y++) {
-            // do stuff
+    // In-maze corners
+    for (int x = 2; x < boardWidth - 2; x += 2) {
+        for (int y = 2; y < boardHeight - 2; y += 2) {
+            maze[x + y * boardWidth] = corner;
         }
     }
 
+    // Draw non-erased edges
+    for (int i = 0; i < amountOfEdges; i++) {
+        int tile1 = GetDrawingLocation(std::get<0>(edges[i]), boardWidth);
+        int tile2 = GetDrawingLocation(std::get<1>(edges[i]), boardWidth);
+        maze[(tile1 + tile2) / 2] = edge;
+    }
+
+    maze[1] = empty; // Entrance / Exit
+    maze[boardSize - 4] = empty; // Entrance / Exit
+    maze[boardSize - 1] = '\0'; // Should already be null, but just in case
     return maze;
+}
+
+int Maze::GetDrawingLocation(int element, int boardWidth) {
+    int heightOffset = ((element / width) * 2 + 1) * boardWidth;
+    int widthOffset = ((element % width) * 2 + 1);
+
+    return heightOffset + widthOffset;
 }

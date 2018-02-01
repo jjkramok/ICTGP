@@ -19,6 +19,9 @@ public:
     std::tuple<int, int> *edges;
     int amountOfEdges;
     char *ToString();
+
+private:
+    int GetDrawingLocation(int element, int gridWidth);
 };
 
 
