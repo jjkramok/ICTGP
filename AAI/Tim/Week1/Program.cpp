@@ -7,7 +7,7 @@
 int week1() {
     Maze maze = Maze(5, 5);
 
-    std::cout << "Hello World";
+    std::cout << maze.ToString();
 
     return 0;
 }

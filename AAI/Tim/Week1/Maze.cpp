@@ -17,7 +17,7 @@ Maze::Maze(int height, int width) {
     int topOfEdges = 0;
     // loop over Maze
     for (int i = 0; i < this->width * this->height; i++) {
-        // Add left and lower edge to edges if applicable
+        // Add right and lower edge to edges if applicable
         // Check if vertical edge is inside the maze and add it to edges.
         if (i % width != width - 1) {
             edges[topOfEdges] = std::make_tuple(i, i + 1);
