@@ -37,20 +37,23 @@ void Maze::CreateEdges() {
 			index++;
 		}
 	}
+	std::cout << "created edges.\n";
 }
 
 void Maze::RemoveEdges() {
-	DisjointSet* set = new DisjointSet(Width * Height);
+	DisjointSet set(Width * Height);
 
-	std::srand(std::time(nullptr));
+	int seed = std::time(nullptr);
+	// std::cout << seed << std::endl;
+	std::srand(seed);
 
 	std::tuple<int, int> *fixedEdges = (std::tuple<int, int>*)calloc(EdgesCount, sizeof(int) * 2);
 
 	int fixedEdgesIndex = 0;
-	while (set->setCount > 1) {
+	while (set.setCount > 1) {
 		int randomIndex = std::rand() % EdgesCount;
 
-		if (set->Union(std::get<0>(Edges[randomIndex]), std::get<1>(Edges[randomIndex]))) {
+		if (set.Union(std::get<0>(Edges[randomIndex]), std::get<1>(Edges[randomIndex]))) {
 			// Union did not happen.
 			// Add edge to fixed edges array.
 			fixedEdges[fixedEdgesIndex] = Edges[randomIndex];
@@ -68,9 +71,9 @@ void Maze::RemoveEdges() {
 	}
 
 	// Free memory.
-	Edges = (std::tuple<int, int>*)realloc(Edges, EdgesCount);
+	// Edges = (std::tuple<int, int>*)realloc(Edges, EdgesCount);
 	free(fixedEdges);
-	delete set;
+	//delete set;
 }
 
 char *Maze::ToString() {
@@ -128,14 +131,9 @@ char *Maze::ToString() {
 
 void Maze::Solve(int delay)
 {
-	const char up = 1;
-	const char right = 2;
-	const char left = 0;
-	const char down = 3;
-
 	int location = 0;
 	int previousLocation = 0;
-	char direction = right;
+	char direction = 2;
 	while (location != Height * Width - 1) {
 		PrintAtLocation(previousLocation, ' ');
 		previousLocation = location;
