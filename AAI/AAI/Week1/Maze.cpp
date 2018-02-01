@@ -67,20 +67,19 @@ void Maze::RemoveEdges() {
 		EdgesCount++;
 	}
 
-	// todo: realloc the edges array to reduce size.
-	// todo: check if disjointset needs to be freed here.
-
+	// Free memory.
+	Edges = (std::tuple<int, int>*)realloc(Edges, EdgesCount);
 	free(fixedEdges);
 	delete set;
 }
 
 char *Maze::ToString() {
-	char outerWall = '1';
-	char staticInnerwall = '2';
-	char edgeWall = '3';
+	char outerWall = 219;
+	char staticInnerwall = 219;
+	char edgeWall = 219;
 	char empty = ' ';
-	char entrance = '4';
-	char exit = '5';
+	char entrance = ' ';
+	char exit = ' ';
 
 
 	int gridWidth = Width * 2 + 2;

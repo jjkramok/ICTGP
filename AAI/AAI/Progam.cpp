@@ -3,7 +3,6 @@
 #if UnitTest == 0 
 
 int main() {
-	// todo: create instance pointer instead of on stack.
 	system("cls");
 
 	Maze* maze = new Maze(80, 20);
@@ -11,7 +10,7 @@ int main() {
 
 
 	std::cout << maze->ToString();
-	maze->Solve(1);
+	maze->Solve(10);
 	
 	delete maze;
 	return 0;
