@@ -7,14 +7,14 @@ int main() {
 	clock_t t1, t2;
 	t1 = clock();
 
-	Maze maze(1000,1000);
-	maze.Create();
-	// maze->ToString();
+	Maze* maze = new Maze(80, 20);
+	maze->Create();
+	std::cout << maze->ToString();
+	maze->Solve(50);
 
 	t2 = clock();
 	float diff = ((float)t2 - (float)t1) / CLOCKS_PER_SEC;
 	std::cout << diff << std::endl;
-	//maze->Solve(0);
 
 	// delete maze;
 	return 0;
