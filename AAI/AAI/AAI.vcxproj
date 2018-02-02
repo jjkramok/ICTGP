@@ -112,6 +112,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Week1\NQueens.cpp" />
     <ClCompile Include="Test\Base.cpp" />
     <ClCompile Include="Test\DisjointSetTest.cpp" />
     <ClCompile Include="Test\MazeTest.cpp" />
@@ -123,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\catch.hpp" />
+    <ClInclude Include="Week1\NQueens.h" />
     <ClInclude Include="Week1\DisjointSet.h" />
     <ClInclude Include="Week1\Maze.h" />
     <ClInclude Include="Program.h" />

@@ -9,12 +9,17 @@ var camera = new THREE.PerspectiveCamera(
 	1000); // far — Camera frustum far plane. 
 
 // Create renderer
-var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+var renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-var geometry = new THREE.BoxGeometry(1, 1, 1);
-var material = new THREE.MeshNormalMaterial();
+var geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
+// var material = new THREE.MeshNormalMaterial();
+
+var texture = new THREE.TextureLoader().load( '/ModelsAndTextures/Yellobrk.bmp' );
+var geometry = new THREE.BoxBufferGeometry( 200, 200, 200 );
+var material = new THREE.MeshBasicMaterial( { map: texture } );
+
 var cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 
