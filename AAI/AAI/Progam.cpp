@@ -2,8 +2,29 @@
 
 #if UnitTest == 0 
 
-int main() {
-	queen();
+#define WRONGINPUT "use args: \nq\tnqueens\nm\tmaze"
+
+int main(int argc, char **argv) {
+
+	std::cout << argv[1];
+
+	if (argc <= 1) {
+		std::cout << WRONGINPUT;
+		return 0;
+	}
+
+	switch (argv[1][0])
+	{
+	case 'q':
+		queen();
+		break;
+	case 'm':
+		maze();
+		break;
+	default:
+		std::cout << WRONGINPUT;
+		break;
+	}
 	return 0;
 }
 
@@ -27,29 +48,15 @@ void queen() {
 	clock_t t1, t2;
 	t1 = clock();
 
-	const int size = 15;
+	const int size = 12;
 	NQueens *n = new NQueens(size);
-	int* solution = n->Solve();
-	
+	n->Solve();
+
 	t2 = clock();
 	float diff = ((float)t2 - (float)t1) / CLOCKS_PER_SEC;
-	std::cout << diff << std::endl;
+	std::cout << "time: " << diff << std::endl;
+	std::cout << "total:" << n->solutionsFound << std::endl;
 
-
-	//nice string
-	char* str = (char*)calloc(size*(size + 1) + 1, sizeof(char));
-	for (int i = 0; i < size*(size + 1); i++) {
-		if (i % (size + 1) == size) {
-			str[i] = '\n';
-		}
-		else {
-			str[i] = '.';
-		}
-	}
-	for (int i = 0; i < size; i++) {
-		str[solution[i] + solution[i] / size] = 'Q';
-	}
-	std::cout << str;
 }
 
 #endif
