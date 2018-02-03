@@ -33,12 +33,15 @@ void maze() {
 	clock_t t1, t2;
 	t1 = clock();
 
-	Maze* maze = new Maze(80, 20);
+	Maze* maze = new Maze(20, 20);
 	maze->Create();
+	
+
 	std::cout << maze->ToString();
 	maze->Solve(0);
 
 	t2 = clock();
+	
 	float diff = ((float)t2 - (float)t1) / CLOCKS_PER_SEC;
 	std::cout << diff << std::endl;
 	delete maze;
@@ -48,13 +51,14 @@ void queen() {
 	clock_t t1, t2;
 	t1 = clock();
 
-	const int size = 8;
+	const int size = 10;
 	NQueens *n = new NQueens(size);
 	n->Solve();
 
 	t2 = clock();
 	double diff = ((double)t2 - (double)t1) / CLOCKS_PER_SEC;
-	// std::cout << "time: " << diff << std::endl;
-	std::cout << n->solutionsFound << '\n';
+	std::cout << "nqueens: " << size << 'x' << size << '\n';
+	std::cout << "time: " << diff << "s \n";
+	std::cout << "solutions: " << n->solutionsFound << '\n';
 	delete n;
 }

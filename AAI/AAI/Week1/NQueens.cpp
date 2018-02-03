@@ -5,7 +5,7 @@
 NQueens::NQueens(int size)
 {
 	boardSize = size;
-	solutionsFound = 0;
+	
 }
 
 
@@ -14,6 +14,7 @@ NQueens::~NQueens()
 }
 
 void NQueens::Solve() {
+	solutionsFound = 0;
 	if (boardSize < 4) {
 		return;
 	}
@@ -25,6 +26,7 @@ void NQueens::Solve() {
 	BackTrack2();
 }
 
+// old solution
 void NQueens::BackTrack(int *start, int attempt, int size) {
 	start[size] = attempt;
 	size++;
@@ -41,6 +43,7 @@ void NQueens::BackTrack(int *start, int attempt, int size) {
 
 void NQueens::BackTrack2() {
 	int *solution = (int*)calloc(boardSize, sizeof(int));
+
 	for (int i = 0; i < boardSize; i++) {
 		solution[0] = i;
 		BackTrack2(0, solution);
@@ -55,6 +58,7 @@ void NQueens::BackTrack2(int row, int *solution) {
 			std::cout << "solution: " << solutionsFound << '\n';
 		//Print(solution);
 	}
+
 	row++;
 	for (int i = 0; i < boardSize; i++) {
 		solution[row] = i + (row*boardSize);
