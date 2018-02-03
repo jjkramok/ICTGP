@@ -1,13 +1,10 @@
+#define CATCH_CONFIG_RUNNER
+
 #include "Program.h"
 
-#if UnitTest == 0 
-
-#define WRONGINPUT "use args: \nq\tnqueens\nm\tmaze"
+#define WRONGINPUT "use args: \nq\tnqueens\nm\tmaze\nu\tUnittest\n"
 
 int main(int argc, char **argv) {
-
-	std::cout << argv[1];
-
 	if (argc <= 1) {
 		std::cout << WRONGINPUT;
 		return 0;
@@ -20,6 +17,9 @@ int main(int argc, char **argv) {
 		break;
 	case 'm':
 		maze();
+		break;
+	case 'u':
+		return Catch::Session().run();
 		break;
 	default:
 		std::cout << WRONGINPUT;
@@ -36,7 +36,7 @@ void maze() {
 	Maze* maze = new Maze(80, 20);
 	maze->Create();
 	std::cout << maze->ToString();
-	maze->Solve(50);
+	maze->Solve(0);
 
 	t2 = clock();
 	float diff = ((float)t2 - (float)t1) / CLOCKS_PER_SEC;
@@ -48,15 +48,13 @@ void queen() {
 	clock_t t1, t2;
 	t1 = clock();
 
-	const int size = 12;
+	const int size = 8;
 	NQueens *n = new NQueens(size);
 	n->Solve();
 
 	t2 = clock();
-	float diff = ((float)t2 - (float)t1) / CLOCKS_PER_SEC;
-	std::cout << "time: " << diff << std::endl;
-	std::cout << "total:" << n->solutionsFound << std::endl;
-
+	double diff = ((double)t2 - (double)t1) / CLOCKS_PER_SEC;
+	// std::cout << "time: " << diff << std::endl;
+	std::cout << n->solutionsFound << '\n';
+	delete n;
 }
-
-#endif

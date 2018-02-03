@@ -30,9 +30,6 @@
     <ClCompile Include="Week1\DisjointSet.cpp">
       <Filter>Source Files\Week1</Filter>
     </ClCompile>
-    <ClCompile Include="Test\Base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Test\MazeTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -57,6 +54,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Week1\NQueens.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\DisjointSetTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\MazeTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

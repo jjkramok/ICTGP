@@ -1,8 +1,5 @@
+#pragma once
 #include "../Program.h"
 
-#if UnitTest == 1
-
-#define CATCH_CONFIG_MAIN
 #include "../lib/catch.hpp"
-
-#endif
+#include "../Week1/DisjointSet.h"
