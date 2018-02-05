@@ -28,10 +28,18 @@ void nqueens() {
     cout << ":END NQUEENS:" << endl;
 }
 
+void BridgeAndTorchProblem() {
+    cout << ":BRIDGE AND TORCH PROBLEM:" << endl;
+    FamilyAtTheBridge *btp = new FamilyAtTheBridge();
+    btp->PrintSolution();
+    cout << ":END BRIDGE AND TORCH PROBLEM:" << endl;
+}
+
 int week1() {
     cout << ":WEEK1:" << endl;
     maze();
-    nqueens();
+    //nqueens(); TODO implement
+    BridgeAndTorchProblem();
     cout << ":END WEEK1:" << endl;
     return 0;
 }

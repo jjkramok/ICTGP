@@ -12,6 +12,7 @@
 #include "Maze.h"
 #include "DisjointSet.h"
 #include "NQueens.h"
+#include "FamilyAtTheBridge.h"
 
 int week1();
 
