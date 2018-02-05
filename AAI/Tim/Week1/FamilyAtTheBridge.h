@@ -8,6 +8,7 @@
 #include "Person.h"
 #include <cstdlib>
 #include <iostream>
+#include <math.h>
 using namespace std;
 
 #define AMOUNT_OF_PERSONS 5
@@ -27,17 +28,24 @@ public:
     FamilyAtTheBridge() : FamilyAtTheBridge(30) {}; // Call other constructor with fixed lightsourceTime value
     ~FamilyAtTheBridge();
     void SolveWithBacktracking();
-    void PrintSolution();
+    void SolveWithBacktracking(Person nextTraveler0, Person nextTraveler1, Person returning, int step);
 
 private:
+    // Helper methods
+    bool IsValidMove(Person a, Person b);
+    bool SolutionFound();
+    void PrintSolution();
+
     // variables for current state
     Person **startSide;
     Person **action;
     Person **endSide;
-    int lightsourceMaxTime;
+    int lightsourceTime;
 
+    // Keeps all states
     State *states;
 };
+
 
 
 #endif //TIM_FAMILYATTHEBRIDGE_H
