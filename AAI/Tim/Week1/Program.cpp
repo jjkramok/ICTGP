@@ -31,6 +31,7 @@ void nqueens() {
 void BridgeAndTorchProblem() {
     cout << ":BRIDGE AND TORCH PROBLEM:" << endl;
     FamilyAtTheBridge *btp = new FamilyAtTheBridge();
+    btp->SolveWithBacktracking();
     btp->PrintSolution();
     cout << ":END BRIDGE AND TORCH PROBLEM:" << endl;
 }

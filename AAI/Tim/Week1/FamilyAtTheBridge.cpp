@@ -18,11 +18,11 @@ FamilyAtTheBridge::FamilyAtTheBridge(int lightsourceTime) {
         throw "Unsupported amount of persons!";
     }
 
-    startSide[0] = new Person(1);
-    startSide[1] = new Person(3);
-    startSide[2] = new Person(6);
-    startSide[3] = new Person(8);
-    startSide[4] = new Person(12);
+    startSide[0] = new Person(1, 'A');
+    startSide[1] = new Person(3, 'B');
+    startSide[2] = new Person(6, 'C');
+    startSide[3] = new Person(8, 'D');
+    startSide[4] = new Person(12, 'E');
 }
 
 FamilyAtTheBridge::~FamilyAtTheBridge() {
@@ -32,6 +32,10 @@ FamilyAtTheBridge::~FamilyAtTheBridge() {
     free(states);
 }
 
-void PrintSolution() {
+void FamilyAtTheBridge::SolveWithBacktracking() {
+
+}
+
+void FamilyAtTheBridge::PrintSolution() {
     cout << "NOT IMPLEMENTED YET" << endl;
 }

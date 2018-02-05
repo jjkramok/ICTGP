@@ -5,12 +5,16 @@
 #ifndef TIM_PERSON_H
 #define TIM_PERSON_H
 
+#include <malloc.h>
+#include <cstring>
+#include <cstdio>
 
 class Person {
 public:
-    explicit Person(int speed);
-    bool HasLightsource;
+    explicit Person(int speed, char name);
+    char *ToString();
     int speed;
+    char name;
 };
 
 
