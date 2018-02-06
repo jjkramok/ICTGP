@@ -10,7 +10,7 @@ using namespace std;
 void maze() {
     cout << ":MAZE:" << endl;
     auto start = chrono::system_clock::now();
-    Maze *maze = new Maze(50, 50);
+    Maze *maze = new Maze(15, 15);
     maze->ToString();
     auto end = chrono::system_clock::now();
     chrono::duration<double> elapsed_seconds = end - start;
