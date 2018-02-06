@@ -12,6 +12,21 @@ void Ex2(int* &p, int n) {
     }
 }
 
+void Ex3(int **&p, int n) {
+    p = (int**) malloc(sizeof(int*) * n);
+    for (int i = 0; i < n; i++) {
+        *(p + i) = (int*) malloc(sizeof(int) * (i + 1));
+        for (int j = 0; j < i + 1; j++) {
+            if (j == 0)
+                p[i][0] = 1;
+            else if (j == i)
+                p[i][j] = 1;
+            else
+                p[i][j] = p[i - 1][j] + p[i][j - 1];
+        }
+    }
+}
+
 int main() {
     cout << "Ex. 1" << endl;
     int *p, *q, *r;
@@ -28,7 +43,7 @@ int main() {
 
     free(p);
     free(q);
-    cout << "End Ex. 1" << endl;
+    cout << "End Ex. 1\n" << endl;
 
     cout << "Ex. 2" << endl;
     int* array;
@@ -38,5 +53,18 @@ int main() {
         cout << array[i] << " ";
     }
     cout << endl;
-    cout << "End Ex. 2" << endl;
+    cout << "End Ex. 2\n" << endl;
+
+    cout << "Ex. 3" << endl;
+    int **triangle;
+    size = 15;
+    Ex3(triangle, size);
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < i + 1; j++) {
+            cout << triangle[i][j] << " ";
+        }
+        cout << '\n';
+    }
+    cout << endl;
+    cout << "End Ex. 3\n" << endl;
 }
