@@ -35,10 +35,10 @@ function initScene() {
 
     // Move camera from center
     camera.position.x = 10;
-    camera.position.y = 10; // height
+    camera.position.y = 10;
     camera.position.z = 20;
 
-    var light = new THREE.PointLight(0xffffff, 1, 100);
+    var light = new THREE.SpotLight(0xff00ff, 100, 100);
     light.position.set(50, 50, 50);
     scene.add(light);
 

@@ -5,6 +5,7 @@ function CreateHouse(x, y, z, scene) {
     var houseRoof = CreateHouseRoof();
     var houseWindow = CreateHouseWindow();
 
+    // set house positions to given offset.
     houseBase.position.x += x + 2;
     houseBase.position.y += y + 1.5;
     houseBase.position.z += z + 3;
@@ -22,10 +23,11 @@ function CreateHouse(x, y, z, scene) {
         scene.add(houseRoof[i]);
     }
 
-    
+
     scene.add(houseBase);
 }
 
+// create the main body of the house.
 function CreateHouseBase() {
     var houseBaseGeometry = new THREE.BoxBufferGeometry(4, 3, 6);
     var brickTexture = new THREE.TextureLoader().load('./ModelsAndTextures/Yellobrk.bmp');
@@ -36,6 +38,7 @@ function CreateHouseBase() {
     return houseBaseMesh;
 }
 
+// create the roof of the house. 
 function CreateHouseRoof() {
     var uvs = [];
     uvs.push(new THREE.Vector2(0.0, 0.0));
@@ -44,6 +47,7 @@ function CreateHouseRoof() {
     uvs.push(new THREE.Vector2(0.0, 1.0));
     uvs.push(new THREE.Vector2(0.5, 0.7));
 
+    // 2 geometries are used because of different textures.
     var roofGeometry = [new THREE.Geometry(), new THREE.Geometry()];
 
     for (var i = 0; i < roofGeometry.length; i++) {
@@ -72,28 +76,36 @@ function CreateHouseRoof() {
 
     roofGeometry.uvsNeedUpdate = true;
 
+    // load textures
     var brickTexture = new THREE.TextureLoader().load('./ModelsAndTextures/Yellobrk.bmp');
     var brickMaterial = new THREE.MeshBasicMaterial({ map: brickTexture });
 
     var roofTexture = new THREE.TextureLoader().load('./ModelsAndTextures/roof.jpg');
     var roofMaterial = new THREE.MeshBasicMaterial({ map: roofTexture });
 
+    // apply textures.
     houseRoofMesh = [
         new THREE.Mesh(roofGeometry[0], brickMaterial),
         new THREE.Mesh(roofGeometry[1], roofMaterial)
     ];
-    
+
     return houseRoofMesh;
 }
 
+// add a round window to the house.
 function CreateHouseWindow() {
-    var material1 = new THREE.MeshLambertMaterial({ color: 0xee2211 });
+    // bumpmap.
+    var bumpmap = new THREE.TextureLoader().load("./ModelsAndTextures/earth_normal.jpg");
+
+    // materials for border and window.
+    var material1 = new THREE.MeshLambertMaterial({ color: 0xee2211, bumpMap: bumpmap, bumpScale: 1, refractionRatio: 0.5 });
     var material2 = new THREE.MeshPhongMaterial({ color: 0x1111ff });
 
     var geometries = [
         new THREE.Mesh(new THREE.TorusGeometry(0.6, 0.2, 20, 20), material1),
         new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 0.1, 20, 20, false), material2),
     ];
+    // offset the positions.
     geometries[0].position.set(2, 3.5, 0);
     geometries[1].position.set(2, 3.5, 0);
     geometries[1].rotation.x = Math.PI / 2;
