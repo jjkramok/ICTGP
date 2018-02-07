@@ -3,7 +3,7 @@
  * @param distanceFromOrigin the width, height and length of the skybox
  * @returns {Raycaster.params.Mesh|{}|*} A mesh object of the skybox.
  */
-function createSkybox(distanceFromOrigin) {
+function addSkybox(distanceFromOrigin, scene) {
     // Locate all skybox texures
     var resLoc = "./ModelsAndTextures/";
     var posx = resLoc + "posx.jpg";
@@ -15,23 +15,7 @@ function createSkybox(distanceFromOrigin) {
 
     var directions = [posx, negx, posy, negy, posz, negz];
 
-    /*var cubeTextures = THREE.ImageUtils.loadTextureCube(directions);
-
-    // Initialize a shader for the skybox cube
-    var shader = THREE.ShaderUtils.lib["cube"];
-    var uniforms = THREE.UniformsUtils.clone (shader.uniforms);
-    uniforms['tCube'].texture = cubeTextures;
-    var skyMaterial = new THREE.MeshShaderMaterial({
-        fragmentShader  : shader.fragmentShader,
-        vertexShader    : shader.vertexShader,
-        uniforms    : uniforms
-    });
-
-    skyboxMesh = new THREE.Mesh( new THREE.CubeGeometry(distanceFromOrigin, distanceFromOrigin, distanceFromOrigin, 1, 1, 1, null, true), skyMaterial);
-    skyboxMesh.doubleSided = true;
-    return skyboxMesh;*/
-
-    // original way to prepare textures for the skybox
+    // Makes six materials based on the six skybox textures
     var materialArray = [];
     var loader = new THREE.TextureLoader();
 
@@ -42,7 +26,9 @@ function createSkybox(distanceFromOrigin) {
         }));
     }
 
+    // Make a box geometry to which the previous materials can be applied to
     var skyGeometry = new THREE.CubeGeometry(distanceFromOrigin, distanceFromOrigin, distanceFromOrigin);
 
-    return new THREE.Mesh(skyGeometry, materialArray);
+    // Return the mesh of the skybox
+    scene.add(new THREE.Mesh(skyGeometry, materialArray));
 }
