@@ -16,23 +16,18 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // Populate scene with meshes
-addLamppost(5, 0, 5, 3, 0.5, scene);
-addTree(10, 0, 15, scene);
 addTerrain(1000, 1000, scene);
-CreateHouse(5, 0, 5, scene);
-var car = CreateCar(0, 0, 0, scene);
+addLamppost(3, 0, 15, 3, 0.5, scene);
+addTree(1, 0, 2, scene);
+addTree(8, 0, 10, scene);
 
+CreateHouse(0, 0, 5, scene);
+CreateHouse(7, 0, 2, scene);
+CreateHouse(7, 0, 15, scene);
+
+var car = CreateCar(-3, 0, -1, scene);
 
 addSkybox(1000, scene);
-
-// Add axis helper TODO remove?
-var worldAxis = new THREE.AxisHelper(500);
-scene.add(worldAxis);
-
-/* Camera and Light */
-// TODO remove; light used for debugging
-var ambientLight = new THREE.AmbientLight(0x404040);
-scene.add(ambientLight);
 
 var light = new THREE.DirectionalLight(0xdddddd, 1.0);
 light.position.set(600, 200, 1000);
@@ -55,5 +50,6 @@ var render = function () {
 
     renderer.render(scene, camera);
 };
-
-render();
+setTimeout(function () {
+    render();
+}, 5000);
