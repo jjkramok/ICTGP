@@ -27,6 +27,7 @@ var cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 
 addLamppost(5, 0, 5, 3, 0.5, scene);
+addTree(10, 0, 15, scene);
 
 var worldAxis = new THREE.AxisHelper(500);
 scene.add(worldAxis);
