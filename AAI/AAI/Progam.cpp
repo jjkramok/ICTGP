@@ -46,7 +46,7 @@ void maze() {
 	std::cout << diff << std::endl;
 	delete maze;
 }
-
+	
 void queen() {
 	clock_t t1, t2;
 	t1 = clock();
