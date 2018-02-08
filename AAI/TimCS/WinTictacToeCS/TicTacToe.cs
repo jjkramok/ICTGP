@@ -5,7 +5,7 @@ using System.Text;
 
 namespace WinTicTacToeCS
 {
-    class TicTacToe
+    public class TicTacToe
     {
         public enum Marble { EMPTY, CROSS, ZERO };
 
@@ -106,6 +106,59 @@ namespace WinTicTacToeCS
             return board[position] == marble;
         }
 
+        List<Move> GetPossibleMoves(Marble player)
+        {
+            List<Move> res = new List<Move>();
+            for (int i = 1; i < board.Length; i++)
+            {
+                if (board[i] == Marble.EMPTY)
+                    res.Add(new Move(i, player));
+            }
+            return res;
+        }
+
+        private Marble GetOppositePlayer(Marble player)
+        {
+            return player == Marble.CROSS ? Marble.ZERO : Marble.CROSS;
+        }
+
+        // TODO improve score calculation
+        /// <summary>
+        /// Evaluates the score of the current board by only checking for the win condition
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public int eval(Marble player)
+        {
+            Marble other = GetOppositePlayer(player);
+            int MyScore = 0;
+            int OtherScore = 0;
+            
+            // First check on end-game states, those should heavily impact the score.
+            if (IsWinner(player))
+            {
+                return 999;
+            } 
+            if (IsWinner(other))
+            {
+                return -999;
+            }
+            
+            /*
+            for (int i = 1; i < board.Length; i++)
+            {
+                if (B(player, i))
+                {
+                        
+                    
+                }
+                else if (B(other, i))
+                {
+                    OtherScore++;
+                }
+            }*/
+            return MyScore - OtherScore;
+        }
 
 
         /***
@@ -114,6 +167,7 @@ namespace WinTicTacToeCS
 
         public bool FindAndDoBestComputerMove(Marble m)
         {
+            
             return false;
         }
     }
