@@ -15,7 +15,7 @@ namespace WinTicTacToeCS
          * 7 8 9
          * */
 
-        Marble[] board;
+        public Marble[] board;
         int count;          //  number of marbles on the board
 
         public TicTacToe()
@@ -106,7 +106,7 @@ namespace WinTicTacToeCS
             return board[position] == marble;
         }
 
-        List<Move> GetPossibleMoves(Marble player)
+        public List<Move> GetPossibleMoves(Marble player)
         {
             List<Move> res = new List<Move>();
             for (int i = 1; i < board.Length; i++)
@@ -117,7 +117,7 @@ namespace WinTicTacToeCS
             return res;
         }
 
-        private Marble GetOppositePlayer(Marble player)
+        public Marble GetOppositePlayer(Marble player)
         {
             return player == Marble.CROSS ? Marble.ZERO : Marble.CROSS;
         }
