@@ -53,6 +53,7 @@ int main() {
         cout << array[i] << " ";
     }
     cout << endl;
+    free(array);
     cout << "End Ex. 2\n" << endl;
 
     cout << "Ex. 3" << endl;
@@ -66,5 +67,6 @@ int main() {
         cout << '\n';
     }
     cout << endl;
+    free(triangle);
     cout << "End Ex. 3\n" << endl;
 }
