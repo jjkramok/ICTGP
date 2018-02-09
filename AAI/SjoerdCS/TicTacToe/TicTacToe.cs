@@ -153,17 +153,14 @@ namespace SjoerdCS.TicTacToe
 		{
 			if (IsWinner(originalPlayer))
 			{
-				Console.WriteLine(15);
-				return 15;
+				return 1;
 			}
 			if (IsWinner(Reverse(originalPlayer)))
 			{
-				Console.WriteLine(-15);
-				return -15;
+				return -1;
 			}
 			if (count == 9)
 			{
-				Console.WriteLine(0);
 				return 0;
 			}
 			int bestValue = maximize ? -100 : 100;

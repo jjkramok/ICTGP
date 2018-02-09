@@ -31,6 +31,20 @@ namespace CG
 			Values = new float[rows, columns];
 			Rows = rows;
 			Columns = columns;
+
+			int index = 0;
+			for(int row = 0; row < Rows; row++)
+			{
+				for(int col = 0; col < Columns; col++)
+				{
+					if (index >= values.Length)
+					{
+						return;
+					}
+					Values[row, col] = values[index];
+					index++;
+				}
+			}
 		}
 
 		public static Matrix operator +(Matrix m1, Matrix m2)
@@ -90,7 +104,26 @@ namespace CG
 
 		public static Matrix operator *(Matrix m1, Matrix m2)
 		{
-			return new Matrix(1);
+			if (m1.Columns != m2.Rows)
+			{
+				throw new Exception("Matrix sizes do not match.");
+			}
+			var result = new Matrix(m1.Rows, m2.Columns);
+
+			for (int row = 0; row < m1.Rows; row++)
+			{
+				for (int col = 0; col < m2.Columns; col++)
+				{
+					float value = 0f;
+					for (int i = 0; i < m1.Columns; i++)
+					{
+						value += m1.Values[row, i] * m2.Values[i, col];
+					}
+					result.Values[row, col] = value;
+				}
+			}
+
+			return result;
 
 		}
 		public Vector ColumnToVector(int column)
@@ -133,7 +166,16 @@ namespace CG
 
 		public override string ToString()
 		{
-			return base.ToString();
+			string result = $"Matrix size: {Rows} x {Columns}\n";
+			for (int row = 0; row < Rows; row++)
+			{
+				for (int col = 0; col < Columns; col++)
+				{
+					result += $"{Values[row, col]}\t";
+				}
+				result += "\n";
+			}
+			return result;
 		}
 	}
 }

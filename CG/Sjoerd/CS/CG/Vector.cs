@@ -41,10 +41,19 @@ namespace CG
 			return newVector;
 		}
 
+		public static Vector operator *(float value, Vector vector)
+		{
+			return vector * value;
+		}
+
 		public override string ToString()
 		{
-			// todo fix
-			return $"X:";
+			string result = $"Vector size: {Count}\n";
+			for (int i = 0; i < Count; i++)
+			{
+				result += $"{Values[i]}\n";
+			}
+			return result;
 		}
 	}
 }

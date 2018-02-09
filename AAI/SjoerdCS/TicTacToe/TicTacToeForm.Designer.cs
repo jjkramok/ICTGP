@@ -130,6 +130,5 @@
 		private System.Windows.Forms.Label GameStateLabel;
 		private System.Windows.Forms.Button StartGameButton;
 		private System.Windows.Forms.Button ComputerMoveButton;
-
 	}
 }
