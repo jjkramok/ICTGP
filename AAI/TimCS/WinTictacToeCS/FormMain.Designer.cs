@@ -34,6 +34,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.depth1 = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -89,6 +90,17 @@
             this.button1.Text = "Start New Game";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            //
+            // numeric updown
+            //
+            this.depth1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.depth1.Location = new System.Drawing.Point(505, 310);
+            this.depth1.Name = "depth1";
+            this.depth1.Size = new System.Drawing.Size(106, 57);
+            this.depth1.TabIndex = 6;
+            this.depth1.Text = "10";
+            this.depth1.Visible = true;
+            
             // 
             // button2
             // 
@@ -99,6 +111,7 @@
             this.button2.TabIndex = 6;
             this.button2.Text = "Generate Computer Move";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // FormMain
             // 
@@ -129,6 +142,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.NumericUpDown depth1;
     }
 }
 
