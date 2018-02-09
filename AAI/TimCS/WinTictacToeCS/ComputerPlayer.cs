@@ -6,17 +6,16 @@ namespace WinTicTacToeCS
     {
         private TicTacToe game;
 
-        ComputerPlayer(TicTacToe game)
+        public ComputerPlayer(TicTacToe game)
         {
             this.game = game;
         }
         
-        Move Minimax(TicTacToe.Marble player, int depth)
+        public Move Minimax(TicTacToe.Marble player, int depth)
         {
             foreach (var move in game.GetPossibleMoves(player))
             {
-                
-
+                TicTacToe cpyOfBoard = new TicTacToe(game); 
             }
             
             throw new NotImplementedException();

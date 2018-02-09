@@ -15,7 +15,7 @@ namespace WinTicTacToeCS
         Random random = new Random();
         TicTacToe.Marble turn = TicTacToe.Marble.CROSS;
         int p1 = 0;
-
+        private ComputerPlayer cpu;
 
         public FormMain()
         {
@@ -31,6 +31,7 @@ namespace WinTicTacToeCS
             label2.Text = "Place new marble";
             this.BackColor = Color.White;
             Invalidate(true);
+            cpu = new ComputerPlayer(ttt);
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -139,6 +140,9 @@ namespace WinTicTacToeCS
 
         private void button2_Click(object sender, EventArgs e)
         {
+            int depth = Decimal.ToInt32(numericUpDown1.Value);
+            Move generatedMove = cpu.Minimax(turn, depth);
+            // TODO Let the computer player make the move 
             throw new NotImplementedException();
         }
 

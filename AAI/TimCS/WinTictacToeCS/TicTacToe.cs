@@ -24,6 +24,16 @@ namespace WinTicTacToeCS
             count = 0;
         }
 
+        public TicTacToe(TicTacToe original)
+        {
+            board = new Marble[10];
+            count = original.count;
+            for (int i = 1; i < board.Length; i++)
+            {
+                board[i] = original.board[i];
+            }
+        }
+
         public bool InInsertingState()
         {
             return count < 6;
