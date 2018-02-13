@@ -11,7 +11,6 @@ namespace Week2
             TestVector();
             Console.WriteLine();
             TestMatrix();
-            Console.ReadKey();
         }
 
         static void TestVector()
