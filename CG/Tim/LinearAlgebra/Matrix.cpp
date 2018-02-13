@@ -4,15 +4,23 @@
 
 #include "Matrix.h"
 
-Matrix::Matrix() {
+void Matrix::matrixInitializer() {
+    row = 2;
+    col = 2;
+    matrix = (float*) calloc(size(), sizeof(float));
+}
 
+Matrix::Matrix() {
+    matrixInitializer();
 }
 
 Matrix::Matrix(float* data) {
+    matrixInitializer();
 
 }
 
 Matrix::Matrix(Vector v) {
+    matrixInitializer();
 
 }
 
@@ -36,7 +44,7 @@ Matrix* Matrix::operator*(float rhs) {
     return nullptr;
 }
 
-Matrix* Matrix::operator*(float lhs, Matrix& rhs) {
+Matrix* operator*(float lhs, Matrix& rhs) {
     return nullptr;
 }
 
@@ -46,4 +54,8 @@ Vector* Matrix::operator*(Vector& rhs) {
 
 char* Matrix::ToString() {
     return nullptr;
+}
+
+int Matrix::size() {
+    return row * col;
 }
