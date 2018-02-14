@@ -14,7 +14,9 @@ function addTerrain(width, height, scene) {
     terrainTexture.repeat.set(128, 128);
 
     // Create a material from the wrapped texture
-    var terrainMaterial = new THREE.MeshBasicMaterial({map: terrainTexture});
+    var terrainMaterial = new THREE.MeshStandardMaterial({map: terrainTexture});
+    terrainMaterial.metalness = 0.9;
+    terrainMaterial.roughness = 0.9;
 
     // Make a flat geometry for the terrain
     var terrainGeometry = new THREE.PlaneBufferGeometry(width, height, 8, 8);

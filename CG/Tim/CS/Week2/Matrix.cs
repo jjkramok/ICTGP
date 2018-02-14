@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -122,10 +124,19 @@ namespace CG
 					result.Values[row, col] = value;
 				}
 			}
-
 			return result;
-
 		}
+		
+		public static Matrix Scale(float s)
+		{
+			return null;
+		}
+
+		public static Matrix Rotate(float degrees)
+		{
+			return null;
+		}
+		
 		public Vector ColumnToVector(int column)
 		{
 			if (column >= Columns)

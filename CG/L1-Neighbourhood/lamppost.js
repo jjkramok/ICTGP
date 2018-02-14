@@ -17,7 +17,7 @@ function addLamppost(x, y, z, h, r, scene) {
     var postGeo = new THREE.CylinderGeometry(postRadius, postRadius, postHeight, amountOfFaces);
     var postTexture = new THREE.TextureLoader().load("./ModelsAndTextures/lamppost_texture_00.jpg");
 
-    var postMat = new THREE.MeshBasicMaterial({map: postTexture});
+    var postMat = new THREE.MeshStandardMaterial({map: postTexture});
     var post = new THREE.Mesh(postGeo, postMat);
     post.position.set(x, y + h / 2, z); // Cylinders are drawn both down and upwards, so translate up.
 
