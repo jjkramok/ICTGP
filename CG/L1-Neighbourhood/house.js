@@ -100,7 +100,7 @@ function CreateHouseWindow() {
     var bumpmap = new THREE.TextureLoader().load("./ModelsAndTextures/earth_normal.jpg");
 
     // materials for border and window.
-    var material1 = new THREE.MeshLambertMaterial({ color: 0xee2211, bumpMap: bumpmap, bumpScale: 1, refractionRatio: 0.5 });
+    var material1 = new THREE.MeshLambertMaterial({ color: 0xee2211, bumpMap: bumpmap, bumpScale: 10000, refractionRatio: 0.5 });
     var material2 = new THREE.MeshPhongMaterial({ color: 0x1111ff });
 
     var geometries = [

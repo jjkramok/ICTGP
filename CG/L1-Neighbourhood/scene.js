@@ -48,12 +48,11 @@ var render = function () {
     requestAnimationFrame(render);
     var delta = clock.getDelta();
 
-    DriveCar(car, delta);
+    DriveCar(car);
 
     controls.update();
 
     renderer.render(scene, camera);
 };
-setTimeout(function () {
-    render();
-}, 500);
+
+render();
