@@ -31,7 +31,7 @@ addSkybox(1000, scene);
 
 
 var sun = new THREE.PointLight( 0xf9d71c, 1 );
-sun.position.set( 0, 40, 0 );
+sun.position.set( 20, 12, 20 );
 var sphere = new THREE.SphereGeometry(0.5, 16, 8);
 sun.add(new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0xf9d71c})));
 
@@ -49,11 +49,6 @@ var render = function () {
     var delta = clock.getDelta();
 
     DriveCar(car, delta);
-
-    sun.position.z += delta * 12;
-    if (sun.position.z > 200) {
-        sun.position.z = - 200;
-    }
 
     controls.update();
 
