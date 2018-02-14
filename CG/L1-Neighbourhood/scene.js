@@ -29,9 +29,13 @@ var car = CreateCar(-3, 0, -1, scene);
 
 addSkybox(1000, scene);
 
-var light = new THREE.DirectionalLight(0xdddddd, 1.0);
-light.position.set(600, 200, 1000);
-scene.add(light);
+
+var sun = new THREE.PointLight( 0xf9d71c, 1 );
+sun.position.set( 0, 40, 0 );
+var sphere = new THREE.SphereGeometry(0.5, 16, 8);
+sun.add(new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0xf9d71c})));
+
+scene.add( sun );
 
 // Move camera from center
 camera.position.set(30, 10, 50);
@@ -46,10 +50,15 @@ var render = function () {
 
     DriveCar(car, delta);
 
+    sun.position.z += delta * 12;
+    if (sun.position.z > 200) {
+        sun.position.z = - 200;
+    }
+
     controls.update();
 
     renderer.render(scene, camera);
 };
 setTimeout(function () {
     render();
-}, 5000);
+}, 500);
