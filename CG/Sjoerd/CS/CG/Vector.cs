@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CG
 {
-	class Vector
+	public class Vector
 	{
 		public float[] Values;
 		public int Count { get { return Values.Length; } }

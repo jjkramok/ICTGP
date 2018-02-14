@@ -31,8 +31,7 @@ function CreateHouse(x, y, z, scene) {
 function CreateHouseBase() {
     var houseBaseGeometry = new THREE.BoxBufferGeometry(4, 3, 6);
     var brickTexture = new THREE.TextureLoader().load('./ModelsAndTextures/Yellobrk.bmp');
-    var brickMaterial = new THREE.MeshBasicMaterial({ map: brickTexture });
-    var normalMaterial = new THREE.MeshNormalMaterial();
+    var brickMaterial = new THREE.MeshPhysicalMaterial({ map: brickTexture });
 
     houseBaseMesh = new THREE.Mesh(houseBaseGeometry, brickMaterial);
     return houseBaseMesh;
@@ -74,14 +73,17 @@ function CreateHouseRoof() {
     roofGeometry[1].faceVertexUvs[0].push([uvs[0], uvs[1], uvs[2]]);
     roofGeometry[1].faceVertexUvs[0].push([uvs[2], uvs[1], uvs[0]]);
 
+    roofGeometry[1].computeFaceNormals();
+    roofGeometry[0].computeFaceNormals();
+
     roofGeometry.uvsNeedUpdate = true;
 
     // load textures
     var brickTexture = new THREE.TextureLoader().load('./ModelsAndTextures/Yellobrk.bmp');
-    var brickMaterial = new THREE.MeshBasicMaterial({ map: brickTexture });
+    var brickMaterial = new THREE.MeshPhysicalMaterial({ color: 0x33FF33 });
 
     var roofTexture = new THREE.TextureLoader().load('./ModelsAndTextures/roof.jpg');
-    var roofMaterial = new THREE.MeshBasicMaterial({ map: roofTexture });
+    var roofMaterial = new THREE.MeshPhysicalMaterial({ map: roofTexture });
 
     // apply textures.
     houseRoofMesh = [
