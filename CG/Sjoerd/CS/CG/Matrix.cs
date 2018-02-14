@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CG
 {
-	class Matrix
+	public class Matrix
 	{
 		public float[,] Values;
 		public int Rows { get; private set; }

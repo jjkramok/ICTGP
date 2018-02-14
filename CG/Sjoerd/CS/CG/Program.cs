@@ -1,8 +1,10 @@
-﻿using System;
+﻿using CG.G2D;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace CG
 {
@@ -10,6 +12,7 @@ namespace CG
 	{
 		static void Main(string[] args)
 		{
+			Test2D();
 			TestVector();
 			Console.WriteLine();
 			TestMatrix();
@@ -39,9 +42,13 @@ namespace CG
 			Console.WriteLine("multiply matrix");
 			Console.WriteLine(m1 * m2);
 
+		}
 
-
-
+		static void Test2D()
+		{
+			Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault(false);
+			Application.Run(new Form2D());
 		}
 	}
 }

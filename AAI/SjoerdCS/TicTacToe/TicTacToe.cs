@@ -16,6 +16,8 @@ namespace SjoerdCS.TicTacToe
          * 7 8 9
          * */
 
+		int movesTried = 0;
+
 		int[] history;
 		Marble[] board;
 		int count;          //  number of marbles on the board
@@ -122,15 +124,15 @@ namespace SjoerdCS.TicTacToe
 
 		public bool FindAndDoBestComputerMove(Marble m)
 		{
-			int bestMoveValue = -100;
+			movesTried = 0;
+			int bestMoveValue = -2;
 			int bestMove = 0;
 			for (int i = 1; i <= 9; i++)
 			{
 				if (IsEmpty(i))
 				{
 					DoMove(m, i);
-					int value = ComputerMove(Reverse(m), m, false, 0);
-					Console.WriteLine(value);
+					int value = MiniMax(Reverse(m), m, false, 0);
 					if (value > bestMoveValue)
 					{
 						bestMove = i;
@@ -144,13 +146,14 @@ namespace SjoerdCS.TicTacToe
 				return false;
 			}
 
-			board[bestMove] = m;
-
+			DoMove(m, bestMove);
+			Console.WriteLine(movesTried);
 			return true;
 		}
 
-		private int ComputerMove(Marble player, Marble originalPlayer, bool maximize, int depth)
+		private int MiniMax(Marble player, Marble originalPlayer, bool maximize, int depth)
 		{
+			movesTried++;
 			if (IsWinner(originalPlayer))
 			{
 				return 1;
@@ -163,13 +166,13 @@ namespace SjoerdCS.TicTacToe
 			{
 				return 0;
 			}
-			int bestValue = maximize ? -100 : 100;
+			int bestValue = maximize ? -2 : 2;
 			for (int i = 1; i <= 9; i++)
 			{
 				if (IsEmpty(i))
 				{
 					DoMove(player, i);
-					int value = ComputerMove(Reverse(player), originalPlayer, !maximize, depth + 1);
+					int value = MiniMax(Reverse(player), originalPlayer, !maximize, depth + 1);
 					if (bestValue < value == maximize)
 					{
 						bestValue = value;
@@ -179,8 +182,6 @@ namespace SjoerdCS.TicTacToe
 			}
 			return bestValue;
 		}
-
-		public string Str { get { return ToString(); } }
 
 		public override string ToString()
 		{
