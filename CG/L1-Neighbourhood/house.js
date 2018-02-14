@@ -80,7 +80,7 @@ function CreateHouseRoof() {
 
     // load textures
     var brickTexture = new THREE.TextureLoader().load('./ModelsAndTextures/Yellobrk.bmp');
-    var brickMaterial = new THREE.MeshPhysicalMaterial({ color: 0x33FF33 });
+    var brickMaterial = new THREE.MeshPhysicalMaterial({ map: brickTexture });
 
     var roofTexture = new THREE.TextureLoader().load('./ModelsAndTextures/roof.jpg');
     var roofMaterial = new THREE.MeshPhysicalMaterial({ map: roofTexture });
