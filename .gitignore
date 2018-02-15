@@ -42,6 +42,10 @@ AAI/AAI/Release/*
 AAI/AAI/lib/*.hpp
 CG/Sjoerd/CS/CG/.vs/*
 *.csproj
+AAI/Assignment/.vs/*
+AAI/Assignment/Assignment/Debug/*
+AAI/Assignment/Assignment/x64/*
+AAI/Assignment/x64/*
 
 
 
