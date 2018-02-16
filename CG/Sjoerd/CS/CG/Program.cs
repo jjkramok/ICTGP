@@ -1,4 +1,5 @@
 ﻿using CG.G2D;
+using CG.G3D;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,7 +49,7 @@ namespace CG
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new Form2D());
+			Application.Run(new Form3D());
 		}
 	}
 }
