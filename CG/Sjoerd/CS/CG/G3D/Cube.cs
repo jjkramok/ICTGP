@@ -23,25 +23,25 @@ namespace CG.G3D
 		private const int size = 1;
 		public List<Vector> vertexbuffer = new List<Vector>
 		{
-			new Vector(new float[]{ 1.0f,  1.0f, 1.0f }),     //1
-            new Vector(new float[]{ 1.0f, -1.0f, 1.0f }),     //2
-            new Vector(new float[]{-1.0f, -1.0f, 1.0f }),     //3
-            new Vector(new float[]{-1.0f,  1.0f, 1.0f }),     //4
+			new Vector(new float[]{ 1.0f,  1.0f, 1.0f, 1.0f }),     //1
+            new Vector(new float[]{ 1.0f, -1.0f, 1.0f, 1.0f }),     //2
+            new Vector(new float[]{-1.0f, -1.0f, 1.0f, 1.0f }),     //3
+            new Vector(new float[]{-1.0f,  1.0f, 1.0f, 1.0f }),     //4
 
-            new Vector(new float[]{ 1.0f,  1.0f, -1.0f }),    //5
-            new Vector(new float[]{ 1.0f, -1.0f, -1.0f }),    //6
-            new Vector(new float[]{-1.0f, -1.0f, -1.0f }),    //7
-            new Vector(new float[]{-1.0f,  1.0f, -1.0f }),    //8
+            new Vector(new float[]{ 1.0f,  1.0f, -1.0f, 1.0f}),    //5
+            new Vector(new float[]{ 1.0f, -1.0f, -1.0f, 1.0f}),    //6
+            new Vector(new float[]{-1.0f, -1.0f, -1.0f, 1.0f}),    //7
+            new Vector(new float[]{-1.0f,  1.0f, -1.0f, 1.0f}),    //8
 
-            new Vector(new float[]{ 1.2f,  1.2f, 1.2f }),     //1
-            new Vector(new float[]{ 1.2f, -1.2f, 1.2f }),     //2
-            new Vector(new float[]{-1.2f, -1.2f, 1.2f }),     //3
-            new Vector(new float[]{-1.2f,  1.2f, 1.2f }),     //4
+            new Vector(new float[]{ 1.2f,  1.2f, 1.2f, 1.0f }),     //1
+            new Vector(new float[]{ 1.2f, -1.2f, 1.2f, 1.0f }),     //2
+            new Vector(new float[]{-1.2f, -1.2f, 1.2f, 1.0f }),     //3
+            new Vector(new float[]{-1.2f,  1.2f, 1.2f, 1.0f }),     //4
 
-            new Vector(new float[]{ 1.2f,  1.2f, -1.2f }),    //5
-            new Vector(new float[]{ 1.2f, -1.2f, -1.2f }),    //6
-            new Vector(new float[]{-1.2f, -1.2f, -1.2f }),    //7
-            new Vector(new float[]{-1.2f,  1.2f, -1.2f })     //8
+            new Vector(new float[]{ 1.2f,  1.2f, -1.2f, 1.0f}),    //5
+            new Vector(new float[]{ 1.2f, -1.2f, -1.2f, 1.0f}),    //6
+            new Vector(new float[]{-1.2f, -1.2f, -1.2f, 1.0f}),    //7
+            new Vector(new float[]{-1.2f,  1.2f, -1.2f, 1.0f})     //8
         };
 
 		Color col;

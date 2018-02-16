@@ -11,7 +11,7 @@ namespace CG
 		public float[,] Values;
 		public int Rows { get; private set; }
 		public int Columns { get; private set; }
-
+		#region constructors
 		public Matrix(int squareSize)
 		{
 			Values = new float[squareSize, squareSize];
@@ -33,9 +33,9 @@ namespace CG
 			Columns = columns;
 
 			int index = 0;
-			for(int row = 0; row < Rows; row++)
+			for (int row = 0; row < Rows; row++)
 			{
-				for(int col = 0; col < Columns; col++)
+				for (int col = 0; col < Columns; col++)
 				{
 					if (index >= values.Length)
 					{
@@ -46,7 +46,9 @@ namespace CG
 				}
 			}
 		}
+		#endregion
 
+		#region operations
 		public static Matrix operator +(Matrix m1, Matrix m2)
 		{
 			if (m1.Rows != m2.Rows || m1.Columns != m2.Columns)
@@ -122,10 +124,35 @@ namespace CG
 					result.Values[row, col] = value;
 				}
 			}
-
 			return result;
-
 		}
+
+		public static Vector operator *(Matrix m, Vector v)
+		{
+			if (m.Columns != v.Count)
+			{
+				throw new Exception("Matrix and vector size do not match.");
+			}
+			var result = new Vector(v.Count);
+
+			for (int row = 0; row < m.Rows; row++)
+			{
+				float value = 0f;
+				for (int i = 0; i < m.Columns; i++)
+				{
+					value += m.Values[row, i] * v.Values[i];
+				}
+				result.Values[row] = value;
+			}
+			return result;
+		}
+
+		public static Vector operator *(Vector v, Matrix m)
+		{
+			return m * v;
+		}
+		#endregion
+
 		public Vector ColumnToVector(int column)
 		{
 			if (column >= Columns)
@@ -153,7 +180,7 @@ namespace CG
 			}
 			return vector;
 		}
-
+		#region DefaultMatrices
 		public static Matrix IdentityMatrix(int size)
 		{
 			var result = new Matrix(size);
@@ -164,6 +191,66 @@ namespace CG
 			return result;
 		}
 
+		public static Matrix ScalingMatrix(int size, float scale)
+		{
+			var matrix = new Matrix(size);
+			for (int i = 0; i < size - 1; i++)
+			{
+				matrix.Values[i, i] = scale;
+			}
+			matrix.Values[size - 1, size - 1] = 1;
+			return matrix;
+		}
+		public static Matrix ScalingMatrix(float scaleX, float scaleY)
+		{
+			var matrix = new Matrix(3);
+
+			matrix.Values[0, 0] = scaleX;
+			matrix.Values[1, 1] = scaleY;
+			matrix.Values[2, 2] = 1;
+
+			return matrix;
+		}
+		public static Matrix ScalingMatrix(float scaleX, float scaleY, float scaleZ)
+		{
+			var matrix = new Matrix(4);
+
+			matrix.Values[0, 0] = scaleX;
+			matrix.Values[1, 1] = scaleY;
+			matrix.Values[2, 2] = scaleZ;
+			matrix.Values[3, 3] = 1;
+
+			return matrix;
+		}
+		// todo: implement these
+		public static Matrix RotationMatrix2D(float amount)
+		{
+			
+			return null;
+		}
+
+		public static Matrix RotationMatrix3D()
+		{
+			return null;
+		}
+
+		public static Matrix TranslationMatrix2D(float x, float y)
+		{
+			var matrix = IdentityMatrix(3);
+			matrix.Values[0, 2] = x;
+			matrix.Values[1, 2] = y;
+			return matrix;
+		}
+
+		public static Matrix TranslationMatrix3D(float x, float y, float z)
+		{
+			var matrix = IdentityMatrix(4);
+			matrix.Values[0, 3] = x;
+			matrix.Values[1, 3] = y;
+			matrix.Values[2, 3] = z;
+			return matrix;
+		}
+		#endregion
 		public override string ToString()
 		{
 			string result = $"Matrix size: {Rows} x {Columns}\n";

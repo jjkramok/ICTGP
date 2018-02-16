@@ -17,9 +17,11 @@ namespace CG.G3D
 		public Form3D()
 		{
 			cube = new Cube(Color.Green);
-			for(int i=0;i<cube.vertexbuffer.Count;i++)
+			var matrix = Matrix.ScalingMatrix(50f, 50f, 50f) * Matrix.TranslationMatrix3D(1.4f, 1.4f, 0f);
+			//var matrix = Matrix.IdentityMatrix(4);
+			for (int i = 0; i < cube.vertexbuffer.Count; i++)
 			{
-				cube.vertexbuffer[i] *= 100f;
+				cube.vertexbuffer[i] *= matrix;
 			}
 
 			//cube.Translate(new Vector(new float[] { 30, 30 }));
