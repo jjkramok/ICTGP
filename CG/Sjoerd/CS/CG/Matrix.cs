@@ -47,6 +47,17 @@ namespace CG
 			}
 		}
 
+        public static Matrix Translate(Vector t)
+        {
+            Matrix idMatrix = IdentityMatrix(t.Count);
+            // Add the translation vector to the last column of the matrix
+            for (int row = 0; row < t.Count - 1; row++)
+            {
+                idMatrix.Values[row, t.Count - 1] = t.Values[row];
+            }
+            return idMatrix;
+        }
+
 		public static Matrix operator +(Matrix m1, Matrix m2)
 		{
 			if (m1.Rows != m2.Rows || m1.Columns != m2.Columns)
