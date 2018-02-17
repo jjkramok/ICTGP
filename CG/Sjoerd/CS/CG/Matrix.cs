@@ -4,7 +4,7 @@ namespace CG
 {
 	public class Matrix
 	{
-		public float[,] Values;
+		public float[,] Values { get; private set; }
 		public int Rows { get; private set; }
 		public int Columns { get; private set; }
 		#region constructors
@@ -44,6 +44,7 @@ namespace CG
 		}
 		#endregion
 
+		// haha tim code, ook te vinden met TranslationMatrix2/3D
 		public static Matrix Translate(Vector t)
 		{
 			Matrix idMatrix = IdentityMatrix(t.Count);

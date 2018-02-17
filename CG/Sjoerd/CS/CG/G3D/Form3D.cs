@@ -17,14 +17,13 @@ namespace CG.G3D
 		public Form3D()
 		{
 			cube = new Cube(Color.Green);
-			var matrix = Matrix.ScalingMatrix3D(50f, 50f, 50f) * Matrix.TranslationMatrix3D(1.4f, 1.4f, 0f);
+			var matrix = Matrix.ScalingMatrix3D(0.1f, 0.1f, 0.1f);
 			//var matrix = Matrix.IdentityMatrix(4);
 			for (int i = 0; i < cube.vertexbuffer.Count; i++)
 			{
 				cube.vertexbuffer[i] *= matrix;
 			}
 
-			//cube.Translate(new Vector(new float[] { 30, 30 }));
 			InitializeComponent();
 		}
 
@@ -36,18 +35,30 @@ namespace CG.G3D
 		private void drawPanel_Paint(object sender, PaintEventArgs e)
 		{
 			Graphics g = e.Graphics;
-			cube.Draw(g, cube.vertexbuffer);
+			Draw3D(g);
+			//cube.Draw(g, cube.vertexbuffer);
 		}
 
 		private void Draw3D(Graphics g)
 		{
+			var d = 800f;
+			var r = 10f;
+			var theta = -90f;
+			var phi = -90f;
 			// draw cube
-			var viewMatrix = Matrix.ViewMatrix3D((float) Math.PI, (float) Math.PI, 1);
-			foreach (var thing in cube.vertexbuffer)
+			var viewMatrix = Matrix.ViewMatrix3D(theta, phi, r);
+			var drawableCube = new List<Vector>();
+			foreach (var original in cube.vertexbuffer)
 			{
-				var translateMatrices = Matrix.ProjectionMatrix(0, 0);
-				// todo figure out. i dont know this.
+				var changed = original * viewMatrix;
+				var translateMatrices = Matrix.ProjectionMatrix(d, changed.Values[3]);
+				drawableCube.Add((changed * translateMatrices) + new Vector(new float[] { 150f, 150f, 0, 0 }));
+
+				//Pen pen = new Pen(Color.Green, 3f);
+				//g.DrawLine(pen, drawer.Values[0], drawer.Values[1], drawer.Values[0], drawer.Values[1]);
+				Console.WriteLine(drawableCube.Last());
 			}
+			cube.Draw(g, drawableCube);
 		}
 	}
 }
