@@ -58,6 +58,7 @@ namespace CG
             }
             return idMatrix;
         }
+		#region operators
 
 		public static Matrix operator +(Matrix m1, Matrix m2)
 		{
@@ -235,8 +236,9 @@ namespace CG
 		// todo: implement these
 		public static Matrix RotationMatrix2D(float amount)
 		{
-			
-			return null;
+			var matrix = IdentityMatrix(3);
+
+			return matrix;
 		}
 
 		public static Matrix RotationMatrix3D()

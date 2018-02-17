@@ -55,7 +55,7 @@ void init() {
 
 	static const GLfloat g_vertex_buffer_data[] = {
 		0.1f, -0.1f, 0.0f,
-		0.1f, -0.1f, 0.3f,
+		0.1f, -0.1f, 0.0f,
 		0.0f,  0.1f, 0.0f,
 	};
 
