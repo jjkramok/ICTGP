@@ -17,7 +17,7 @@ namespace CG.G3D
 		public Form3D()
 		{
 			cube = new Cube(Color.Green);
-			var matrix = Matrix.ScalingMatrix(50f, 50f, 50f) * Matrix.TranslationMatrix3D(1.4f, 1.4f, 0f);
+			var matrix = Matrix.ScalingMatrix3D(50f, 50f, 50f) * Matrix.TranslationMatrix3D(1.4f, 1.4f, 0f);
 			//var matrix = Matrix.IdentityMatrix(4);
 			for (int i = 0; i < cube.vertexbuffer.Count; i++)
 			{
@@ -37,6 +37,17 @@ namespace CG.G3D
 		{
 			Graphics g = e.Graphics;
 			cube.Draw(g, cube.vertexbuffer);
+		}
+
+		private void Draw3D(Graphics g)
+		{
+			// draw cube
+			var viewMatrix = Matrix.ViewMatrix3D((float) Math.PI, (float) Math.PI, 1);
+			foreach (var thing in cube.vertexbuffer)
+			{
+				var translateMatrices = Matrix.ProjectionMatrix(0, 0);
+				// todo figure out. i dont know this.
+			}
 		}
 	}
 }

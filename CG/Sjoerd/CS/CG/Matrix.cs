@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CG
 {
@@ -48,16 +44,18 @@ namespace CG
 		}
 		#endregion
 
-        public static Matrix Translate(Vector t)
-        {
-            Matrix idMatrix = IdentityMatrix(t.Count);
-            // Add the translation vector to the last column of the matrix
-            for (int row = 0; row < t.Count - 1; row++)
-            {
-                idMatrix.Values[row, t.Count - 1] = t.Values[row];
-            }
-            return idMatrix;
-        }
+		public static Matrix Translate(Vector t)
+		{
+			Matrix idMatrix = IdentityMatrix(t.Count);
+			// Add the translation vector to the last column of the matrix
+			for (int row = 0; row < t.Count - 1; row++)
+			{
+				idMatrix.Values[row, t.Count - 1] = t.Values[row];
+			}
+			return idMatrix;
+		}
+
+
 		#region operators
 
 		public static Matrix operator +(Matrix m1, Matrix m2)
@@ -163,7 +161,7 @@ namespace CG
 			return m * v;
 		}
 		#endregion
-
+		#region convertions
 		public Vector ColumnToVector(int column)
 		{
 			if (column >= Columns)
@@ -191,6 +189,7 @@ namespace CG
 			}
 			return vector;
 		}
+		#endregion
 		#region DefaultMatrices
 		public static Matrix IdentityMatrix(int size)
 		{
@@ -202,17 +201,7 @@ namespace CG
 			return result;
 		}
 
-		public static Matrix ScalingMatrix(int size, float scale)
-		{
-			var matrix = new Matrix(size);
-			for (int i = 0; i < size - 1; i++)
-			{
-				matrix.Values[i, i] = scale;
-			}
-			matrix.Values[size - 1, size - 1] = 1;
-			return matrix;
-		}
-		public static Matrix ScalingMatrix(float scaleX, float scaleY)
+		public static Matrix ScalingMatrix2D(float scaleX, float scaleY)
 		{
 			var matrix = new Matrix(3);
 
@@ -222,7 +211,8 @@ namespace CG
 
 			return matrix;
 		}
-		public static Matrix ScalingMatrix(float scaleX, float scaleY, float scaleZ)
+
+		public static Matrix ScalingMatrix3D(float scaleX, float scaleY, float scaleZ)
 		{
 			var matrix = new Matrix(4);
 
@@ -233,18 +223,75 @@ namespace CG
 
 			return matrix;
 		}
-		// todo: implement these
+
 		public static Matrix RotationMatrix2D(float amount)
 		{
+			// cos  -sin  0
+			// sin  cos   0
+			// 0    0     1
+
 			var matrix = IdentityMatrix(3);
+
+			matrix.Values[0, 0] = (float) Math.Cos(amount);
+			matrix.Values[0, 1] = (float) -Math.Sin(amount);
+			matrix.Values[1, 0] = -matrix.Values[0, 1];
+			matrix.Values[1, 1] = matrix.Values[0, 0];
 
 			return matrix;
 		}
 
-		public static Matrix RotationMatrix3D()
+		public static Matrix RotationMatrix3Dx(float amount)
 		{
-			return null;
+			//	1	0	0	0
+			//	0	cos	-sin0
+			//	0	sin  cos0
+			//	0	0	0	1
+
+			var matrix = IdentityMatrix(4);
+
+			matrix.Values[1, 1] = (float) Math.Cos(amount);
+			matrix.Values[1, 2] = (float) -Math.Sin(amount);
+			matrix.Values[2, 1] = -matrix.Values[1, 2];
+			matrix.Values[2, 2] = matrix.Values[1, 1];
+
+			return matrix;
 		}
+
+		public static Matrix RotationMatrix3Dy(float amount)
+		{
+			//	cos	0	sin	0
+			//	0	1	0	0
+			//	-sin0	cos	0
+			//	0	0	0	1
+
+			var matrix = IdentityMatrix(4);
+
+			matrix.Values[0, 0] = (float) Math.Cos(amount);
+			matrix.Values[0, 2] = (float) Math.Sin(amount);
+			matrix.Values[2, 0] = -matrix.Values[0, 2];
+			matrix.Values[2, 2] = matrix.Values[0, 0];
+
+			return matrix;
+		}
+
+
+		public static Matrix RotationMatrix3Dz(float amount)
+		{
+			//	cos	-sin0	0
+			//	sin cos	0	0
+			//	0	0	1	0
+			//	0	0	0	1
+
+			var matrix = IdentityMatrix(4);
+
+			matrix.Values[0, 0] = (float) Math.Cos(amount);
+			matrix.Values[0, 1] = (float) -Math.Sin(amount);
+			matrix.Values[1, 0] = -matrix.Values[0, 1];
+			matrix.Values[1, 1] = matrix.Values[0, 0];
+
+			return matrix;
+		}
+
 
 		public static Matrix TranslationMatrix2D(float x, float y)
 		{
@@ -260,6 +307,46 @@ namespace CG
 			matrix.Values[0, 3] = x;
 			matrix.Values[1, 3] = y;
 			matrix.Values[2, 3] = z;
+			return matrix;
+		}
+
+		public static Matrix ViewMatrix3D(float o, float p, float r)
+		{
+			// -sinO		cosO		0			0
+			// cosOcosP		-cosPsinO	sinP		0
+			// cosOsinP		sinOsinP	cosP		-r
+			// 0			0			0			1
+
+			var matrix = IdentityMatrix(4);
+
+			float sinO = (float) Math.Sin(o);
+			float sinP = (float) Math.Sin(p);
+			float cosO = (float) Math.Cos(o);
+			float cosP = (float) Math.Cos(p);
+
+			matrix.Values[0, 0] = -sinO;
+			matrix.Values[0, 1] = cosO;
+			matrix.Values[1, 0] = cosO * cosP;
+			matrix.Values[1, 1] = -cosP * sinO;
+			matrix.Values[1, 2] = sinP;
+			matrix.Values[2, 0] = cosO * sinP;
+			matrix.Values[2, 1] = sinO * sinP;
+			matrix.Values[2, 2] = cosP;
+			matrix.Values[2, 3] = -r;
+
+			return matrix;
+		}
+
+		public static Matrix ProjectionMatrix(float d, float z)
+		{
+			// -d/z		0		0		0
+			// 0		-d/z	0		0
+
+			var matrix = new Matrix(2, 4);
+
+			matrix.Values[0, 0] = -d / z;
+			matrix.Values[1, 1] = matrix.Values[0, 0];
+
 			return matrix;
 		}
 		#endregion

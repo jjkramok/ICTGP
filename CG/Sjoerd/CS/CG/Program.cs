@@ -14,6 +14,7 @@ namespace CG
 		static void Main(string[] args)
 		{
 			//Test2D();
+			Test3D();
 			TestVector();
 			Console.WriteLine();
 			TestMatrix();
@@ -43,19 +44,25 @@ namespace CG
 			Console.WriteLine("multiply matrix");
 			Console.WriteLine(m1 * m2);
 
-            Vector TwoDTranslationVector = new Vector(new float[] { 4, -1, 1 });
-            Vector ThreeDTranslationVector = new Vector(new float[] { 4, -1, 8, 1 });
-            Matrix tm1 = Matrix.Translate(TwoDTranslationVector);
-            Matrix tm2 = Matrix.Translate(ThreeDTranslationVector);
-            Console.WriteLine("Translation matrix based on 2d vector");
-            Console.WriteLine(TwoDTranslationVector);
-            Console.WriteLine(tm1);
-            Console.WriteLine("Translation matrix based on 3d vector");
-            Console.WriteLine(ThreeDTranslationVector);
-            Console.WriteLine(tm2);
-        }
+			Vector TwoDTranslationVector = new Vector(new float[] { 4, -1, 1 });
+			Vector ThreeDTranslationVector = new Vector(new float[] { 4, -1, 8, 1 });
+			Matrix tm1 = Matrix.Translate(TwoDTranslationVector);
+			Matrix tm2 = Matrix.Translate(ThreeDTranslationVector);
+			Console.WriteLine("Translation matrix based on 2d vector");
+			Console.WriteLine(TwoDTranslationVector);
+			Console.WriteLine(tm1);
+			Console.WriteLine("Translation matrix based on 3d vector");
+			Console.WriteLine(ThreeDTranslationVector);
+			Console.WriteLine(tm2);
+		}
 
 		static void Test2D()
+		{
+			Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault(false);
+			Application.Run(new Form2D());
+		}
+		static void Test3D()
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
