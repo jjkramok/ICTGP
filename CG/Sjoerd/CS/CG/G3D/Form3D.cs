@@ -27,11 +27,6 @@ namespace CG.G3D
 			InitializeComponent();
 		}
 
-		private void rotateButton_Click(object sender, EventArgs e)
-		{
-			// rotate
-		}
-
 		private void drawPanel_Paint(object sender, PaintEventArgs e)
 		{
 			Graphics g = e.Graphics;
@@ -53,12 +48,44 @@ namespace CG.G3D
 				var changed = original * viewMatrix;
 				var translateMatrices = Matrix.ProjectionMatrix(d, changed.Values[3]);
 				drawableCube.Add((changed * translateMatrices) + new Vector(new float[] { 150f, 150f, 0, 0 }));
-
-				//Pen pen = new Pen(Color.Green, 3f);
-				//g.DrawLine(pen, drawer.Values[0], drawer.Values[1], drawer.Values[0], drawer.Values[1]);
-				Console.WriteLine(drawableCube.Last());
 			}
 			cube.Draw(g, drawableCube);
 		}
+
+
+		// todo implement
+		private void Form3D_KeyDown(object sender, KeyEventArgs e)
+		{
+			bool inverse = e.Shift;
+			switch (e.KeyCode)
+			{
+				case Keys.Up: // change x/z
+					break;
+				case Keys.Down: // change x/z
+					break;
+				case Keys.Left: // change x/z
+					break;
+				case Keys.Right: // change x/z
+					break;
+				case Keys.X: // rotate
+					break;
+				case Keys.Y: // rotate
+					break;
+				case Keys.Z: // rotate
+					break;
+				case Keys.PageUp: // change y
+					break;
+				case Keys.PageDown: // change y
+					break;
+				case Keys.S: // scale
+					break;
+				case Keys.A: // animate
+					break;
+				case Keys.C: // reset
+					break;
+			}
+			drawPanel.Refresh();
+		}
+		
 	}
 }

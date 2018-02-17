@@ -13,12 +13,11 @@ namespace CG
 	{
 		static void Main(string[] args)
 		{
-			//Test2D();
 			Test3D();
+
 			TestVector();
 			Console.WriteLine();
 			TestMatrix();
-			Console.ReadKey();
 		}
 
 		static void TestVector()
