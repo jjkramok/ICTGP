@@ -56,6 +56,7 @@ namespace CG.G3D
 		// todo implement
 		private void Form3D_KeyDown(object sender, KeyEventArgs e)
 		{
+			var transformationMatrix = Matrix.IdentityMatrix(4);
 			bool inverse = e.Shift;
 			switch (e.KeyCode)
 			{
@@ -67,11 +68,11 @@ namespace CG.G3D
 					break;
 				case Keys.Right: // change x/z
 					break;
-				case Keys.X: // rotate
+				case Keys.X: // rotate X
 					break;
-				case Keys.Y: // rotate
+				case Keys.Y: // rotate Y
 					break;
-				case Keys.Z: // rotate
+				case Keys.Z: // rotate Z
 					break;
 				case Keys.PageUp: // change y
 					break;
@@ -84,8 +85,14 @@ namespace CG.G3D
 				case Keys.C: // reset
 					break;
 			}
+
+			// apply tranformation matrix to cube
+			for(int i = 0; i < cube.vertexbuffer.Count; i++)
+			{
+				cube.vertexbuffer[i] *= transformationMatrix;
+			}
+			// redraw
 			drawPanel.Refresh();
 		}
-		
 	}
 }
