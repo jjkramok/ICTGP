@@ -10,6 +10,6 @@ namespace Assignment.Entity
 	abstract class BaseEntity
 	{
 		protected List<BaseSteering> SteeringBehaviours;
-
+		public EntityType Type { get; }
 	}
 }

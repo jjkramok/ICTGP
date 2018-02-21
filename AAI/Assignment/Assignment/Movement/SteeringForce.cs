@@ -6,15 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assignment.Movement
 {
-	abstract class BaseSteering
+	class SteeringForce
 	{
-		public double Priority;
-
-		public BaseSteering()
-		{
-
-		}
-
-		public abstract SteeringForce Calculate();
 	}
 }

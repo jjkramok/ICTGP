@@ -6,15 +6,11 @@ using System.Threading.Tasks;
 
 namespace Assignment.Movement
 {
-	abstract class BaseSteering
+	class Wander : BaseSteering
 	{
-		public double Priority;
-
-		public BaseSteering()
+		public override SteeringForce Calculate()
 		{
-
+			throw new NotImplementedException();
 		}
-
-		public abstract SteeringForce Calculate();
 	}
 }
