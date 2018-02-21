@@ -7,7 +7,7 @@ using Assignment.Entity;
 
 namespace Assignment.Movement
 {
-	class Wander : BaseSteering
+	class ObstacleAvoidance : BaseSteering
 	{
 		public override SteeringForce Calculate(BaseEntity entity)
 		{

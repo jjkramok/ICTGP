@@ -1,4 +1,5 @@
 ﻿using Assignment.Entity;
+using Assignment.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +10,21 @@ namespace Assignment.Movement
 {
 	class Seek : BaseSteering
 	{
-		public BaseEntity SeekEntity;
-		public double offset;
+		public BaseEntity ChaseEntity;
+		public double MaxDistance;
 
-		public override SteeringForce Calculate()
+		public override SteeringForce Calculate(BaseEntity entity)
 		{
-			throw new NotImplementedException();
+			var distance = Utilities.Distance(entity.Location, ChaseEntity.Location);
+			if (distance > MaxDistance)
+			{
+				return new SteeringForce();
+			}
+
+			var direction = Utilities.Direction(entity.Location, ChaseEntity.Location);
+
+			// todo nmn
+			return new SteeringForce(direction, 5);
 		}
 	}
 }

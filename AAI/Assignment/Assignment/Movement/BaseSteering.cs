@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assignment.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,11 +11,12 @@ namespace Assignment.Movement
 	{
 		public double Priority;
 
+
 		public BaseSteering()
 		{
 
 		}
 
-		public abstract SteeringForce Calculate();
+		public abstract SteeringForce Calculate(BaseEntity entity);
 	}
 }
