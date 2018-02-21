@@ -36,12 +36,12 @@
 AAI/AAI/.vs/*
 AAI/AAI/Debug/*
 AAI/AAI/Release/*
-*.sln
+
 *.vcxproj
 *.vcxproj.*
 AAI/AAI/lib/*.hpp
 CG/Sjoerd/CS/CG/.vs/*
-*.csproj
+
 AAI/Assignment/.vs/*
 AAI/Assignment/Assignment/Debug/*
 AAI/Assignment/Assignment/x64/*
