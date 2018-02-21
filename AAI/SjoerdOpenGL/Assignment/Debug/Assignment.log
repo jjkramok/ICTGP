@@ -1,0 +1,12 @@
+﻿glsl.obj : error LNK2001: unresolved external symbol __imp____glewAttachShader
+glsl.obj : error LNK2001: unresolved external symbol __imp____glewCompileShader
+glsl.obj : error LNK2001: unresolved external symbol __imp____glewCreateProgram
+glsl.obj : error LNK2001: unresolved external symbol __imp____glewCreateShader
+glsl.obj : error LNK2001: unresolved external symbol __imp____glewGetShaderInfoLog
+glsl.obj : error LNK2001: unresolved external symbol __imp____glewGetShaderiv
+glsl.obj : error LNK2001: unresolved external symbol __imp____glewLinkProgram
+glsl.obj : error LNK2001: unresolved external symbol __imp____glewShaderSource
+Program.obj : error LNK2019: unresolved external symbol __imp__glewInit@0 referenced in function _main
+Program.obj : error LNK2001: unresolved external symbol __imp____glewUseProgram
+Program.obj : error LNK2001: unresolved external symbol __imp____glewClearBufferfv
+D:\Dev\C\GamesProgramming\AAI\Assignment\Debug\Assignment.exe : fatal error LNK1120: 11 unresolved externals
