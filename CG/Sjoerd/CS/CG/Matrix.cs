@@ -213,6 +213,29 @@ namespace CG
 			return matrix;
 		}
 
+		public static Matrix ScalingMatrix2D(float scale)
+		{
+			var matrix = new Matrix(3);
+
+			matrix.Values[0, 0] = scale;
+			matrix.Values[1, 1] = scale;
+			matrix.Values[2, 2] = 1;
+
+			return matrix;
+		}
+
+		public static Matrix ScalingMatrix3D(float scale)
+		{
+			var matrix = new Matrix(4);
+
+			matrix.Values[0, 0] = scale;
+			matrix.Values[1, 1] = scale;
+			matrix.Values[2, 2] = scale;
+			matrix.Values[3, 3] = 1;
+
+			return matrix;
+		}
+
 		public static Matrix ScalingMatrix3D(float scaleX, float scaleY, float scaleZ)
 		{
 			var matrix = new Matrix(4);
@@ -245,7 +268,7 @@ namespace CG
 		{
 			//	1	0	0	0
 			//	0	cos	-sin0
-			//	0	sin  cos0
+			//	0	sin cos 0
 			//	0	0	0	1
 
 			var matrix = IdentityMatrix(4);
