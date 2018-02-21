@@ -36,7 +36,7 @@ namespace Assignment.World
 			Random = new Random();
 			Entities = new List<BaseEntity>
 			{
-				new BaseEntity{ Direction = Math.PI * 0.5, Location = new Location(50, 50)},
+				new BaseEntity{ Direction = Math.PI * 0.1, Location = new Location(50, 50)},
 			};
 			Width = 200;
 			Height = 200;

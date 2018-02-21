@@ -29,5 +29,11 @@ namespace Assignment.Renderer
 			var renderer = new Rendering(e.Graphics, worldPanel);
 			renderer.Render();
 		}
+
+		private void button2_Click(object sender, EventArgs e)
+		{
+			GameWorld.Instance.Entities[0].Direction = GameWorld.Instance.Random.NextDouble() * Math.PI * 2;
+			worldPanel.Refresh();
+		}
 	}
 }
