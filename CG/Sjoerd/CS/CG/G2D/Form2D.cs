@@ -58,12 +58,6 @@ namespace CG.G2D
             InitializeComponent();
 		}
 
-        private void rotateButton_Click(object sender, EventArgs e)
-        {
-            Matrix rotateMatrix = Matrix.RotationMatrix2D(0.1f * (float)Math.PI);
-            // todo apply matrix to square;
-        }
-
 		private void drawPanel_Paint(object sender, PaintEventArgs e)
 		{
             Graphics g = e.Graphics;

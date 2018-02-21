@@ -13,11 +13,17 @@ namespace CG
 	{
 		static void Main(string[] args)
 		{
-			Test3D();
+			Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault(false);
 
-			TestVector();
-			Console.WriteLine();
-			TestMatrix();
+			Test3D();
+			Test2D();
+
+			//TestVector();
+			//Console.WriteLine();
+			//TestMatrix();
+
+			Application.Run();
 		}
 
 		static void TestVector()
@@ -57,15 +63,13 @@ namespace CG
 
 		static void Test2D()
 		{
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new Form2D());
+			Form form = new Form2D();
+			form.Show();
 		}
 		static void Test3D()
 		{
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new Form3D());
+			Form form = new Form3D();
+			form.Show();
 		}
 	}
 }

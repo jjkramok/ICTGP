@@ -28,49 +28,36 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.drawPanel = new System.Windows.Forms.Panel();
-            this.rotateButton = new System.Windows.Forms.Button();
-            this.SuspendLayout();
-            // 
-            // drawPanel
-            // 
-            this.drawPanel.Location = new System.Drawing.Point(16, 15);
-            this.drawPanel.Margin = new System.Windows.Forms.Padding(4);
-            this.drawPanel.Name = "drawPanel";
-            this.drawPanel.Size = new System.Drawing.Size(347, 292);
-            this.drawPanel.TabIndex = 0;
-            this.drawPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.drawPanel_Paint);
-            // 
-            // rotateButton
-            // 
-            this.rotateButton.Location = new System.Drawing.Point(17, 315);
-            this.rotateButton.Margin = new System.Windows.Forms.Padding(4);
-            this.rotateButton.Name = "rotateButton";
-            this.rotateButton.Size = new System.Drawing.Size(100, 28);
-            this.rotateButton.TabIndex = 1;
-            this.rotateButton.Text = "Rotate";
-            this.rotateButton.UseVisualStyleBackColor = true;
-            this.rotateButton.Click += new System.EventHandler(this.rotateButton_Click);
-            // 
-            // Form2D
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(379, 370);
-            this.Controls.Add(this.rotateButton);
-            this.Controls.Add(this.drawPanel);
-            this.KeyPreview = true;
-            this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "Form2D";
-            this.Text = "Form2D";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form2D_KeyDown);
-            this.ResumeLayout(false);
+			this.drawPanel = new System.Windows.Forms.Panel();
+			this.SuspendLayout();
+			// 
+			// drawPanel
+			// 
+			this.drawPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.drawPanel.Location = new System.Drawing.Point(12, 12);
+			this.drawPanel.Name = "drawPanel";
+			this.drawPanel.Size = new System.Drawing.Size(267, 243);
+			this.drawPanel.TabIndex = 0;
+			this.drawPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.drawPanel_Paint);
+			// 
+			// Form2D
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.ClientSize = new System.Drawing.Size(291, 267);
+			this.Controls.Add(this.drawPanel);
+			this.KeyPreview = true;
+			this.Name = "Form2D";
+			this.Text = "Form2D";
+			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form2D_KeyDown);
+			this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
 		private System.Windows.Forms.Panel drawPanel;
-		private System.Windows.Forms.Button rotateButton;
 	}
 }
