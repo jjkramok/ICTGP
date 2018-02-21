@@ -19,7 +19,7 @@ namespace CG.G2D
 			this.size = size;
 
 			vb = new List<Vector>();
-			vb.Add(new Vector(new float[] { 0, 0 }));
+			vb.Add(new Vector(new float[] { -size, 0 }));
 			vb.Add(new Vector(new float[] { size, 0 }));
 		}
 
