@@ -25,10 +25,10 @@ namespace GC.G2D
 			this.weight = weight;
 
 			vb = new List<Vector>();
-			vb.Add(new Vector(new float[] { 0, 0 }));
-			vb.Add(new Vector(new float[] { size, 0 }));
-			vb.Add(new Vector(new float[] { size, size }));
-			vb.Add(new Vector(new float[] { 0, size }));
+			vb.Add(new Vector(new float[] { 0, 0, 1 }));
+			vb.Add(new Vector(new float[] { size, 0, 1 }));
+			vb.Add(new Vector(new float[] { size, size, 1 }));
+			vb.Add(new Vector(new float[] { 0, size, 1 }));
 		}
 
 		public void Draw(Graphics g)
@@ -38,7 +38,7 @@ namespace GC.G2D
 			g.DrawLine(pen, vb[1].Values[0], vb[1].Values[1], vb[2].Values[0], vb[2].Values[1]);
 			g.DrawLine(pen, vb[2].Values[0], vb[2].Values[1], vb[3].Values[0], vb[3].Values[1]);
 			g.DrawLine(pen, vb[3].Values[0], vb[3].Values[1], vb[0].Values[0], vb[0].Values[1]);
-		}
+        }
 
 		public void Translate(Vector Change)
 		{
@@ -47,5 +47,15 @@ namespace GC.G2D
 				vb[i] = vb[i] + Change;
 			}
 		}
+
+        public void Transform(Matrix t)
+        {
+            List<Vector> transformedVectors = new List<Vector>();
+            foreach(Vector v in vb)
+            {
+                transformedVectors.Add(v * t);
+            }
+            vb = transformedVectors;
+        }
 	}
 }
