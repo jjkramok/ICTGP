@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assignment.World
 {
-	class Location
+	public class Location
 	{
 		public double X;
 		public double Y;

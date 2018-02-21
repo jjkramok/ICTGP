@@ -58,6 +58,7 @@
     <Compile Include="Movement\Wander.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="State\BaseState.cs" />
     <Compile Include="Renderer\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -67,6 +68,7 @@
     <Compile Include="Renderer\Rendering.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="World\GameWorld.cs" />
+    <Compile Include="World\Graph.cs" />
     <Compile Include="World\Location.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

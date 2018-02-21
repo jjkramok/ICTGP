@@ -16,6 +16,7 @@ namespace Assignment.World
 		public double Width { get; private set; }
 		public double Height { get; private set; }
 		public double GridSize { get; private set; }
+		public Graph NavGraph { get; private set; }
 		public List<BaseEntity> Entities { get; private set; }
 
 		public Random Random;
