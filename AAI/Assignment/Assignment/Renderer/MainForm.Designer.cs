@@ -31,6 +31,7 @@
 			this.worldPanel = new System.Windows.Forms.Panel();
 			this.startButton = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
+			this.infoLabel = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// worldPanel
@@ -66,17 +67,28 @@
 			this.button2.UseVisualStyleBackColor = true;
 			this.button2.Click += new System.EventHandler(this.button2_Click);
 			// 
+			// infoLabel
+			// 
+			this.infoLabel.AutoSize = true;
+			this.infoLabel.Location = new System.Drawing.Point(714, 69);
+			this.infoLabel.Name = "infoLabel";
+			this.infoLabel.Size = new System.Drawing.Size(35, 13);
+			this.infoLabel.TabIndex = 0;
+			this.infoLabel.Text = "label1";
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(804, 474);
+			this.Controls.Add(this.infoLabel);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.startButton);
 			this.Controls.Add(this.worldPanel);
 			this.Name = "MainForm";
 			this.Text = "AAIForm";
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -85,5 +97,6 @@
 		private System.Windows.Forms.Panel worldPanel;
 		private System.Windows.Forms.Button startButton;
 		private System.Windows.Forms.Button button2;
+		private System.Windows.Forms.Label infoLabel;
 	}
 }

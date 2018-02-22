@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Assignment.Entity
 {
-	enum EntityType
+	public enum EntityType
 	{
-		type1,
-		type2
+		Herbivore,
+		Omnivore
 	}
 }
