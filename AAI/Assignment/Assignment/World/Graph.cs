@@ -9,7 +9,7 @@ namespace Assignment.World
         //public HashSet<Vertex> vertices;
         public Dictionary<string, Vertex> vertices;
 
-        private double NodeSpreadDistance = 10;
+        private double NodeSpreadDistance = 50;
         private double AgentCollisionSpacing = 5f;
         private long nextVertexLabel = 0;
         private const int MAX_NAV_DEPTH = 5000;
@@ -52,7 +52,7 @@ namespace Assignment.World
             // Base case: out of bounds
             if (x <= 0 || x >= GameWorld.Instance.Width || y <= 0 || y >= GameWorld.Instance.Height)
             {
-                Console.WriteLine("NavGraph out-of-bounds");
+                //Console.WriteLine("NavGraph out-of-bounds");
                 return;
             }
                 

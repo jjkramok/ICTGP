@@ -12,7 +12,7 @@ namespace Assignment.Movement
 	{
 		public override SteeringForce Calculate(BaseEntity entity)
 		{
-			double direction = entity.Direction + GameWorld.Instance.Random.NextDouble() - 0.5;
+			double direction = entity.Direction + (GameWorld.Instance.Random.NextDouble() - 0.5);
 			double force = GameWorld.Instance.Random.NextDouble();
 
 			return new SteeringForce(direction, force);

@@ -1,4 +1,5 @@
 ﻿using Assignment.Entity;
+using Assignment.Obstacle;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,7 @@ namespace Assignment.World
 			}
 
 			MapEntities();
+			MapObstacles();
 		}
 
 		private void MapEntities()
@@ -40,6 +42,18 @@ namespace Assignment.World
 			{
 				var cellLocation = GetGridCellForLocation(entity.Location);
 				GridCells[cellLocation.Item1, cellLocation.Item2].Entities.Add(entity);
+			}
+		}
+
+		private void MapObstacles()
+		{
+			foreach (var obstacle in GameWorld.Instance.Obstacles)
+			{
+				foreach (var circle in obstacle.CollisionCircles)
+				{
+					var cellLocation = GetGridCellForLocation(circle.Location);
+					GridCells[cellLocation.Item1, cellLocation.Item2].Obstacles.Add(circle);
+				}
 			}
 		}
 
@@ -80,6 +94,25 @@ namespace Assignment.World
 			int cellY = (int) (location.Y / CellHeight);
 
 			return new Tuple<int, int>(cellX, cellY);
+		}
+
+		public List<ObstacleCircle> ObstacleCirclesNearLocation(Location location, double distance)
+		{
+			var centerCell = GetGridCellForLocation(location);
+			var cellDistanceX = (int) Math.Ceiling(distance / CellWidth);
+			var cellDistanceY = (int) Math.Ceiling(distance / CellHeight);
+
+			List<ObstacleCircle> circles = new List<ObstacleCircle>();
+
+			for (int x = Math.Max(centerCell.Item1 - cellDistanceX, 0); x < Math.Min(centerCell.Item1 + cellDistanceX, GridWidth); x++)
+			{
+				for (int y = Math.Max(centerCell.Item2 - cellDistanceY, 0); y < Math.Min(centerCell.Item2 + cellDistanceY, GridHeight); y++)
+				{
+					circles.AddRange(GridCells[x, y].Obstacles);
+				}
+			}
+
+			return circles;
 		}
 	}
 }

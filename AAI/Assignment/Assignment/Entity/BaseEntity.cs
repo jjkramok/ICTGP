@@ -18,6 +18,7 @@ namespace Assignment.Entity
 		public double Speed;
 		public double MaxSpeed;
 		public double MaxForce;
+		public double DirectionMaxChange = 0.3;
 
 		public Location Location;
 
@@ -50,20 +51,17 @@ namespace Assignment.Entity
 					throw new Exception("Current SteeringForceCalculationType is invalid.");
 			}
 
-			if (force.Amount > MaxForce)
-			{
-				force.Amount = MaxForce;
-			}
+			force.Amount = Math.Min(force.Amount, MaxForce);
 
 			ApplySteeringForce(force);
 		}
 
 		private void ApplySteeringForce(SteeringForce force)
 		{
-			Direction = force.Direction;
+			Direction += Math.Min(Math.Max(Direction - force.Direction, -DirectionMaxChange), DirectionMaxChange);
 			// todo nmn
 			Speed += force.Amount * 0.1;// inertia
-
+			Speed = Math.Min(Speed, MaxSpeed);
 
 			Location.X = (Location.X + (Math.Cos(Direction) * Speed));
 			Location.Y = (Location.Y + (Math.Sin(Direction) * Speed));
@@ -89,7 +87,7 @@ namespace Assignment.Entity
 
 		private SteeringForce CalculateSteeringForcePriorization()
 		{
-			int behaviorsCalculationCount = 3;
+			int behaviorsCalculationCount = 1;
 			SteeringForce force = new SteeringForce();
 
 			for(int i = 0; i < behaviorsCalculationCount && i < SteeringBehaviours.Count; i++)

@@ -11,7 +11,8 @@ namespace Assignment.Entity
 	{
 		public Herbivore() : base()
 		{
-			MaxSpeed = 10;
+			MaxSpeed = 2;
+			SteeringBehaviours.Add(new ObstacleAvoidance());
 			SteeringBehaviours.Add(new Wander());
 		}
 

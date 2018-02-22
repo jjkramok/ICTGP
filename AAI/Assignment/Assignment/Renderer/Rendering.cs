@@ -30,13 +30,13 @@ namespace Assignment.Renderer
 			using (graphics = Graphics.FromImage(screen))
 			{
 				RenderBackground();
-				RenderStatic();
-				RenderGrid();
+				RenderObstacles();
+				//RenderGrid();
 				RenderEntities();
-				RenderNavGraph();
+				//RenderNavGraph();
 			}
 
-			graphicsPanel.DrawImage(screen, 0, 0);
+			graphicsPanel.DrawImage(screen, 0, 0, panel.Width, panel.Height);
 		}
 
 		private void RenderBackground()
@@ -44,9 +44,12 @@ namespace Assignment.Renderer
 			graphics.FillRectangle(Brushes.White, 0, 0, panel.Width, panel.Height);
 		}
 
-		private void RenderStatic()
+		private void RenderObstacles()
 		{
-
+			foreach(var obstacle in GameWorld.Instance.Obstacles)
+			{
+				obstacle.Render(graphics);
+			}
 		}
 
 		private void RenderGrid()
@@ -68,6 +71,7 @@ namespace Assignment.Renderer
 
 		private void RenderEntities()
 		{
+			var pen = new Pen(Color.Green);
 			int size = 20;
 			foreach (var entity in GameWorld.Instance.Entities)
 			{
@@ -76,7 +80,7 @@ namespace Assignment.Renderer
 				int x = (int) (entity.Location.X + (Math.Cos(entity.Direction) * size));
 				int y = (int) (entity.Location.Y + (Math.Sin(entity.Direction) * size));
 
-				graphics.DrawLine(new Pen(Color.Green), (int) entity.Location.X, (int) entity.Location.Y, x, y);
+				graphics.DrawLine(pen, (int) entity.Location.X, (int) entity.Location.Y, x, y);
 			}
 		}
         

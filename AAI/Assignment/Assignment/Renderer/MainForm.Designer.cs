@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.worldPanel = new System.Windows.Forms.Panel();
+			this.worldPanel1 = new System.Windows.Forms.Panel();
 			this.startButton = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
 			this.infoLabel = new System.Windows.Forms.Label();
@@ -37,14 +37,14 @@
 			// 
 			// worldPanel
 			// 
-			this.worldPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.worldPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.worldPanel.Location = new System.Drawing.Point(0, 0);
-			this.worldPanel.Name = "worldPanel";
-			this.worldPanel.Size = new System.Drawing.Size(700, 474);
-			this.worldPanel.TabIndex = 0;
-			this.worldPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.worldPanel_Paint);
+			this.worldPanel1.Location = new System.Drawing.Point(0, 0);
+			this.worldPanel1.Name = "worldPanel";
+			this.worldPanel1.Size = new System.Drawing.Size(700, 474);
+			this.worldPanel1.TabIndex = 0;
+			this.worldPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.worldPanel2_Paint);
 			// 
 			// startButton
 			// 
@@ -97,7 +97,7 @@
 			this.Controls.Add(this.infoLabel);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.startButton);
-			this.Controls.Add(this.worldPanel);
+			this.Controls.Add(this.worldPanel1);
 			this.Name = "MainForm";
 			this.Text = "AAIForm";
 			this.ResumeLayout(false);
@@ -107,7 +107,7 @@
 
 		#endregion
 
-		private System.Windows.Forms.Panel worldPanel;
+		private System.Windows.Forms.Panel worldPanel1;
 		private System.Windows.Forms.Button startButton;
 		private System.Windows.Forms.Button button2;
 		private System.Windows.Forms.Label infoLabel;
