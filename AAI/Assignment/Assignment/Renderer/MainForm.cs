@@ -46,5 +46,11 @@ namespace Assignment.Renderer
 
 			worldPanel.Refresh();
 		}
+
+		private void worldPanel2_Paint(object sender, PaintEventArgs e)
+		{
+			var renderer = new Rendering(e.Graphics, worldPanel);
+			renderer.Render();
+		}
 	}
 }
