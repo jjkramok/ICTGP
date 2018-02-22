@@ -9,7 +9,7 @@ namespace Assignment.World
         //public HashSet<Vertex> vertices;
         public Dictionary<string, Vertex> vertices;
 
-        private double NodeSpreadDistance = 10;
+        private double NodeSpreadDistance = GameWorld.Instance.Width / 25;
         private double AgentCollisionSpacing = 5f;
         private long nextVertexLabel = 0;
         private const int MAX_NAV_DEPTH = 5000;
@@ -119,12 +119,13 @@ namespace Assignment.World
             return res;
         }
 
-        public class Vertex : IComparable
+        public class Vertex : IComparable<Vertex>
         {      
             public string Label;
             public HashSet<Edge> Adj;
             public Vertex Prev;
             public double Dist;
+            public double HDist;
             public bool Known;
             public Location Loc { get; set; }
             public string ExtraInfo { get; set; } //TODO node should be able to contain items or other objects (change type later)
@@ -145,7 +146,7 @@ namespace Assignment.World
 
             public int CompareTo(Vertex v)
             {
-                return (int) (Dist - v.Dist);
+                return (int)(HDist - v.HDist);
             }
 
             public override string ToString() {
