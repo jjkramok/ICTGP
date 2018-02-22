@@ -26,11 +26,11 @@ namespace Assignment.Movement
 
 				var angleDiff = angle - entity.Direction;
 
-				var offset = Math.Sin(Math.Abs(angleDiff)) * distance;
+				var offset = Math.Asin(Math.Abs(angleDiff)) * distance;
 
 				if (offset < offsetMargin + obstacle.Radius)
 				{
-					force += new SteeringForce(entity.Direction + angleDiff * 2, 100 / distance);
+					force += new SteeringForce(entity.Direction + angleDiff, 100 / distance);
 				}
 			}
 
