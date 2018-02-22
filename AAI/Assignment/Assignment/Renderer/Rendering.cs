@@ -25,6 +25,7 @@ namespace Assignment.Renderer
 			RenderBackground();
 			RenderStatic();
 			RenderEntities();
+            //RenderNavGraph();
 		}
 
 		private void RenderBackground()
@@ -50,5 +51,15 @@ namespace Assignment.Renderer
 				graphics.DrawLine(new Pen(Color.Green), (int) entity.Location.X, (int) entity.Location.Y, x, y);
 			}
 		}
+        
+        private void RenderNavGraph()
+        {
+            foreach (var entry in GameWorld.Instance.NavGraph.vertices)
+            {
+                Graph.Vertex v = entry.Value;
+                float pointRadius = 1;
+                graphics.DrawEllipse(new Pen(Color.LawnGreen), (float) v.Loc.X - pointRadius / 2, (float) v.Loc.Y - pointRadius / 2, pointRadius, pointRadius);
+            }
+        }
 	}
 }

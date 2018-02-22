@@ -28,6 +28,7 @@ namespace Assignment.World
 				if (_instance == null)
 				{
 					_instance = new GameWorld();
+                    _instance.NavGraph = new Graph();
 				}
 				return _instance;
 			}
@@ -39,11 +40,10 @@ namespace Assignment.World
 			{
 				new BaseEntity{ Direction = Math.PI * 0.1, Location = new Location(50, 50)},
 			};
-			Width = 200;
-			Height = 200;
+			Width = 400;
+			Height = 400;
 			GridSize = 10;
 			SteeringForceCalculationType = SteeringForceCalculationType.Dithering;
-
 		}
 
 		public static void DeleteWorld()
