@@ -52,7 +52,6 @@ namespace Assignment.World
             // Base case: out of bounds
             if (x <= 0 || x >= GameWorld.Instance.Width || y <= 0 || y >= GameWorld.Instance.Height)
             {
-                Console.WriteLine("NavGraph out-of-bounds");
                 return;
             }
                 
@@ -120,7 +119,7 @@ namespace Assignment.World
             return res;
         }
 
-        public class Vertex
+        public class Vertex : IComparable
         {      
             public string Label;
             public HashSet<Edge> Adj;
@@ -142,6 +141,11 @@ namespace Assignment.World
                 Adj = new HashSet<Edge>();
                 Prev = null;
                 Loc = new Location(x, y);
+            }
+
+            public int CompareTo(Vertex v)
+            {
+                return (int) (Dist - v.Dist);
             }
 
             public override string ToString() {
