@@ -3,9 +3,6 @@ using Assignment.Movement;
 using Assignment.Renderer;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Assignment.World
 {
@@ -20,7 +17,7 @@ namespace Assignment.World
 		public Graph NavGraph { get; private set; }
 		public List<BaseEntity> Entities { get; private set; }
 
-		public const int TickDelay = 50;
+		public const int TickDelay = 10;
 		public MainForm Screen;
 		public Random Random;
 
@@ -31,7 +28,7 @@ namespace Assignment.World
 				if (_instance == null)
 				{
 					_instance = new GameWorld();
-                    _instance.PostInitialize();
+					_instance.PostInitialize();
 				}
 				return _instance;
 			}
@@ -48,7 +45,7 @@ namespace Assignment.World
 			Random = new Random();
 			Entities = new List<BaseEntity>
 			{
-				new Herbivore{ Direction = Math.PI * 0.1, Location = new Location(50, 50)},
+				new Herbivore{ Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(100, 100)},
 			};
 
             Width = 200;
@@ -66,7 +63,9 @@ namespace Assignment.World
 		{
 			foreach(var entity in Entities)
 			{
+				Location oldLocation = new Location(entity.Location.X, entity.Location.Y);
 				entity.Update(1);
+				Grid.UpdateEntity(entity, oldLocation);
 			}
 		}
 
@@ -77,7 +76,18 @@ namespace Assignment.World
 
 		public List<BaseEntity> EntitiesInArea(Location location, double radius)
 		{
-			return new List<BaseEntity>();
+			var searchableEntities = Grid.EntitiesNearLocation(location, radius);
+
+			var closeEntities = new List<BaseEntity>();
+			foreach(var entity in searchableEntities)
+			{
+				if(Utilities.Distance(entity.Location, location) < radius)
+				{
+					closeEntities.Add(entity);
+				}
+			}
+
+			return closeEntities;
 		}
 	}
 }

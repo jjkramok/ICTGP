@@ -67,6 +67,9 @@ namespace Assignment.Entity
 
 			Location.X = (Location.X + (Math.Cos(Direction) * Speed));
 			Location.Y = (Location.Y + (Math.Sin(Direction) * Speed));
+
+			Location.X = Math.Max(Math.Min(Location.X, GameWorld.Instance.Width - 0.001), 0);
+			Location.Y = Math.Max(Math.Min(Location.Y, GameWorld.Instance.Height - 0.001), 0);
 		}
 
 		private SteeringForce CalculateSteeringForceDithering()

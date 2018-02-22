@@ -15,19 +15,19 @@ namespace Assignment.World
 		public readonly int GridWidth;
 		public readonly int GridHeight;
 
-		private GridCell[,] gridcells;
+		public readonly GridCell[,] GridCells;
 
 		public Grid()
 		{
 			GridWidth = (int) Math.Ceiling((double) GameWorld.Instance.Width / CellWidth);
 			GridHeight = (int) Math.Ceiling((double) GameWorld.Instance.Height / CellHeight);
 
-			gridcells = new GridCell[GridWidth, GridHeight];
+			GridCells = new GridCell[GridWidth, GridHeight];
 			for (var x = 0; x < GridWidth; x++)
 			{
 				for (var y = 0; y < GridHeight; y++)
 				{
-					gridcells[x, y] = new GridCell();
+					GridCells[x, y] = new GridCell();
 				}
 			}
 
@@ -39,7 +39,7 @@ namespace Assignment.World
 			foreach (var entity in GameWorld.Instance.Entities)
 			{
 				var cellLocation = GetGridCellForLocation(entity.Location);
-				gridcells[cellLocation.Item1, cellLocation.Item2].Entities.Add(entity);
+				GridCells[cellLocation.Item1, cellLocation.Item2].Entities.Add(entity);
 			}
 		}
 
@@ -55,11 +55,23 @@ namespace Assignment.World
 			{
 				for (int y = Math.Max(centerCell.Item2 - cellDistanceY, 0); y < Math.Min(centerCell.Item2 + cellDistanceY, GridHeight); y++)
 				{
-					entities.AddRange(gridcells[x, y].Entities);
+					entities.AddRange(GridCells[x, y].Entities);
 				}
 			}
 
 			return entities;
+		}
+
+		public void UpdateEntity(BaseEntity entity, Location oldLocation)
+		{
+			var newCell = GetGridCellForLocation(entity.Location);
+			var oldCell = GetGridCellForLocation(oldLocation);
+
+			if (newCell.Equals(oldCell))
+				return;
+
+			GridCells[oldCell.Item1, oldCell.Item2].Entities.Remove(entity);
+			GridCells[newCell.Item1, newCell.Item2].Entities.Add(entity);
 		}
 
 		private Tuple<int, int> GetGridCellForLocation(Location location)

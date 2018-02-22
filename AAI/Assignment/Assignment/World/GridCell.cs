@@ -14,6 +14,6 @@ namespace Assignment.World
 		public GridCell()
 		{
 			Entities = new List<BaseEntity>();
-		}
+		}	
 	}
 }
