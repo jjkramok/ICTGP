@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assignment.Movement
 {
-	class SteeringForce
+	public class SteeringForce
 	{
 		public double Direction;
 		public double Amount;

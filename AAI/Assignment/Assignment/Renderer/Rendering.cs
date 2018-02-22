@@ -45,9 +45,9 @@ namespace Assignment.Renderer
 			{
 				graphics.FillEllipse(Brushes.Blue, (int) entity.Location.X - (size / 2), (int) entity.Location.Y - (size / 2), size, size);
 
-				int x = (int) (entity.Location.X + Math.Cosh(entity.Direction) * size);
-				int y = (int) (entity.Location.Y + Math.Sinh(entity.Direction) * size);
-					
+				int x = (int) (entity.Location.X + (Math.Cos(entity.Direction) * size));
+				int y = (int) (entity.Location.Y + (Math.Sin(entity.Direction) * size));
+
 				graphics.DrawLine(new Pen(Color.Green), (int) entity.Location.X, (int) entity.Location.Y, x, y);
 			}
 		}

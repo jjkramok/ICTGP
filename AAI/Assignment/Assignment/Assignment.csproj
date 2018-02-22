@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E306DF6A-7F40-41FE-BD96-F459074B4A43}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>Assignment</RootNamespace>
     <AssemblyName>Assignment</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -47,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Entity\BaseEntity.cs" />
     <Compile Include="Entity\EntityType.cs" />
+    <Compile Include="Entity\Herbivore.cs" />
     <Compile Include="Movement\BaseSteering.cs" />
     <Compile Include="Movement\Explore.cs" />
     <Compile Include="Movement\Flee.cs" />
@@ -70,6 +74,8 @@
     <Compile Include="Utilities.cs" />
     <Compile Include="World\GameWorld.cs" />
     <Compile Include="World\Graph.cs" />
+    <Compile Include="World\Grid.cs" />
+    <Compile Include="World\GridCell.cs" />
     <Compile Include="World\Location.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

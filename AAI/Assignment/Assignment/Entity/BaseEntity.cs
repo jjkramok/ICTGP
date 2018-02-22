@@ -8,14 +8,16 @@ using System.Threading.Tasks;
 
 namespace Assignment.Entity
 {
-	class BaseEntity
+	public abstract class BaseEntity
 	{
+		// should always be ordered by prioity.
 		protected List<BaseSteering> SteeringBehaviours = new List<BaseSteering>();
 		public EntityType Type { get; }
 
 		public double Direction;
 		public double Speed;
 		public double MaxSpeed;
+		public double MaxForce;
 
 		public Location Location;
 
@@ -25,11 +27,12 @@ namespace Assignment.Entity
 			Direction = Math.PI * 0.5;
 			Speed = 1;
 			MaxSpeed = 5;
+			MaxForce = 4;
 		}
 
-		public void Update(int tick) { }
+		public abstract void Update(int tick);
 
-		public void CalculateSteeringForce()
+		protected void CalculateSteeringForce()
 		{
 			SteeringForce force = null;
 			switch (GameWorld.Instance.SteeringForceCalculationType)
@@ -47,27 +50,63 @@ namespace Assignment.Entity
 					throw new Exception("Current SteeringForceCalculationType is invalid.");
 			}
 
+			if (force.Amount > MaxForce)
+			{
+				force.Amount = MaxForce;
+			}
+
 			ApplySteeringForce(force);
 		}
 
 		private void ApplySteeringForce(SteeringForce force)
 		{
+			Direction = force.Direction;
+			// todo nmn
+			Speed += force.Amount * 0.1;// inertia
 
+
+			Location.X = (Location.X + (Math.Cos(Direction) * Speed));
+			Location.Y = (Location.Y + (Math.Sin(Direction) * Speed));
 		}
 
 		private SteeringForce CalculateSteeringForceDithering()
 		{
-			return new SteeringForce();
+			SteeringForce force = new SteeringForce();
+
+			foreach(var behavior in SteeringBehaviours)
+			{
+				if(GameWorld.Instance.Random.NextDouble() > behavior.Priority)
+				{
+					force += behavior.Calculate(this);
+				}
+			}
+
+			return force;
 		}
 
 		private SteeringForce CalculateSteeringForcePriorization()
 		{
-			return new SteeringForce();
+			int behaviorsCalculationCount = 3;
+			SteeringForce force = new SteeringForce();
+
+			for(int i = 0; i < behaviorsCalculationCount && i < SteeringBehaviours.Count; i++)
+			{
+				force += SteeringBehaviours[i].Calculate(this);
+			}
+
+			return force;
 		}
 
 		private SteeringForce CalculateSteeringForceTruncatedSum()
 		{
-			return new SteeringForce();
+			SteeringForce force = new SteeringForce();
+
+			foreach (var behavior in SteeringBehaviours)
+			{
+				force += behavior.Calculate(this);
+			}
+
+			return force;
 		}
 	}
 }
