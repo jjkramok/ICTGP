@@ -20,14 +20,5 @@ namespace Assignment.Movement
             return path;
         }
 
-       
-
-        // Heuristic based on the euclidean distance between current vertex and goal vertex
-        private static double heuristic(Location loc1, Location loc2)
-        {
-            double a = loc1.X - loc2.X;
-            double b = loc1.Y - loc2.Y;
-            return Math.Sqrt(Math.Pow(a, 2) + Math.Pow(b, 2));
-        }
     }
 }

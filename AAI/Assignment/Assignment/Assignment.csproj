@@ -71,7 +71,8 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Renderer\Rendering.cs" />
-    <Compile Include="Utilities.cs" />
+    <Compile Include="Utilities\PriorityQueue.cs" />
+    <Compile Include="Utilities\Utilities.cs" />
     <Compile Include="World\GameWorld.cs" />
     <Compile Include="World\Graph.cs" />
     <Compile Include="World\Grid.cs" />
