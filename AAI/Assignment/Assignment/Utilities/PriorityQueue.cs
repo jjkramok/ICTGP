@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assignment.Utilities
 {
-    class PriorityQueue<T> where T : IComparable
+    class PriorityQueue<T> where T : IComparable<T>
     {
         private List<T> queue;
         public bool IsEmpty

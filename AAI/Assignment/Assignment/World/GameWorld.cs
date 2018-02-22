@@ -48,8 +48,8 @@ namespace Assignment.World
 				new Herbivore{ Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(100, 100)},
 			};
 
-            Width = 200;
-			Height = 200;
+            Width = 600;
+			Height = 600;
 			SteeringForceCalculationType = SteeringForceCalculationType.WeightedTruncatedSum;
 		}
 
