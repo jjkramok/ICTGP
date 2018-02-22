@@ -11,20 +11,31 @@ namespace Assignment.Renderer
 {
 	class Rendering
 	{
-		private Graphics graphics;
+		private Graphics graphicsPanel;
 		private Panel panel;
+
+		private Bitmap screen;
+		private Graphics graphics;
 
 		public Rendering(Graphics g, Panel p)
 		{
-			graphics = g;
+			graphicsPanel = g;
 			panel = p;
 		}
 
 		public void Render()
 		{
-			RenderBackground();
-			RenderStatic();
-			RenderEntities();
+			screen = new Bitmap((int) GameWorld.Instance.Width, (int) GameWorld.Instance.Height);
+
+			using (graphics = Graphics.FromImage(screen))
+			{
+				RenderBackground();
+				RenderStatic();
+				RenderGrid();
+				RenderEntities();
+			}
+
+			graphicsPanel.DrawImage(screen, 0, 0);
 		}
 
 		private void RenderBackground()
@@ -35,6 +46,23 @@ namespace Assignment.Renderer
 		private void RenderStatic()
 		{
 
+		}
+
+		private void RenderGrid()
+		{
+			var pen = new Pen(Color.Red);
+			var font = new Font(FontFamily.GenericSansSerif, 7);
+			var grid = GameWorld.Instance.Grid;
+
+			for (int x = 0; x < grid.GridWidth; x++)
+			{
+				for (int y = 0; y < grid.GridHeight; y++)
+				{
+					graphics.DrawRectangle(pen, x * Grid.CellWidth, y * Grid.CellHeight, Grid.CellWidth, Grid.CellHeight);
+
+					graphics.DrawString(grid.GridCells[x, y].Entities.Count.ToString(), font, Brushes.Blue, x * Grid.CellWidth, y * Grid.CellHeight);
+				}
+			}
 		}
 
 		private void RenderEntities()
