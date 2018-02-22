@@ -81,7 +81,7 @@ namespace Assignment.World
 			var closeEntities = new List<BaseEntity>();
 			foreach(var entity in searchableEntities)
 			{
-				if(Utilities.Distance(entity.Location, location) < radius)
+				if(Utilities.Utilities.Distance(entity.Location, location) < radius)
 				{
 					closeEntities.Add(entity);
 				}
