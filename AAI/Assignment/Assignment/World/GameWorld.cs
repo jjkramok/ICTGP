@@ -47,7 +47,8 @@ namespace Assignment.World
 			{
 				new Herbivore{ Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(100, 100)},
 			};
-			Width = 200;
+
+            Width = 200;
 			Height = 200;
 			SteeringForceCalculationType = SteeringForceCalculationType.WeightedTruncatedSum;
 		}
@@ -55,7 +56,8 @@ namespace Assignment.World
 		private void PostInitialize()
 		{
 			Grid = new Grid();
-		}
+            NavGraph = new Graph();
+        }
 
 		public void UpdateEntites()
 		{

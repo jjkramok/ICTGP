@@ -6,19 +6,21 @@ namespace Assignment.World
 {
     public class Graph
     {
-        private HashSet<Vertex> vertices;
+        //public HashSet<Vertex> vertices;
+        public Dictionary<string, Vertex> vertices;
 
-        private float NodeSpreadDistance = 1;
-        private float AgentCollisionSpacing = .5f;
+        private double NodeSpreadDistance = 10;
+        private double AgentCollisionSpacing = 5f;
         private long nextVertexLabel = 0;
+        private const int MAX_NAV_DEPTH = 5000;
 
         /// <summary>
         /// Initialize a navMap from point (0, 0)
         /// </summary>
         public Graph()
         {
-            vertices = new HashSet<Vertex>();
-            BuildNavGraph(GameWorld.Instance.Width / 2, GameWorld.Instance.Height / 2, null);
+            vertices = new Dictionary<string, Vertex>();
+            BuildNavGraph(GameWorld.Instance.Width / 2, GameWorld.Instance.Height / 2, null, 0);
         }
 
         /// <summary>
@@ -28,12 +30,17 @@ namespace Assignment.World
         /// <param name="y"></param>
         public Graph(double x, double y)
         {
-            vertices = new HashSet<Vertex>();
-            BuildNavGraph(x, y, null);
+            vertices = new Dictionary<string, Vertex>();
+            BuildNavGraph(x, y, null, 0);
         }
 
-        private void BuildNavGraph(double x, double y, Vertex prev)
+        private void BuildNavGraph(double x, double y, Vertex prev, int depth)
         {
+            // Base case
+            if (depth == MAX_NAV_DEPTH)
+            {
+                return;
+            }
             // Base case: alread a vertex on this location, add an edge from the previous vertex to the colliding vertex.
             Vertex collisionVertex = VertexAtLocation(x, y);
             if (collisionVertex != null)
@@ -43,7 +50,7 @@ namespace Assignment.World
             }
 
             // Base case: out of bounds
-            if (x < 0 || x > GameWorld.Instance.Width || y < 0 || y > GameWorld.Instance.Height)
+            if (x <= 0 || x >= GameWorld.Instance.Width || y <= 0 || y >= GameWorld.Instance.Height)
             {
                 Console.WriteLine("NavGraph out-of-bounds");
                 return;
@@ -51,6 +58,7 @@ namespace Assignment.World
                 
             // Create vertex on current location
             Vertex v = new Vertex(x, y, nextVertexLabel.ToString());
+            vertices.Add(v.Label, v);
             nextVertexLabel++;
             
             // Check vicinity for obstructions
@@ -58,19 +66,20 @@ namespace Assignment.World
 
             // TODO check for illegal vertex locations based on entitiesInProx
             
-            BuildNavGraph(x, y + NodeSpreadDistance, v);
-            BuildNavGraph(x + NodeSpreadDistance, y, v);
-            BuildNavGraph(x, y - NodeSpreadDistance, v);
-            BuildNavGraph(x - NodeSpreadDistance, y, v);
+            BuildNavGraph(x, y + NodeSpreadDistance, v, depth + 1);
+            BuildNavGraph(x + NodeSpreadDistance, y, v, depth + 1);
+            BuildNavGraph(x, y - NodeSpreadDistance, v, depth + 1);
+            BuildNavGraph(x - NodeSpreadDistance, y, v, depth + 1);
         }
 
         private Vertex VertexAtLocation(double x, double y)
         {
-            foreach (Vertex v in vertices)
+            foreach (var entry in vertices)
             {
-                double xDifference = x * 0.0001;
-                double yDifference = y * 0.0001;
-                if (v.Loc.X - x <= xDifference && v.Loc.Y - y <= yDifference)
+                Vertex v = entry.Value;
+                double xDifference = x * 0.000001;
+                double yDifference = y * 0.000001;
+                if (Math.Abs(v.Loc.X - x) <= xDifference && Math.Abs(v.Loc.Y - y) <= yDifference)
                 {
                     return v;
                 }
@@ -79,7 +88,7 @@ namespace Assignment.World
         }
         
         public void AddVertex(Vertex v) {
-            vertices.Add(v);
+            vertices.Add(v.Label, v);
         }
     
         private void AddEdge(String src, String dest, double cost) {
@@ -96,7 +105,8 @@ namespace Assignment.World
         }
     
         private Vertex GetVertex(String label) {
-            foreach (Vertex v in vertices) {
+            foreach (var entry in vertices) {
+                Vertex v = entry.Value;
                 if (v.Label.Equals(label))
                     return v;
             }
@@ -105,8 +115,8 @@ namespace Assignment.World
     
         public override String ToString() {
             String res = "";
-            foreach (Vertex v in vertices)
-                res += v + "\n";
+            foreach (var entry in vertices)
+                res += entry.Value + "\n";
             return res;
         }
 
