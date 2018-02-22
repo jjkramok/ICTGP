@@ -18,7 +18,7 @@ namespace Assignment.World
         public Graph()
         {
             vertices = new HashSet<Vertex>();
-            BuildNavGraph((float) GameWorld.Instance.Width / 2, (float) GameWorld.Instance.Height / 2, null);
+            BuildNavGraph(GameWorld.Instance.Width / 2, GameWorld.Instance.Height / 2, null);
         }
 
         /// <summary>
@@ -26,22 +26,23 @@ namespace Assignment.World
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public Graph(float x, float y)
+        public Graph(double x, double y)
         {
             vertices = new HashSet<Vertex>();
             BuildNavGraph(x, y, null);
         }
 
-        private void BuildNavGraph(float x, float y, Vertex prev)
+        private void BuildNavGraph(double x, double y, Vertex prev)
         {
-            // TODO base case: alread a vertex on this location, create an edge and break
-            if (false)
+            // Base case: alread a vertex on this location, add an edge from the previous vertex to the colliding vertex.
+            Vertex collisionVertex = VertexAtLocation(x, y);
+            if (collisionVertex != null)
             {
-                // TODO add edge to vertex
+                prev.Adj.Add(new Edge(collisionVertex));
                 return;
             }
 
-            // base case: out of bounds
+            // Base case: out of bounds
             if (x < 0 || x > GameWorld.Instance.Width || y < 0 || y > GameWorld.Instance.Height)
             {
                 Console.WriteLine("NavGraph out-of-bounds");
@@ -61,6 +62,20 @@ namespace Assignment.World
             BuildNavGraph(x + NodeSpreadDistance, y, v);
             BuildNavGraph(x, y - NodeSpreadDistance, v);
             BuildNavGraph(x - NodeSpreadDistance, y, v);
+        }
+
+        private Vertex VertexAtLocation(double x, double y)
+        {
+            foreach (Vertex v in vertices)
+            {
+                double xDifference = x * 0.0001;
+                double yDifference = y * 0.0001;
+                if (v.Loc.X - x <= xDifference && v.Loc.Y - y <= yDifference)
+                {
+                    return v;
+                }
+            }
+            return null;
         }
         
         public void AddVertex(Vertex v) {
@@ -102,7 +117,7 @@ namespace Assignment.World
             public Vertex Prev;
             public double Dist;
             public bool Known;
-            public Location Loc { get; set; }// TODO change to vector for location in gameworld
+            public Location Loc { get; set; }
             public string ExtraInfo { get; set; } //TODO node should be able to contain items or other objects (change type later)
             
             public Vertex(Location loc, string label) {
@@ -112,7 +127,7 @@ namespace Assignment.World
                 Loc = loc;
             }
             
-            public Vertex(float x, float y, string label) {
+            public Vertex(double x, double y, string label) {
                 Label = label;
                 Adj = new HashSet<Edge>();
                 Prev = null;
@@ -137,6 +152,12 @@ namespace Assignment.World
             public Edge(Vertex dest, double cost) {
                 Dest = dest;
                 Cost = cost;
+            }
+
+            public Edge(Vertex dest)
+            {
+                Dest = dest;
+                Cost = 1;
             }
 
             public override string ToString() {
