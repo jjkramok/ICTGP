@@ -13,27 +13,62 @@ namespace Assignment.Renderer
 {
 	public partial class MainForm : Form
 	{
+		private bool panel1Active = true;
+
 		public MainForm()
 		{
 			InitializeComponent();
+			GameWorld.Instance.Screen = this;
+			worldPanel2.Visible = false;
 		}
 
 		private void startButton_Click(object sender, EventArgs e)
 		{
 			GameWorld.DeleteWorld();
 			var world = GameWorld.Instance;
+			world.Screen = this;
 		}
 
-		private void worldPanel_Paint(object sender, PaintEventArgs e)
+		private void worldPanel1_Paint(object sender, PaintEventArgs e)
 		{
-			var renderer = new Rendering(e.Graphics, worldPanel);
+
+			var renderer = new Rendering(e.Graphics, worldPanel1);
 			renderer.Render();
 		}
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			GameWorld.Instance.Entities[0].Direction = GameWorld.Instance.Random.NextDouble() * Math.PI * 2;
-			worldPanel.Refresh();
+			GameWorld.Instance.UpdateEntites();
+
+			worldPanel1.Refresh();
+		}
+
+		private void worldPanel2_Paint(object sender, PaintEventArgs e)
+		{
+			var renderer = new Rendering(e.Graphics, worldPanel2);
+			renderer.Render();
+		}
+
+
+		public void Render()
+		{
+			worldPanel1.Invalidate();
+			return;
+
+			if (panel1Active)
+			{
+				worldPanel2.SendToBack();
+
+				worldPanel2.Invalidate();
+			}
+			else
+			{
+				worldPanel1.SendToBack();
+
+				worldPanel1.Invalidate();
+			}
+
+			panel1Active = !panel1Active;
 		}
 	}
 }

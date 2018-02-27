@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E306DF6A-7F40-41FE-BD96-F459074B4A43}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>Assignment</RootNamespace>
     <AssemblyName>Assignment</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -47,15 +50,22 @@
   <ItemGroup>
     <Compile Include="Entity\BaseEntity.cs" />
     <Compile Include="Entity\EntityType.cs" />
+    <Compile Include="Entity\Herbivore.cs" />
     <Compile Include="Movement\BaseSteering.cs" />
     <Compile Include="Movement\Explore.cs" />
     <Compile Include="Movement\Flee.cs" />
     <Compile Include="Movement\Hide.cs" />
     <Compile Include="Movement\ObstacleAvoidance.cs" />
+    <Compile Include="Movement\Pathfinding.cs" />
     <Compile Include="Movement\Seek.cs" />
     <Compile Include="Movement\SteeringForce.cs" />
     <Compile Include="Movement\SteeringForceCalculationType.cs" />
     <Compile Include="Movement\Wander.cs" />
+    <Compile Include="Obstacle\BaseObstacle.cs" />
+    <Compile Include="Obstacle\Bush.cs" />
+    <Compile Include="Obstacle\ObstacleCircle.cs" />
+    <Compile Include="Obstacle\Rock.cs" />
+    <Compile Include="Obstacle\Tree.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="State\BaseState.cs" />
@@ -66,9 +76,12 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Renderer\Rendering.cs" />
-    <Compile Include="Utilities.cs" />
+    <Compile Include="Utilities\PriorityQueue.cs" />
+    <Compile Include="Utilities\Utilities.cs" />
     <Compile Include="World\GameWorld.cs" />
     <Compile Include="World\Graph.cs" />
+    <Compile Include="World\Grid.cs" />
+    <Compile Include="World\GridCell.cs" />
     <Compile Include="World\Location.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

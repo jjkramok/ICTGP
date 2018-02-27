@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assignment
+namespace Assignment.Utilities
 {
 	static class Utilities
 	{
@@ -19,7 +19,10 @@ namespace Assignment
 
 		public static double Direction(Location from, Location to)
 		{
-			return Math.Tan((from.Y - to.Y) / (from.X - to.X));
+			if(to.X > from.X)
+				return Math.Tan((from.Y - to.Y) / (from.X - to.X));
+			else
+				return Math.Tan((from.Y - to.Y) / (from.X - to.X)) + Math.PI;
 		}
 	}
 }

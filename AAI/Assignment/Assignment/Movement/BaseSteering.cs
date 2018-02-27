@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Assignment.Movement
 {
-	abstract class BaseSteering
+	public abstract class BaseSteering
 	{
 		public double Priority;
 

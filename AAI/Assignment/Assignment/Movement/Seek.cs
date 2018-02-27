@@ -15,13 +15,13 @@ namespace Assignment.Movement
 
 		public override SteeringForce Calculate(BaseEntity entity)
 		{
-			var distance = Utilities.Distance(entity.Location, ChaseEntity.Location);
+			var distance = Utilities.Utilities.Distance(entity.Location, ChaseEntity.Location);
 			if (distance > MaxDistance)
 			{
 				return new SteeringForce();
 			}
 
-			var direction = Utilities.Direction(entity.Location, ChaseEntity.Location);
+			var direction = Utilities.Utilities.Direction(entity.Location, ChaseEntity.Location);
 
 			// todo nmn
 			return new SteeringForce(direction, 5);

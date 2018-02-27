@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assignment.Movement
 {
-	class SteeringForce
+	public class SteeringForce
 	{
 		public double Direction;
 		public double Amount;
@@ -25,11 +25,17 @@ namespace Assignment.Movement
 
 		public static SteeringForce operator +(SteeringForce force1, SteeringForce force2)
 		{
+			if(force1.Amount == 0)
+			{
+				return new SteeringForce(force2.Direction, force2.Amount);
+			}
+
 			double x = Math.Cos(force1.Direction) * force1.Amount + Math.Cos(force2.Direction) * force2.Amount;
 			double y = Math.Sin(force1.Direction) * force1.Amount + Math.Sin(force2.Direction) * force2.Amount;
 
 			double amount = Math.Sqrt(x * x + y * y);
-			double direction = Math.Tanh(y / x);
+
+			double direction = x < 0 ? Math.Atan(y / x) + Math.PI : Math.Atan(y / x);
 
 			return new SteeringForce(direction, amount);
 		}

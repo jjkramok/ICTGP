@@ -1,10 +1,10 @@
 ﻿using Assignment.Entity;
 using Assignment.Movement;
+using Assignment.Obstacle;
+using Assignment.Renderer;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Assignment.World
 {
@@ -15,11 +15,16 @@ namespace Assignment.World
 		public SteeringForceCalculationType SteeringForceCalculationType;
 		public double Width { get; private set; }
 		public double Height { get; private set; }
-		public double GridSize { get; private set; }
+		public Grid Grid { get; private set; }
 		public Graph NavGraph { get; private set; }
 		public List<BaseEntity> Entities { get; private set; }
+		public List<BaseObstacle> Obstacles { get; private set; }
 
+		public const int TickDelay = 50;
+		public MainForm Screen;
 		public Random Random;
+
+		private Timer timer;
 
 		public static GameWorld Instance
 		{
@@ -28,32 +33,115 @@ namespace Assignment.World
 				if (_instance == null)
 				{
 					_instance = new GameWorld();
+					_instance.PostInitialize();
 				}
 				return _instance;
 			}
 		}
+
+		public void GameTick(object sender, EventArgs e)
+		{
+			UpdateEntites();
+			Screen.Render();
+		}
+
 		private GameWorld()
 		{
 			Random = new Random();
 			Entities = new List<BaseEntity>
 			{
-				new BaseEntity{ Direction = Math.PI * 0.1, Location = new Location(50, 50)},
+				new Herbivore{ Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(50, 50)},
 			};
+
+			Obstacles = new List<BaseObstacle>
+			{
+				new Rock(new Location(40,10), 20),
+				new Rock(new Location(40,50), 20),
+				new Rock(new Location(40,90), 20),
+				new Rock(new Location(80,90), 20),
+				new Rock(new Location(80,40), 20),
+				new Rock(new Location(80,10), 20),
+			};
+
 			Width = 200;
 			Height = 200;
-			GridSize = 10;
-			SteeringForceCalculationType = SteeringForceCalculationType.Dithering;
+			SteeringForceCalculationType = SteeringForceCalculationType.Priorization;
+		}
 
+		private void StoneEdge()
+		{
+			for (int i = 5; i < Width; i += 10)
+			{
+				Obstacles.Add(new Rock(new Location(i, 5), 1));
+				Obstacles.Add(new Rock(new Location(i, Height - 5), 1));
+			}
+
+			for (int i = 5; i < Height; i += 10)
+			{
+				Obstacles.Add(new Rock(new Location(5, i), 1));
+				Obstacles.Add(new Rock(new Location(Width - 5, i), 1));
+			}
+		}
+
+		private void PostInitialize()
+		{
+			StoneEdge();
+
+			Grid = new Grid();
+			NavGraph = new Graph();
+
+			timer = new Timer();
+			timer.Interval = TickDelay;
+			timer.Tick += new EventHandler(GameTick);
+			timer.Start();
+		}
+
+		public void UpdateEntites()
+		{
+			foreach (var entity in Entities)
+			{
+				Location oldLocation = new Location(entity.Location.X, entity.Location.Y);
+				entity.Update(1);
+				Grid.UpdateEntity(entity, oldLocation);
+			}
 		}
 
 		public static void DeleteWorld()
 		{
+			Instance.timer.Stop();
 			_instance = null;
 		}
 
 		public List<BaseEntity> EntitiesInArea(Location location, double radius)
 		{
-			return new List<BaseEntity>();
+			var searchableEntities = Grid.EntitiesNearLocation(location, radius);
+
+			var closeEntities = new List<BaseEntity>();
+			foreach (var entity in searchableEntities)
+			{
+				if (Utilities.Utilities.Distance(entity.Location, location) < radius)
+				{
+					closeEntities.Add(entity);
+				}
+			}
+
+			return closeEntities;
+		}
+
+		public List<ObstacleCircle> ObstaclesInArea(Location location, double radius)
+		{
+			var searchableObstacleCircles = Grid.ObstacleCirclesNearLocation(location, radius);
+
+			var closeCircles = new List<ObstacleCircle>();
+			foreach (var circle in searchableObstacleCircles)
+			{
+				if (Utilities.Utilities.Distance(circle.Location, location) < radius)
+				{
+					closeCircles.Add(circle);
+				}
+			}
+
+			return closeCircles;
 		}
 	}
 }
