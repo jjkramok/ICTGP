@@ -6,18 +6,18 @@ namespace Assignment.World
 {
     public class Graph
     {
-        public Dictionary<string, Vertex> old_vertices;
+        //public Dictionary<string, Vertex> old_vertices;
 
         public Vertex[,] vertices;
 
-        private const double NodeSpreadFactor = 10;
+        private const double NodeSpreadFactor = 10; // Distance between vertices, less means more vertices in the graph.
         private double AmountOfNodesInRow = GameWorld.Instance.Width / NodeSpreadFactor;
         private double AmountOfNodesInCol = GameWorld.Instance.Height / NodeSpreadFactor;
-        private double AgentCollisionSpacing = 5f;
-        private long nextVertexLabel = 0;
-        private const int XOffset = 1; // should at least be one
-        private const int YOffset = 1; // should at leats be one
-        private const double DiagonalEdgesCost = 1.5; // negative value disables diagonal edges
+        private const double AgentCollisionSpacing = 5f;
+        private long nextVertexLabel = 0; // Used to generate vertex label.
+        private const int XOffset = 1; // Should at least be one.
+        private const int YOffset = 1; // Should at leats be one.
+        private const double DiagonalEdgesCost = 1.5; // Negative value disables diagonal edges.
 
         /// <summary>
         /// Initialize a navMap from point (0, 0)

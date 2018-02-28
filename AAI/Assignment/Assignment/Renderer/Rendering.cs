@@ -144,12 +144,12 @@ namespace Assignment.Renderer
 
         private void RenderShortestPath()
         {
-            var vertices = GameWorld.Instance.NavGraph.old_vertices;
+            var vertices = GameWorld.Instance.NavGraph.vertices;
             try
             {
                 Graph.Vertex start, goal;
-                vertices.TryGetValue("0", out start);
-                vertices.TryGetValue("100", out goal);
+	            start = vertices[0, 0];
+	            goal = vertices[vertices.GetLength(0) - 1, vertices.GetLength(1) - 1];
                 List<Graph.Vertex> path = Movement.Pathfinding.AStar(start, goal);
 
                 Pen p = new Pen(Color.DeepPink);

@@ -15,9 +15,8 @@ namespace Assignment.Movement
             Utilities.PriorityQueue<Graph.Vertex> pq = new Utilities.PriorityQueue<Graph.Vertex>();
 
             // Initialize graph
-            foreach(var entry in nav.old_vertices)
+            foreach(Graph.Vertex v in nav.vertices)
             {
-                Graph.Vertex v = entry.Value;
                 v.Dist = Double.MaxValue;
                 v.HDist = Double.MaxValue;
                 v.Known = false;
