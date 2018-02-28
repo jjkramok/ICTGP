@@ -6,82 +6,31 @@ namespace Assignment.World
 {
     public class Graph
     {
-        //public HashSet<Vertex> vertices;
         public Dictionary<string, Vertex> old_vertices;
-        public Vertex[,] vertices = new Vertex[(int) (GameWorld.Instance.Width / NodeSpreadFactor), (int) (GameWorld.Instance.Height / NodeSpreadFactor)];
 
-        private const double NodeSpreadFactor = 25;
+        public Vertex[,] vertices;
+
+        private const double NodeSpreadFactor = 10;
         private double AmountOfNodesInRow = GameWorld.Instance.Width / NodeSpreadFactor;
+        private double AmountOfNodesInCol = GameWorld.Instance.Height / NodeSpreadFactor;
         private double AgentCollisionSpacing = 5f;
         private long nextVertexLabel = 0;
-        private const int MAX_NAV_DEPTH = 5000;
+        private const int XOffset = 1; // should at least be one
+        private const int YOffset = 1; // should at leats be one
+        private const double DiagonalEdgesCost = 1.5; // negative value disables diagonal edges
 
         /// <summary>
         /// Initialize a navMap from point (0, 0)
         /// </summary>
         public Graph()
         {
-            old_vertices = new Dictionary<string, Vertex>();
-            //BuildNavGraphRec(GameWorld.Instance.Width / 2, GameWorld.Instance.Height / 2, null, 0);
             BuildNavGraph();
-        }
-
-        /// <summary>
-        /// Initialize the NavGraph from point (x, y)
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public Graph(double x, double y)
-        {
-            old_vertices = new Dictionary<string, Vertex>();
-            //BuildNavGraphRec(x, y, null, 0);
-            BuildNavGraph();
-        }
-
-        private void BuildNavGraphRec(double x, double y, Vertex prev, int depth)
-        {
-            // Base case
-            if (depth == MAX_NAV_DEPTH)
-            {
-                return;
-            }
-            // Base case: alread a vertex on this location, add an edge from the previous vertex to the colliding vertex.
-            Vertex collisionVertex = VertexAtLocation(x, y);
-            if (collisionVertex != null)
-            {
-                prev.Add(new Edge(collisionVertex));
-                return;
-            }
-
-            // Base case: out of bounds
-            if (x <= 0 || x >= GameWorld.Instance.Width || y <= 0 || y >= GameWorld.Instance.Height)
-            {
-                return;
-            }
-
-            // Create vertex on current location
-            Vertex v = new Vertex(x, y, nextVertexLabel.ToString());
-            old_vertices.Add(v.Label, v);
-            if (prev != null)
-                v.Add(new Edge(prev));
-            nextVertexLabel++;
-
-            // Check vicinity for obstructions
-            List<BaseEntity> entitiesInProx = GameWorld.Instance.EntitiesInArea(new Location(x, y), Math.Max(AmountOfNodesInRow, AgentCollisionSpacing));
-
-            // TODO check for illegal vertex locations based on entitiesInProx
-
-            BuildNavGraphRec(x, y + AmountOfNodesInRow, v, depth + 1);
-            BuildNavGraphRec(x + AmountOfNodesInRow, y, v, depth + 1);
-            BuildNavGraphRec(x, y - AmountOfNodesInRow, v, depth + 1);
-            BuildNavGraphRec(x - AmountOfNodesInRow, y, v, depth + 1);
         }
 
         private Vertex VertexAtLocation(double x, double y)
         {
-            foreach (var entry in old_vertices)
+            foreach (Vertex v in vertices)
             {
-                Vertex v = entry.Value;
                 double xDifference = x * 0.000001;
                 double yDifference = y * 0.000001;
                 if (Math.Abs(v.Loc.X - x) <= xDifference && Math.Abs(v.Loc.Y - y) <= yDifference)
@@ -92,15 +41,17 @@ namespace Assignment.World
             return null;
         }
         
+        /// <summary>
+        /// (Re)Builds the Navigation Graph used in a GameWorld.
+        /// Generates vertices in a grid like pattern based on constants above the class.
+        /// </summary>
         private void BuildNavGraph()
         {
             // Clear vertices
-            old_vertices = new Dictionary<string, Vertex>();
+            vertices = new Vertex[(int) AmountOfNodesInRow, (int) AmountOfNodesInCol];
             GameWorld gw = GameWorld.Instance;
 
             // Declare help variables
-            int xOffset = 10;
-            int yOffset = 10;
             double step = NodeSpreadFactor;
 
             // Place vertices every step distance in the game world
@@ -108,7 +59,7 @@ namespace Assignment.World
             {
                 for (int y = 0; y < vertices.GetLength(1); y++)
                 {
-                    Location loc = new Location(xOffset + x * step, yOffset + y * step);
+                    Location loc = new Location(XOffset + x * step, YOffset + y * step);
                     vertices[x, y] = new Vertex(loc, nextVertexLabel.ToString());
                     nextVertexLabel++;
                 }
@@ -123,73 +74,62 @@ namespace Assignment.World
                     {
                         vertices[x, y].Adj.Add(new Edge(vertices[x + 1, y], 1));
                     }
-                    if (x + 1 < vertices.GetLength(0) && y + 1 < vertices.GetLength(1))
+                    if (x + 1 < vertices.GetLength(0) && y + 1 < vertices.GetLength(1) && DiagonalEdgesCost > -1)
                     {
-                        vertices[x, y].Adj.Add(new Edge(vertices[x + 1, y + 1], 1.5));
+                        vertices[x, y].Adj.Add(new Edge(vertices[x + 1, y + 1], DiagonalEdgesCost));
                     }
                     if (y + 1 < vertices.GetLength(1))
                     {
                         vertices[x, y].Adj.Add(new Edge(vertices[x, y + 1], 1));
                     }
-                    if (x - 1 > -1 && y + 1 < vertices.GetLength(1))
+                    if (x - 1 > -1 && y + 1 < vertices.GetLength(1) && DiagonalEdgesCost > -1)
                     {
-                        vertices[x, y].Adj.Add(new Edge(vertices[x - 1, y + 1], 1.5));
+                        vertices[x, y].Adj.Add(new Edge(vertices[x - 1, y + 1], DiagonalEdgesCost));
                     }
                     if (x - 1 > -1)
                     {
                         vertices[x, y].Adj.Add(new Edge(vertices[x - 1, y], 1));
                     }
-                    if (x - 1 > -1 && y - 1 > -1)
+                    if (x - 1 > -1 && y - 1 > -1 && DiagonalEdgesCost > -1)
                     {
-                        vertices[x, y].Adj.Add(new Edge(vertices[x - 1, y - 1], 1.5));
+                        vertices[x, y].Adj.Add(new Edge(vertices[x - 1, y - 1], DiagonalEdgesCost));
                     }
                     if (y - 1 > -1)
                     {
                         vertices[x, y].Adj.Add(new Edge(vertices[x, y - 1], 1));
                     }
-                    if (x + 1 < vertices.GetLength(0) && y - 1 > -1)
+                    if (x + 1 < vertices.GetLength(0) && y - 1 > -1 && DiagonalEdgesCost > -1)
                     {
-                        vertices[x, y].Adj.Add(new Edge(vertices[x + 1, y - 1], 1.5));
+                        vertices[x, y].Adj.Add(new Edge(vertices[x + 1, y - 1], DiagonalEdgesCost));
                     }
                 }
             }
-
-            
-            // TODO Correctly stitch corner vertices
-
-
         }
 
         public void AddVertex(Vertex v) {
-            old_vertices.Add(v.Label, v);
-        }
-    
-        private void AddEdge(String src, String dest, double cost) {
-            Vertex s = GetVertex(src);
-            Vertex d = GetVertex(dest);
-            if (s == null) {
-                Console.WriteLine("src vertex does not exist");
-                return;
-            } else if (d == null) {
-                Console.WriteLine("dest vertex does not exist");
-                return;
+            if (v.Loc != null)
+            {
+                Location loc = v.Loc;
+                vertices[(int) loc.X, (int) loc.Y] = v;
             }
-            s.Adj.Add(new Edge(d, cost));
         }
     
         private Vertex GetVertex(String label) {
-            foreach (var entry in old_vertices) {
-                Vertex v = entry.Value;
-                if (v.Label.Equals(label))
-                    return v;
+            for (int x = 0; x < vertices.GetLength(0); x++)
+            {
+                for (int y = 0; y < vertices.GetLength(1); y++)
+                {
+                    if (vertices[x,y].Label.Equals(label))
+                        return vertices[x,y];
+                }
             }
             return null;
         }
     
         public override String ToString() {
             String res = "";
-            foreach (var entry in old_vertices)
-                res += entry.Value + "\n";
+            foreach (var entry in vertices)
+                res += entry + "\n";
             return res;
         }
 
