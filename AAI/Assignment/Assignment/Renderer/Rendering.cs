@@ -128,9 +128,9 @@ namespace Assignment.Renderer
 	                }
 	                if (SHOW_VERTICES)
 	                {
-		                float pointRadius = 1;
-		                graphics.DrawEllipse(new Pen(Color.LawnGreen), (float) v.Loc.X - pointRadius / 2,
-			                (float) v.Loc.Y - pointRadius / 2, pointRadius, pointRadius);
+		                float renderedVertexRadius = 1; 
+		                graphics.DrawEllipse(new Pen(Color.LawnGreen), (float) v.Loc.X - renderedVertexRadius / 2,
+			                (float) v.Loc.Y - renderedVertexRadius / 2, renderedVertexRadius, renderedVertexRadius);
 	                }
                     if (SHOW_VERTEX_LABEL)
                     {
