@@ -9,15 +9,16 @@ namespace Assignment.Movement
 {
     static class Pathfinding
     {
+        private static long flops = 0;
+
         public static List<Graph.Vertex> AStar(Graph.Vertex start, Graph.Vertex goal)
         {
             Graph nav = GameWorld.Instance.NavGraph;
             Utilities.PriorityQueue<Graph.Vertex> pq = new Utilities.PriorityQueue<Graph.Vertex>();
 
             // Initialize graph
-            foreach(var entry in nav.old_vertices)
+            foreach(Graph.Vertex v in nav.vertices)
             {
-                Graph.Vertex v = entry.Value;
                 v.Dist = Double.MaxValue;
                 v.HDist = Double.MaxValue;
                 v.Known = false;
@@ -31,12 +32,20 @@ namespace Assignment.Movement
 
             while (!pq.IsEmpty)
             {
+                flops++;
+                
                 Graph.Vertex v = pq.Get();
+                if (flops > 10000)
+                {
+                    flops = 0;
+                    return reconstructPath(v);
+                }
                 v.Known = true;
 
                 // End-case : goal found, retrieve path to goal node.
                 if (v == goal)
                 {
+                    flops = 0;
                     return reconstructPath(goal);
                 }
 
@@ -47,11 +56,9 @@ namespace Assignment.Movement
                     {
                         continue; // Already evaluated
                     }
-                    if (!w.Known)
-                    {
-                        pq.Add(w); // Newly discovered node
-                    }
-
+                    w.HDist = v.Dist + e.Cost + h(w, goal);
+                    pq.Add(w); // Newly discovered node
+                    
                     // Calculate distance from start till current vertex
                     double tentative_dist = v.Dist + e.Cost;
 
@@ -63,7 +70,6 @@ namespace Assignment.Movement
                     // Current best path
                     w.Prev = v;
                     w.Dist = tentative_dist;
-                    w.HDist = w.Dist + h(w, v);
                 }
             }
             return null; // goal not reached
@@ -72,7 +78,14 @@ namespace Assignment.Movement
         // Heuristic for A* based on euclidian distance.
         private static double h(Graph.Vertex v, Graph.Vertex w)
         {
-            return Utilities.Utilities.Distance(v.Loc, w.Loc);
+            // Determine which heuristic is to be used based on the fact that diagonal edges are used or not.
+            if (GameWorld.Instance.NavGraph.DiagonalEdgesCost >= 0)
+            {
+                return Utilities.Utilities.Distance(v.Loc, w.Loc); // euclidian distance
+            }
+            else {
+                return Math.Abs(v.Loc.X - w.Loc.X) + Math.Abs(v.Loc.Y - w.Loc.Y); // cardinal / manhattan distance
+            }
         }
 
         // Reconstructs a path from graph explored by A*
@@ -87,6 +100,8 @@ namespace Assignment.Movement
             {
                 path.Insert(0, curr);
             }
+
+            Console.WriteLine(String.Join(" ->\n ", path));
             return path;
         }
 

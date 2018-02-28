@@ -13,6 +13,7 @@ namespace Assignment.Renderer
 	{
 		private Graphics graphicsPanel;
 		private Panel panel;
+        private List<Graph.Vertex> PathAlreadyCalculated = null;
 
 		private Bitmap screen;
 		private Graphics graphics;
@@ -83,38 +84,30 @@ namespace Assignment.Renderer
         private void RenderNavGraph()
         {
             const bool SHOW_VERTEX_LABEL = false;
-            const bool SHOW_EDGES = false;
-            /**
-            foreach (var entry in GameWorld.Instance.NavGraph.old_vertices)
-            {
-                Graph.Vertex v = entry.Value;
-                float pointRadius = 1;
-                graphics.DrawEllipse(new Pen(Color.LawnGreen), (float) v.Loc.X - pointRadius / 2, (float) v.Loc.Y - pointRadius / 2, pointRadius, pointRadius);
-                if (SHOW_EDGES)
-                {
-                    foreach (Graph.Edge e in v.Adj)
-                    {
-                        Graph.Vertex w = e.Dest;
-                        graphics.DrawLine(new Pen(Color.Black, 1), (float)v.Loc.X, (float)v.Loc.Y, (float)w.Loc.X, (float)w.Loc.Y);
-                    }
-                }
-                if (SHOW_VERTEX_LABEL)
-                {
-                    Brush b = new SolidBrush(Color.DarkBlue);
-                    Font f = new Font(SystemFonts.DefaultFont.Name, 6);
-                    graphics.DrawString(v.Label, f, b, (float) v.Loc.X, (float) v.Loc.Y);
-                }
-            }**/
+            const bool SHOW_EDGES = true;
+	        const bool SHOW_VERTICES = true;
+           
             var vs = GameWorld.Instance.NavGraph.vertices;
             for (int x = 0; x < vs.GetLength(0); x++)
             {
                 for (int y = 0; y < vs.GetLength(1); y++)
                 {
                     Graph.Vertex v = vs[x, y];
-
-                    float pointRadius = 1;
-                    graphics.DrawEllipse(new Pen(Color.LawnGreen), (float)v.Loc.X - pointRadius / 2, (float)v.Loc.Y - pointRadius / 2, pointRadius, pointRadius);
-
+	                
+	                if (SHOW_EDGES)
+	                {
+		                foreach (Graph.Edge e in v.Adj)
+		                {
+			                Graph.Vertex w = e.Dest;
+			                graphics.DrawLine(new Pen(Color.Black, 1), (float)v.Loc.X, (float)v.Loc.Y, (float)w.Loc.X, (float)w.Loc.Y);
+		                }
+	                }
+	                if (SHOW_VERTICES)
+	                {
+		                float renderedVertexRadius = 1; 
+		                graphics.DrawEllipse(new Pen(Color.LawnGreen), (float) v.Loc.X - renderedVertexRadius / 2,
+			                (float) v.Loc.Y - renderedVertexRadius / 2, renderedVertexRadius, renderedVertexRadius);
+	                }
                     if (SHOW_VERTEX_LABEL)
                     {
                         Brush b = new SolidBrush(Color.DarkBlue);
@@ -127,15 +120,20 @@ namespace Assignment.Renderer
 
         private void RenderShortestPath()
         {
-            var vertices = GameWorld.Instance.NavGraph.old_vertices;
+            Graph.Vertex[,] vertices = GameWorld.Instance.NavGraph.vertices;
             try
             {
                 Graph.Vertex start, goal;
-                vertices.TryGetValue("0", out start);
-                vertices.TryGetValue("100", out goal);
-                List<Graph.Vertex> path = Movement.Pathfinding.AStar(start, goal);
-
+	            start = vertices[1, 1];
+                goal = vertices[vertices.GetLength(0) - 2, vertices.GetLength(1) - 2];
+                List<Graph.Vertex> path = PathAlreadyCalculated;
+                if (path == null) { 
+	                path = Movement.Pathfinding.AStar(start, goal);
+                    PathAlreadyCalculated = path;
+                 }
+	            
                 Pen p = new Pen(Color.DeepPink);
+
                 for (int i = 1; i < path.Count; i++)
                 {
                     Graph.Vertex v = path[i - 1];
