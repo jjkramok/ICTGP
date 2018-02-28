@@ -113,8 +113,49 @@ namespace Assignment.World
                     nextVertexLabel++;
                 }
             }
+            
+            // Place vertices every step distance in the game world
+            for (int x = 0; x < vertices.GetLength(0); x++)
+            {
+                for (int y = 0; y < vertices.GetLength(1); y++)
+                {
+                    if (x + 1 < vertices.GetLength(0))
+                    {
+                        vertices[x, y].Adj.Add(new Edge(vertices[x + 1, y], 1));
+                    }
+                    if (x + 1 < vertices.GetLength(0) && y + 1 < vertices.GetLength(1))
+                    {
+                        vertices[x, y].Adj.Add(new Edge(vertices[x + 1, y + 1], 1.5));
+                    }
+                    if (y + 1 < vertices.GetLength(1))
+                    {
+                        vertices[x, y].Adj.Add(new Edge(vertices[x, y + 1], 1));
+                    }
+                    if (x - 1 > -1 && y + 1 < vertices.GetLength(1))
+                    {
+                        vertices[x, y].Adj.Add(new Edge(vertices[x - 1, y + 1], 1.5));
+                    }
+                    if (x - 1 > -1)
+                    {
+                        vertices[x, y].Adj.Add(new Edge(vertices[x - 1, y], 1));
+                    }
+                    if (x - 1 > -1 && y - 1 > -1)
+                    {
+                        vertices[x, y].Adj.Add(new Edge(vertices[x - 1, y - 1], 1.5));
+                    }
+                    if (y - 1 > -1)
+                    {
+                        vertices[x, y].Adj.Add(new Edge(vertices[x, y - 1], 1));
+                    }
+                    if (x + 1 < vertices.GetLength(0) && y - 1 > -1)
+                    {
+                        vertices[x, y].Adj.Add(new Edge(vertices[x + 1, y - 1], 1.5));
+                    }
+                }
+            }
 
-            // TODO Stitch previously created vertices together
+            
+            // TODO Correctly stitch corner vertices
 
 
         }

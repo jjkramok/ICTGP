@@ -33,7 +33,7 @@ namespace Assignment.Renderer
 				RenderObstacles();
 				//RenderGrid();
 				RenderEntities();
-				//RenderNavGraph();
+				RenderNavGraph();
                 //RenderShortestPath();
 			}
 
@@ -88,7 +88,8 @@ namespace Assignment.Renderer
         private void RenderNavGraph()
         {
             const bool SHOW_VERTEX_LABEL = false;
-            const bool SHOW_EDGES = false;
+            const bool SHOW_EDGES = true;
+	        const bool SHOW_VERTICES = true;
             /**
             foreach (var entry in GameWorld.Instance.NavGraph.old_vertices)
             {
@@ -116,10 +117,21 @@ namespace Assignment.Renderer
                 for (int y = 0; y < vs.GetLength(1); y++)
                 {
                     Graph.Vertex v = vs[x, y];
-
-                    float pointRadius = 1;
-                    graphics.DrawEllipse(new Pen(Color.LawnGreen), (float)v.Loc.X - pointRadius / 2, (float)v.Loc.Y - pointRadius / 2, pointRadius, pointRadius);
-
+	                
+	                if (SHOW_EDGES)
+	                {
+		                foreach (Graph.Edge e in v.Adj)
+		                {
+			                Graph.Vertex w = e.Dest;
+			                graphics.DrawLine(new Pen(Color.Black, 1), (float)v.Loc.X, (float)v.Loc.Y, (float)w.Loc.X, (float)w.Loc.Y);
+		                }
+	                }
+	                if (SHOW_VERTICES)
+	                {
+		                float pointRadius = 1;
+		                graphics.DrawEllipse(new Pen(Color.LawnGreen), (float) v.Loc.X - pointRadius / 2,
+			                (float) v.Loc.Y - pointRadius / 2, pointRadius, pointRadius);
+	                }
                     if (SHOW_VERTEX_LABEL)
                     {
                         Brush b = new SolidBrush(Color.DarkBlue);
