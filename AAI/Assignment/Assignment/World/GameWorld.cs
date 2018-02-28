@@ -20,7 +20,7 @@ namespace Assignment.World
 		public List<BaseEntity> Entities { get; private set; }
 		public List<BaseObstacle> Obstacles { get; private set; }
 
-		public const int TickDelay = 2000;
+		public const int TickDelay = 50;
 		public MainForm Screen;
 		public Random Random;
 

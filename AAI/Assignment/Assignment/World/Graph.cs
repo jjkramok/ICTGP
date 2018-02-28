@@ -11,7 +11,7 @@ namespace Assignment.World
         private const double NodeSpreadFactor = 10; // Distance between vertices, less means more vertices in the graph.
         private double AmountOfNodesInRow = GameWorld.Instance.Width / NodeSpreadFactor;
         private double AmountOfNodesInCol = GameWorld.Instance.Height / NodeSpreadFactor;
-        private const double AgentCollisionSpacing = 5f;
+        private const double AgentCollisionSpacing = 5f; // Used as a collision circle for all pathfinding agents
         private long nextVertexLabel = 0; // Used to generate vertex label.
         private const int XOffset = 1; // Should at least be one.
         private const int YOffset = 1; // Should at leats be one.
@@ -53,11 +53,19 @@ namespace Assignment.World
             // Declare help variables
             double step = NodeSpreadFactor;
 
+            // TODO hold into account obstacles, bounding circles and entity collision box
+
             // Place vertices every step distance in the game world
             for (int x = 0; x < vertices.GetLength(0); x++)
             {
                 for (int y = 0; y < vertices.GetLength(1); y++)
                 {
+                    if (gw.ObstaclesInArea(new Location(XOffset + x * step, YOffset + y * step), AgentCollisionSpacing).Count > 0)
+                    {
+                        //break; //TODO code for edge stitching assumes all slots in vertices[,] are not null, breaking here breaks stuff
+                    }
+                    
+
                     Location loc = new Location(XOffset + x * step, YOffset + y * step);
                     vertices[x, y] = new Vertex(loc, nextVertexLabel.ToString());
                     nextVertexLabel++;
