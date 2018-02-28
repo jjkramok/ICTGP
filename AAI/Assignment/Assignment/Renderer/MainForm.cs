@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,8 +19,13 @@ namespace Assignment.Renderer
 		public MainForm()
 		{
 			InitializeComponent();
+
+			typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty
+				   | BindingFlags.Instance | BindingFlags.NonPublic, null,
+				   worldPanel1, new object[] { true });
+
 			GameWorld.Instance.Screen = this;
-			worldPanel2.Visible = false;
+
 		}
 
 		private void startButton_Click(object sender, EventArgs e)
@@ -38,37 +44,12 @@ namespace Assignment.Renderer
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			GameWorld.Instance.UpdateEntites();
-
-			worldPanel1.Refresh();
+			GameWorld.Instance.GameTick();
 		}
-
-		private void worldPanel2_Paint(object sender, PaintEventArgs e)
-		{
-			var renderer = new Rendering(e.Graphics, worldPanel2);
-			renderer.Render();
-		}
-
 
 		public void Render()
 		{
 			worldPanel1.Invalidate();
-			return;
-
-			if (panel1Active)
-			{
-				worldPanel2.SendToBack();
-
-				worldPanel2.Invalidate();
-			}
-			else
-			{
-				worldPanel1.SendToBack();
-
-				worldPanel1.Invalidate();
-			}
-
-			panel1Active = !panel1Active;
 		}
 	}
 }

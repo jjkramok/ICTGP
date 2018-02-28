@@ -6,18 +6,25 @@ using System.Threading.Tasks;
 using Assignment.Entity;
 using Assignment.World;
 using Assignment.Obstacle;
+using System.Drawing;
 
 namespace Assignment.Movement
 {
 	class ObstacleAvoidance : BaseSteering
 	{
-		private readonly double offsetMargin = 10;
+		public double offsetMargin = 10;
+		public double avoidanceFactor = 100;
 
 		public override SteeringForce Calculate(BaseEntity entity)
 		{
 			var force = new SteeringForce();
 
-			var obstacles = GameWorld.Instance.ObstaclesInArea(entity.Location, 40);
+			var obstacles = GameWorld.Instance.ObstaclesInArea(entity.Location, 50);
+
+			double totalForce = 0;
+
+			int forceCounterL = 0;
+			int forceCounterR = 0;
 
 			foreach (var obstacle in obstacles)
 			{
@@ -26,14 +33,47 @@ namespace Assignment.Movement
 
 				var angleDiff = angle - entity.Direction;
 
-				var offset = Math.Asin(Math.Abs(angleDiff)) * distance;
+				g.DrawLine(Pens.Yellow, (float) entity.Location.X, (float) entity.Location.Y, (float) obstacle.Location.X, (float) obstacle.Location.Y);
 
-				if (offset < offsetMargin + obstacle.Radius)
+				var offset = Math.Sin(angleDiff) * distance;
+
+				//g.DrawString($"angle: {Math.Round(angle * 180 / Math.PI)}\nangledif: {Math.Round(angleDiff * 180 / Math.PI)}", new Font(FontFamily.GenericSerif, 10), Brushes.Yellow, (float) entity.Location.X, (float) entity.Location.Y);
+
+				while (angleDiff > Math.PI)
+					angleDiff -= Math.PI * 2;
+
+				while (angleDiff < -Math.PI)
+					angleDiff += Math.PI * 2;
+
+				// ignore obstacles behind the entity
+				if (Math.Abs(angleDiff) < Math.PI / 2)
 				{
-					force += new SteeringForce(entity.Direction + angleDiff, 100 / distance);
+					if (Math.Abs(offset) < offsetMargin + obstacle.Radius)
+					{
+						g.FillEllipse(Brushes.Red, (float) obstacle.Location.X - 10, (float) obstacle.Location.Y - 10, 20, 20);
+
+						var amountToSteer = obstacle.Radius - Math.Abs(offset) + offsetMargin;
+						var steeringNeed = distance;
+
+						if (offset < 0)
+						{
+							force += new SteeringForce(entity.Direction + Math.PI / 2, avoidanceFactor / steeringNeed * amountToSteer);
+							forceCounterL++;
+						}
+						else
+						{
+							force += new SteeringForce(entity.Direction - Math.PI / 2, avoidanceFactor / steeringNeed * amountToSteer);
+							forceCounterR++;
+						}
+						totalForce += force.Amount;
+					}
 				}
 			}
 
+			if (forceCounterL + forceCounterR > 1)
+			{
+				return new SteeringForce(entity.Direction + Math.PI, totalForce);
+			}
 			return force;
 		}
 	}

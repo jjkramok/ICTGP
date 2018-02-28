@@ -72,16 +72,11 @@ namespace Assignment.Renderer
 
 		private void RenderEntities()
 		{
-			var pen = new Pen(Color.Green);
-			int size = 20;
 			foreach (var entity in GameWorld.Instance.Entities)
 			{
-				graphics.FillEllipse(Brushes.Blue, (int) entity.Location.X - (size / 2), (int) entity.Location.Y - (size / 2), size, size);
-
-				int x = (int) (entity.Location.X + (Math.Cos(entity.Direction) * size));
-				int y = (int) (entity.Location.Y + (Math.Sin(entity.Direction) * size));
-
-				graphics.DrawLine(pen, (int) entity.Location.X, (int) entity.Location.Y, x, y);
+				var oldLocation = new Location(entity.Location.X, entity.Location.Y);
+				entity.Render(graphics);
+				GameWorld.Instance.Grid.UpdateEntity(entity, oldLocation);
 			}
 		}
         
@@ -147,9 +142,10 @@ namespace Assignment.Renderer
                     Graph.Vertex w = path[i];
                     graphics.DrawLine(p, (float) v.Loc.X, (float) v.Loc.Y, (float)w.Loc.X, (float) w.Loc.Y);
                 }
-            } catch (NullReferenceException e)
+            }
+			catch (NullReferenceException e)
             {
-                Console.WriteLine("Could not render Shortest Path");
+                //Console.WriteLine("Could not render Shortest Path");
                 return;
             }        
         }

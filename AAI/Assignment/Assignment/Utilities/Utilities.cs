@@ -20,9 +20,9 @@ namespace Assignment.Utilities
 		public static double Direction(Location from, Location to)
 		{
 			if(to.X > from.X)
-				return Math.Tan((from.Y - to.Y) / (from.X - to.X));
+				return Math.Atan((from.Y - to.Y) / (from.X - to.X));
 			else
-				return Math.Tan((from.Y - to.Y) / (from.X - to.X)) + Math.PI;
+				return Math.Atan((from.Y - to.Y) / (from.X - to.X)) + Math.PI;
 		}
 	}
 }

@@ -39,9 +39,9 @@ namespace Assignment.World
 			}
 		}
 
-		public void GameTick(object sender, EventArgs e)
+		public void GameTick(object sender = null, EventArgs e = null)
 		{
-			UpdateEntites();
+			//UpdateEntites();
 			Screen.Render();
 		}
 
@@ -50,15 +50,15 @@ namespace Assignment.World
 			Random = new Random();
 			Entities = new List<BaseEntity>
 			{
-				new Herbivore{ Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(50, 50)},
+				new Herbivore{ Direction = Math.PI * 2 * 1, Location = new Location(70, 90.01)},
 			};
 
 			Obstacles = new List<BaseObstacle>
 			{
 				new Rock(new Location(40,10), 20),
-				new Rock(new Location(40,50), 20),
+				new Rock(new Location(110, 150), 20),
 				new Rock(new Location(40,90), 20),
-				new Rock(new Location(80,90), 20),
+				new Rock(new Location(90,90), 20),
 				new Rock(new Location(80,40), 20),
 				new Rock(new Location(80,10), 20),
 			};
