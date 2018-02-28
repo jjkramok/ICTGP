@@ -149,6 +149,8 @@ namespace Assignment.World
                 Adj = new HashSet<Edge>();
                 Prev = null;
                 Loc = loc;
+                Dist = -1;
+                Known = false;
             }
             
             public Vertex(double x, double y, string label) {
@@ -156,6 +158,8 @@ namespace Assignment.World
                 Adj = new HashSet<Edge>();
                 Prev = null;
                 Loc = new Location(x, y);
+                Dist = -1;
+                Known = false;
             }
 
             public bool Add(Edge e)

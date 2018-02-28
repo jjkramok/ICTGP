@@ -86,6 +86,9 @@ namespace Assignment.Movement
             {
                 path.Insert(0, curr);
             }
+
+            //Console.WriteLine(String.Join(" -> ", path));
+            Console.WriteLine("Hallo ");
             return path;
         }
 
