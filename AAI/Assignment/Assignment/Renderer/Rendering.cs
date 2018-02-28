@@ -33,7 +33,7 @@ namespace Assignment.Renderer
 				RenderObstacles();
 				//RenderGrid();
 				RenderEntities();
-				RenderNavGraph();
+				//RenderNavGraph();
                 //RenderShortestPath();
 			}
 
