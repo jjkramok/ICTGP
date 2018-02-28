@@ -6,8 +6,6 @@ namespace Assignment.World
 {
     public class Graph
     {
-        //public Dictionary<string, Vertex> old_vertices;
-
         public Vertex[,] vertices;
 
         private const double NodeSpreadFactor = 10; // Distance between vertices, less means more vertices in the graph.
@@ -17,7 +15,8 @@ namespace Assignment.World
         private long nextVertexLabel = 0; // Used to generate vertex label.
         private const int XOffset = 1; // Should at least be one.
         private const int YOffset = 1; // Should at leats be one.
-        private const double DiagonalEdgesCost = 1.5; // Negative value disables diagonal edges.
+        private const double CardinalEdgesCost = NodeSpreadFactor;
+        public double DiagonalEdgesCost = -1;// Math.Sqrt(Math.Pow(CardinalEdgesCost, 2) * 2); // Negative value disables diagonal edges.
 
         /// <summary>
         /// Initialize a navMap from point (0, 0)
@@ -72,7 +71,7 @@ namespace Assignment.World
                 {
                     if (x + 1 < vertices.GetLength(0))
                     {
-                        vertices[x, y].Adj.Add(new Edge(vertices[x + 1, y], 1));
+                        vertices[x, y].Adj.Add(new Edge(vertices[x + 1, y], CardinalEdgesCost));
                     }
                     if (x + 1 < vertices.GetLength(0) && y + 1 < vertices.GetLength(1) && DiagonalEdgesCost > -1)
                     {
@@ -80,7 +79,7 @@ namespace Assignment.World
                     }
                     if (y + 1 < vertices.GetLength(1))
                     {
-                        vertices[x, y].Adj.Add(new Edge(vertices[x, y + 1], 1));
+                        vertices[x, y].Adj.Add(new Edge(vertices[x, y + 1], CardinalEdgesCost));
                     }
                     if (x - 1 > -1 && y + 1 < vertices.GetLength(1) && DiagonalEdgesCost > -1)
                     {
@@ -88,7 +87,7 @@ namespace Assignment.World
                     }
                     if (x - 1 > -1)
                     {
-                        vertices[x, y].Adj.Add(new Edge(vertices[x - 1, y], 1));
+                        vertices[x, y].Adj.Add(new Edge(vertices[x - 1, y], CardinalEdgesCost));
                     }
                     if (x - 1 > -1 && y - 1 > -1 && DiagonalEdgesCost > -1)
                     {
@@ -96,7 +95,7 @@ namespace Assignment.World
                     }
                     if (y - 1 > -1)
                     {
-                        vertices[x, y].Adj.Add(new Edge(vertices[x, y - 1], 1));
+                        vertices[x, y].Adj.Add(new Edge(vertices[x, y - 1], CardinalEdgesCost));
                     }
                     if (x + 1 < vertices.GetLength(0) && y - 1 > -1 && DiagonalEdgesCost > -1)
                     {
@@ -175,16 +174,19 @@ namespace Assignment.World
 
             public int CompareTo(Vertex v)
             {
-                return (int)(HDist - v.HDist);
+                return (int)(HDist - v.HDist); // TODO dist compare (to HDist?)
             }
 
             public override string ToString() {
+                /*
                 string prevLabel = (Prev == null) ? "none" : Prev.Label;
                 string result = "Vertex: " + Label + " prev: " + prevLabel + " dist: " +
                                 Dist + " known: " + Known + " {";
                 foreach (Edge e in Adj)
                     result += e;
                 return result + "}";
+                */
+                return String.Format("<{0},{1}>", Math.Round(Loc.X / NodeSpreadFactor), Math.Round(Loc.Y / NodeSpreadFactor));
             }
         }
 

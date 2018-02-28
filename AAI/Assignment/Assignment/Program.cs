@@ -25,12 +25,13 @@ namespace Assignment
 		[STAThread]
 		static void Main()
 		{
-			//var handle = GetConsoleWindow();
-			//ShowWindow(handle, SW_SHOW);
+            //var handle = GetConsoleWindow();
+            //ShowWindow(handle, SW_SHOW);
 
-			Application.EnableVisualStyles();
+            Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new MainForm());
+            Application.Run(new MainForm());
+            Console.Read();
 		}
 }
 }
