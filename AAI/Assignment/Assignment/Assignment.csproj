@@ -51,6 +51,7 @@
     <Compile Include="Entity\BaseEntity.cs" />
     <Compile Include="Entity\EntityType.cs" />
     <Compile Include="Entity\Herbivore.cs" />
+    <Compile Include="Entity\Omnivore.cs" />
     <Compile Include="Movement\Arrive.cs" />
     <Compile Include="Movement\BaseSteering.cs" />
     <Compile Include="Movement\Explore.cs" />

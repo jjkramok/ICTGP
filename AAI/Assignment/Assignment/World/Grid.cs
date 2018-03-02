@@ -60,8 +60,8 @@ namespace Assignment.World
 		public List<BaseEntity> EntitiesNearLocation(Location location, double distance)
 		{
 			var centerCell = GetGridCellForLocation(location);
-			var cellDistanceX = (int) Math.Ceiling(distance / CellWidth);
-			var cellDistanceY = (int) Math.Ceiling(distance / CellHeight);
+			var cellDistanceX = (int) Math.Floor(distance / CellWidth) + 1;
+			var cellDistanceY = (int) Math.Floor(distance / CellHeight) + 1;
 
 			List<BaseEntity> entities = new List<BaseEntity>();
 

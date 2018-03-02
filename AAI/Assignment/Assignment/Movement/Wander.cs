@@ -13,9 +13,13 @@ namespace Assignment.Movement
 	{
 		private double wanderDirection = Math.PI * 2;
 		public double DirectionChangeMax = 0.8;
-		public double CircleSize = 20;
-		public double CircleOffset = 40;
-		public bool render = false;
+		public double CircleSize = 5;
+		public double CircleOffset = 10;
+
+		public Wander() : base()
+		{
+			Priority = 0.3;
+		}
 
 		public override SteeringForce Calculate(BaseEntity entity)
 		{
@@ -32,7 +36,8 @@ namespace Assignment.Movement
 			double direction = Math.Atan((circleDotY - entity.Location.Y) / (circleDotX - entity.Location.X));
 			direction = circleDotX < entity.Location.X ? direction + Math.PI : direction;
 
-			if (render)
+			/*
+			if (Render)
 			{
 				g.DrawEllipse(Pens.Brown, (float) circleX - (float) CircleSize / 2, (float) circleY - (float) CircleSize / 2, (float) CircleSize, (float) CircleSize);
 
@@ -40,15 +45,8 @@ namespace Assignment.Movement
 
 				g.DrawLine(Pens.Black, (float) circleX, (float) circleY, (float) circleDotX, (float) circleDotY);
 			}
-
+			*/
 			return new SteeringForce(direction, force);
 		}
-
-		//public override SteeringForce Calculate(BaseEntity entity)
-		//{
-		//	var direction = entity.Direction + (GameWorld.Instance.Random.NextDouble() - 0.5);
-
-		//	return new SteeringForce(direction, 5);
-		//}
 	}
 }

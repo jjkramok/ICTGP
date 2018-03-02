@@ -9,6 +9,11 @@ namespace Assignment.Movement
 {
 	class Hide : BaseSteering
 	{
+		public Hide():base()
+		{
+			Priority = 0.6;
+		}
+
 		public override SteeringForce Calculate(BaseEntity entity)
 		{
 			throw new NotImplementedException();

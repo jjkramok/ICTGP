@@ -13,7 +13,7 @@ namespace Assignment.Entity
 	{
 		// should always be ordered by prioity.
 		protected List<BaseSteering> SteeringBehaviours = new List<BaseSteering>();
-		public EntityType Type { get; }
+		public EntityType Type { get; protected set; }
 
 		public double Direction;
 		public double Speed;
@@ -36,19 +36,19 @@ namespace Assignment.Entity
 
 		public abstract void Render(Graphics g);
 
-		protected void CalculateSteeringForce(Graphics g)
+		protected void CalculateSteeringForce()
 		{
 			SteeringForce force = null;
 			switch (GameWorld.Instance.SteeringForceCalculationType)
 			{
 				case SteeringForceCalculationType.Dithering:
-					force = CalculateSteeringForceDithering(g);
+					force = CalculateSteeringForceDithering();
 					break;
 				case SteeringForceCalculationType.Priorization:
-					force = CalculateSteeringForcePriorization(g);
+					force = CalculateSteeringForcePriorization();
 					break;
 				case SteeringForceCalculationType.WeightedTruncatedSum:
-					force = CalculateSteeringForceTruncatedSum(g);
+					force = CalculateSteeringForceTruncatedSum();
 					break;
 				default:
 					throw new Exception("Current SteeringForceCalculationType is invalid.");
@@ -56,37 +56,73 @@ namespace Assignment.Entity
 
 			force.Amount = Math.Min(force.Amount, MaxForce);
 
-			ApplySteeringForce(force, g);
+			ApplySteeringForce(force);
 		}
 
-		private void ApplySteeringForce(SteeringForce force, Graphics g)
+		private void ApplySteeringForce(SteeringForce force)
 		{
-
+			/*
 			float x = (float) (Math.Cos(force.Direction) * force.Amount + Location.X);
 			float y = (float) (Math.Sin(force.Direction) * force.Amount + Location.Y);
-			//g.DrawLine(Pens.DarkGreen, (float) Location.X, (float) Location.Y, x, y);
+			g.DrawLine(Pens.DarkGreen, (float) Location.X, (float) Location.Y, x, y);
+			*/
 
-			Direction += Math.Min(Math.Max(force.Direction - Direction, -DirectionMaxChange), DirectionMaxChange);
+			UpdateDirection(force);
+
 			// todo nmn
 			Speed = Math.Max(Speed - 0.3, 0);
 			Speed += force.Amount * 0.1;// inertia
 			Speed = Math.Min(Speed, MaxSpeed);
 
-			Location.X = (Location.X + (Math.Cos(Direction) * Speed));
-			Location.Y = (Location.Y + (Math.Sin(Direction) * Speed));
+			Location.X += Math.Cos(Direction) * Speed;
+			Location.Y += Math.Sin(Direction) * Speed;
 
-			Location.X = Math.Max(Math.Min(Location.X, GameWorld.Instance.Width - 0.001), 0);
-			Location.Y = Math.Max(Math.Min(Location.Y, GameWorld.Instance.Height - 0.001), 0);
+			FixEntityOnEdge();
+		}
+
+		private void FixEntityOnEdge()
+		{
+			if (Location.X < 2)
+			{
+				Location.X = 20;
+				Direction = 0;
+			}
+			if (Location.Y < 2)
+			{
+				Location.Y = 20;
+				Direction = Math.PI * 0.5;
+			}
+			if (Location.X > GameWorld.Instance.Width - 2)
+			{
+				Location.X = GameWorld.Instance.Width - 20;
+				Direction = Math.PI;
+			}
+			if (Location.Y > GameWorld.Instance.Height - 2)
+			{
+				Location.Y = GameWorld.Instance.Height - 20;
+				Direction = Math.PI * 1.5;
+			}
+		}
+
+		private void UpdateDirection(SteeringForce force)
+		{
+			while (Math.Abs(force.Direction - (Direction + Math.PI * 2)) < Math.Abs(force.Direction - Direction))
+				Direction += Math.PI * 2;
+
+			while (Math.Abs(force.Direction - (Direction - Math.PI * 2)) < Math.Abs(force.Direction - Direction))
+				Direction -= Math.PI * 2;
+
+			Direction += Math.Min(Math.Max(force.Direction - Direction, -DirectionMaxChange), DirectionMaxChange);
 
 		}
 
-		private SteeringForce CalculateSteeringForceDithering(Graphics g)
+		private SteeringForce CalculateSteeringForceDithering()
 		{
 			SteeringForce force = new SteeringForce();
 
 			foreach (var behavior in SteeringBehaviours)
 			{
-				if (GameWorld.Instance.Random.NextDouble() > behavior.Priority)
+				if (GameWorld.Instance.Random.NextDouble() < behavior.Priority)
 				{
 					force += behavior.Calculate(this);
 				}
@@ -95,15 +131,13 @@ namespace Assignment.Entity
 			return force;
 		}
 
-		private SteeringForce CalculateSteeringForcePriorization(Graphics g)
+		private SteeringForce CalculateSteeringForcePriorization()
 		{
-			int behaviorsCalculationCount = 2;
+			int behaviorsCalculationCount = 3;
 			SteeringForce force = new SteeringForce();
 
 			for (int i = 0; i < behaviorsCalculationCount && i < SteeringBehaviours.Count; i++)
 			{
-				SteeringBehaviours[i].g = g;
-
 				force += SteeringBehaviours[i].Calculate(this);
 				if (SteeringBehaviours[i].BehaviorDone)
 				{
@@ -114,7 +148,7 @@ namespace Assignment.Entity
 			return force;
 		}
 
-		private SteeringForce CalculateSteeringForceTruncatedSum(Graphics g)
+		private SteeringForce CalculateSteeringForceTruncatedSum()
 		{
 			SteeringForce force = new SteeringForce();
 

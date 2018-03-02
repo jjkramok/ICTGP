@@ -9,6 +9,10 @@ namespace Assignment.Movement
 {
 	class Explore : BaseSteering
 	{
+		public Explore() : base()
+		{
+			Priority = 0.5;
+		}
 		public override SteeringForce Calculate(BaseEntity entity)
 		{
 			throw new NotImplementedException();
