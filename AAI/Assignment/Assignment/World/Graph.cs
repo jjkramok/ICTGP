@@ -53,8 +53,6 @@ namespace Assignment.World
             // Declare help variables
             double step = NodeSpreadFactor;
 
-            // TODO hold into account obstacles, bounding circles and entity collision box
-
             // Place vertices every step distance in the game world
             for (int x = 0; x < vertices.GetLength(0); x++)
             {
@@ -190,7 +188,7 @@ namespace Assignment.World
 
             public int CompareTo(Vertex v)
             {
-                return (int)(HDist - v.HDist); // TODO dist compare (to HDist?)
+                return (int) (HDist - v.HDist);
             }
 
             public override string ToString() {
