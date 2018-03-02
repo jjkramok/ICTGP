@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using Assignment.World;
+using Assignment.State;
 
 namespace Assignment.Entity
 {
@@ -14,11 +15,10 @@ namespace Assignment.Entity
 		public Herbivore() : base()
 		{
 			MaxSpeed = 5;
-			SteeringBehaviours.Add(new ObstacleAvoidance { Render = true });
-			SteeringBehaviours.Add(new Flee { Radius = 200, FleeFrom = EntityType.Omnivore });
-			//SteeringBehaviours.Add(new Arrive { ArriveLocation = new Location(50, 50), Render = true });
-			SteeringBehaviours.Add(new Wander());
+			
 			Type = EntityType.Herbivore;
+
+			State = new StateMachine(this);
 		}
 
 		public override void Render(Graphics g)
@@ -34,6 +34,7 @@ namespace Assignment.Entity
 
 		public override void Update(int tick)
 		{
+			State.Execute();
 			CalculateSteeringForce();
 		}
 	}

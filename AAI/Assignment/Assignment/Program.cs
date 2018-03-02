@@ -32,6 +32,8 @@ namespace Assignment
 			Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
             Console.Read();
+
+			
 		}
 }
 }

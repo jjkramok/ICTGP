@@ -8,7 +8,7 @@ namespace Assignment.Entity
 {
 	public enum EntityType
 	{
-		Herbivore,
-		Omnivore
+		Herbivore = 0,
+		Omnivore = 1
 	}
 }

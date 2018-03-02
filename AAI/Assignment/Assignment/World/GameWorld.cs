@@ -48,17 +48,6 @@ namespace Assignment.World
 		private GameWorld()
 		{
 			Random = new Random();
-			Entities = new List<BaseEntity>
-			{
-				new Herbivore{ Direction = Math.PI * 2, Location = new Location(70, 90.01)},
-				new Omnivore{ Direction = Math.PI * 1.2, Location = new Location(130, 120.01)},
-				new Omnivore{ Direction = Math.PI * 0.4, Location = new Location(530, 320.01)},
-			};
-			for(int i = 0; i < 100; i++)
-			{
-				Entities.Add(new Herbivore { Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(40 + Random.Next(0, 500), 40 + Random.Next(0, 500)) });
-			}
-
 			Obstacles = new List<BaseObstacle>
 			{
 				new Rock(new Location(40,10), 20),
@@ -92,6 +81,17 @@ namespace Assignment.World
 		private void PostInitialize()
 		{
 			StoneEdge();
+
+			Entities = new List<BaseEntity>
+			{
+				new Herbivore{ Direction = Math.PI * 2, Location = new Location(70, 90.01)},
+				//new Omnivore{ Direction = Math.PI * 1.2, Location = new Location(130, 120.01)},
+				new Omnivore{ Direction = Math.PI * 0.4, Location = new Location(530, 320.01)},
+			};
+			for (int i = 0; i < 100; i++)
+			{
+				Entities.Add(new Herbivore { Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(40 + Random.Next(0, 500), 40 + Random.Next(0, 500)) });
+			}
 
 			Grid = new Grid();
 			NavGraph = new Graph();

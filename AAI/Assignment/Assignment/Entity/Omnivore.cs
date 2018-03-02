@@ -1,4 +1,5 @@
 ﻿using Assignment.Movement;
+using Assignment.State;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -13,9 +14,8 @@ namespace Assignment.Entity
 		public Omnivore() : base()
 		{
 			MaxSpeed = 5;
-			SteeringBehaviours.Add(new ObstacleAvoidance());
-			SteeringBehaviours.Add(new Wander());
 			Type = EntityType.Omnivore;
+			State = new StateMachine(this);
 		}
 
 		public override void Render(Graphics g)
@@ -31,6 +31,7 @@ namespace Assignment.Entity
 
 		public override void Update(int tick)
 		{
+			State.Execute();
 			CalculateSteeringForce();
 		}
 	}
