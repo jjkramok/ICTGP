@@ -101,7 +101,7 @@ namespace Assignment.Movement
                 path.Insert(0, curr);
             }
 
-            Console.WriteLine(String.Join(" ->\n ", path));
+            //Console.WriteLine(String.Join(" ->\n ", path));
             return path;
         }
 

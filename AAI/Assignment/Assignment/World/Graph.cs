@@ -63,7 +63,8 @@ namespace Assignment.World
                     int amountOfCollisions = gw.ObstaclesInArea(new Location(XOffset + x * step, YOffset + y * step), AgentCollisionSpacing).Count;
                     if (amountOfCollisions > 0)
                     {
-                        //continue; //TODO code for edge stitching assumes all slots in vertices[,] are not null, breaking here breaks stuff
+                        continue; //TODO code for edge stitching assumes all slots in vertices[,] are not null, breaking here breaks stuff
+                        // To save computing power: store result of amoutOfCollisions seperatly or in the Vertex class
                     }
                     
 
@@ -78,6 +79,12 @@ namespace Assignment.World
             {
                 for (int y = 0; y < vertices.GetLength(1); y++)
                 {
+                    int amountOfCollisions = gw.ObstaclesInArea(new Location(XOffset + x * step, YOffset + y * step), AgentCollisionSpacing).Count;
+                    if (amountOfCollisions > 0)
+                    {
+                        continue; //TODO code for edge stitching assumes all slots in vertices[,] are not null, breaking here breaks stuff
+                        // To save computing power: store result of amoutOfCollisions seperatly or in the Vertex class
+                    }
                     if (x + 1 < vertices.GetLength(0))
                     {
                         vertices[x, y].Adj.Add(new Edge(vertices[x + 1, y], CardinalEdgesCost));

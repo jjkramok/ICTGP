@@ -48,9 +48,17 @@ namespace Assignment.Renderer
 
 		private void RenderObstacles()
 		{
+            const bool SHOW_OBSTACLE_LOCATION = false;
+
 			foreach(var obstacle in GameWorld.Instance.Obstacles)
 			{
 				obstacle.Render(graphics);
+                if (SHOW_OBSTACLE_LOCATION)
+                {
+                    Brush b = new SolidBrush(Color.DarkGoldenrod);
+                    Font f = new Font(SystemFonts.DefaultFont.Name, 6);
+                    graphics.DrawString(obstacle.Location.X + ", " + obstacle.Location.Y, f, b, (float)obstacle.Location.X, (float)obstacle.Location.Y);
+                }
 			}
 		}
 
@@ -93,26 +101,31 @@ namespace Assignment.Renderer
                 for (int y = 0; y < vs.GetLength(1); y++)
                 {
                     Graph.Vertex v = vs[x, y];
-	                
-	                if (SHOW_EDGES)
-	                {
-		                foreach (Graph.Edge e in v.Adj)
-		                {
-			                Graph.Vertex w = e.Dest;
-			                graphics.DrawLine(new Pen(Color.Black, 1), (float)v.Loc.X, (float)v.Loc.Y, (float)w.Loc.X, (float)w.Loc.Y);
-		                }
-	                }
-	                if (SHOW_VERTICES)
-	                {
-		                float renderedVertexRadius = 1; 
-		                graphics.DrawEllipse(new Pen(Color.LawnGreen), (float) v.Loc.X - renderedVertexRadius / 2,
-			                (float) v.Loc.Y - renderedVertexRadius / 2, renderedVertexRadius, renderedVertexRadius);
-	                }
-                    if (SHOW_VERTEX_LABEL)
+                    if (v != null)
                     {
-                        Brush b = new SolidBrush(Color.DarkBlue);
-                        Font f = new Font(SystemFonts.DefaultFont.Name, 6);
-                        graphics.DrawString(v.Label, f, b, (float)v.Loc.X, (float)v.Loc.Y);
+                        if (SHOW_EDGES)
+                        {
+                            foreach (Graph.Edge e in v.Adj)
+                            {
+                                Graph.Vertex w = e.Dest;
+                                if (w != null)
+                                {
+                                    graphics.DrawLine(new Pen(Color.Black, 1), (float)v.Loc.X, (float)v.Loc.Y, (float)w.Loc.X, (float)w.Loc.Y);
+                                }
+                            }
+                        }
+                        if (SHOW_VERTICES)
+                        {
+                            float renderedVertexRadius = 1;
+                            graphics.DrawEllipse(new Pen(Color.LawnGreen), (float)v.Loc.X - renderedVertexRadius / 2,
+                                (float)v.Loc.Y - renderedVertexRadius / 2, renderedVertexRadius, renderedVertexRadius);
+                        }
+                        if (SHOW_VERTEX_LABEL)
+                        {
+                            Brush b = new SolidBrush(Color.DarkBlue);
+                            Font f = new Font(SystemFonts.DefaultFont.Name, 6);
+                            graphics.DrawString(v.Label, f, b, (float)v.Loc.X, (float)v.Loc.Y);
+                        }
                     }
                 }
             }
@@ -143,7 +156,7 @@ namespace Assignment.Renderer
             }
 			catch (NullReferenceException e)
             {
-                //Console.WriteLine("Could not render Shortest Path");
+                Console.WriteLine("Could not render Shortest Path");
                 return;
             }        
         }

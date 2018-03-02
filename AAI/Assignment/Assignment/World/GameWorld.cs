@@ -135,8 +135,8 @@ namespace Assignment.World
 			var closeCircles = new List<ObstacleCircle>();
 			foreach (var circle in searchableObstacleCircles)
 			{
-				if (Utilities.Utilities.Distance(circle.Location, location) < radius)
-				{
+				if (Utilities.Utilities.Distance(circle.Location, location) < radius + circle.Radius)
+                {
 					closeCircles.Add(circle);
 				}
 			}
