@@ -1,4 +1,5 @@
 ﻿using Assignment.Movement;
+using Assignment.State;
 using Assignment.World;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace Assignment.Entity
 	public abstract class BaseEntity
 	{
 		// should always be ordered by prioity.
-		protected List<BaseSteering> SteeringBehaviours = new List<BaseSteering>();
+		public List<BaseSteering> SteeringBehaviours = new List<BaseSteering>();
 		public EntityType Type { get; protected set; }
 
 		public double Direction;
@@ -20,6 +21,7 @@ namespace Assignment.Entity
 		public double MaxSpeed;
 		public double MaxForce;
 		public double DirectionMaxChange = 0.3;
+		public StateMachine State;
 
 		public Location Location;
 
