@@ -114,5 +114,37 @@ namespace Assignment.World
 
 			return circles;
 		}
-	}
+
+        private Tuple<int, int> GetGridCellsAlongLine(Location l1, Location l2)
+        {
+            // TODO implement
+            //int cellX = (int)(location.X / CellWidth);
+            //int cellY = (int)(location.Y / CellHeight);
+            
+            //return new Tuple<int, int>(cellX, cellY);
+            return null;
+        }
+
+        public List<ObstacleCircle> ObstacleCirclesAlongLine(Location l1, Location l2, double distance)
+        {
+            //var centercell = getgridcellforlocation(location);
+            //var celldistancex = (int)math.floor(distance / cellwidth) + 1;
+            //var celldistancey = (int)math.floor(distance / cellheight) + 1;
+
+            //list<obstaclecircle> circles = new list<obstaclecircle>();
+
+            //for (int x = math.max(centercell.item1 - celldistancex, 0); x < math.min(centercell.item1 + celldistancex + 1, gridwidth); x++)
+            //{
+            //    for (int y = math.max(centercell.item2 - celldistancey, 0); y < math.min(centercell.item2 + celldistancey + 1, gridheight); y++)
+            //    {
+            //        circles.addrange(gridcells[x, y].obstacles);
+            //    }
+            //}
+
+            //return circles;
+            return null;
+        }
+
+
+    }
 }
