@@ -37,8 +37,7 @@ namespace Assignment.Renderer
 
 		private void worldPanel_Paint(object sender, PaintEventArgs e)
 		{
-			var renderer = new Rendering(e.Graphics, worldPanel);
-			renderer.Render();
+			Rendering.Render(e.Graphics, worldPanel);
 		}
 
 		private void button2_Click(object sender, EventArgs e)

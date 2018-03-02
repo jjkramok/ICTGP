@@ -2,29 +2,23 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Assignment.Renderer
 {
-    class Rendering
+    static class Rendering
     {
-        private Graphics graphicsPanel;
-        private Panel panel;
+        private static Graphics graphicsPanel;
+        private static Panel panel;
 
-        private Bitmap screen;
-        private Graphics graphics;
+        private static Bitmap screen;
+        private static Graphics graphics;
 
-        public Rendering(Graphics g, Panel p)
+
+        public static void Render(Graphics g, Panel p)
         {
             graphicsPanel = g;
             panel = p;
-        }
-
-        public void Render()
-        {
             screen = new Bitmap((int)GameWorld.Instance.Width, (int)GameWorld.Instance.Height);
 
             using (graphics = Graphics.FromImage(screen))
@@ -40,12 +34,12 @@ namespace Assignment.Renderer
             graphicsPanel.DrawImage(screen, 0, 0, panel.Width, panel.Height);
         }
 
-        private void RenderBackground()
+        private static void RenderBackground()
         {
             graphics.FillRectangle(Brushes.White, 0, 0, (int)GameWorld.Instance.Width, (int)GameWorld.Instance.Height);
         }
 
-        private void RenderObstacles()
+        private static void RenderObstacles()
         {
             const bool SHOW_OBSTACLE_LOCATION = false;
 
@@ -61,7 +55,7 @@ namespace Assignment.Renderer
             }
         }
 
-        private void RenderGrid()
+        private static void RenderGrid()
         {
             var pen = new Pen(Color.Red);
             var font = new Font(FontFamily.GenericSansSerif, 7);
@@ -78,7 +72,7 @@ namespace Assignment.Renderer
             }
         }
 
-        private void RenderEntities()
+        private static void RenderEntities()
         {
             foreach (var entity in GameWorld.Instance.Entities)
             {
@@ -88,7 +82,7 @@ namespace Assignment.Renderer
             }
         }
 
-        private void RenderNavGraph()
+        private static void RenderNavGraph()
         {
             const bool SHOW_VERTEX_LABEL = false;
             const bool SHOW_EDGES = true;
@@ -127,7 +121,7 @@ namespace Assignment.Renderer
             }
         }
 
-        private bool RenderShortestPath()
+        private static bool RenderShortestPath()
         {
             Graph.Vertex[,] vertices = GameWorld.Instance.NavGraph.vertices;
             try
