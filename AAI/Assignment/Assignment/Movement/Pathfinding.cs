@@ -19,9 +19,12 @@ namespace Assignment.Movement
             // Initialize graph
             foreach(Graph.Vertex v in nav.vertices)
             {
-                v.Dist = Double.MaxValue;
-                v.HDist = Double.MaxValue;
-                v.Known = false;
+                if (v != null)
+                {
+                    v.Dist = Double.MaxValue;
+                    v.HDist = Double.MaxValue;
+                    v.Known = false;
+                }
             }
 
             // Add start node to queue

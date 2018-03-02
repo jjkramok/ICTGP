@@ -13,7 +13,6 @@ namespace Assignment.Renderer
     {
         private Graphics graphicsPanel;
         private Panel panel;
-        private List<Graph.Vertex> PathAlreadyCalculated = null;
 
         private Bitmap screen;
         private Graphics graphics;
@@ -33,9 +32,9 @@ namespace Assignment.Renderer
                 RenderBackground();
                 RenderObstacles();
                 //RenderGrid();
-                RenderEntities();
-                //RenderNavGraph();
-                //RenderShortestPath();
+                //RenderEntities();
+                RenderNavGraph();
+                RenderShortestPath();
             }
 
             graphicsPanel.DrawImage(screen, 0, 0, panel.Width, panel.Height);
@@ -101,59 +100,65 @@ namespace Assignment.Renderer
                 for (int y = 0; y < vs.GetLength(1); y++)
                 {
                     Graph.Vertex v = vs[x, y];
-
-                    if (SHOW_EDGES)
+                    if (v != null)
                     {
-                        foreach (Graph.Edge e in v.Adj)
+                        if (SHOW_EDGES)
                         {
-                            Graph.Vertex w = e.Dest;
-                            graphics.DrawLine(new Pen(Color.Black, 1), (float)v.Loc.X, (float)v.Loc.Y, (float)w.Loc.X, (float)w.Loc.Y);
+                            foreach (Graph.Edge e in v.Adj)
+                            {
+                                Graph.Vertex w = e.Dest;
+                                graphics.DrawLine(new Pen(Color.Black, 1), (float)v.Loc.X, (float)v.Loc.Y, (float)w.Loc.X, (float)w.Loc.Y);
+                            }
                         }
-                    }
-                    if (SHOW_VERTICES)
-                    {
-                        float renderedVertexRadius = 1;
-                        graphics.DrawEllipse(new Pen(Color.LawnGreen), (float)v.Loc.X - renderedVertexRadius / 2,
-                            (float)v.Loc.Y - renderedVertexRadius / 2, renderedVertexRadius, renderedVertexRadius);
-                    }
-                    if (SHOW_VERTEX_LABEL)
-                    {
-                        Brush b = new SolidBrush(Color.DarkBlue);
-                        Font f = new Font(SystemFonts.DefaultFont.Name, 6);
-                        graphics.DrawString(v.Label, f, b, (float)v.Loc.X, (float)v.Loc.Y);
+                        if (SHOW_VERTICES)
+                        {
+                            float renderedVertexRadius = 1;
+                            graphics.DrawEllipse(new Pen(Color.LawnGreen), (float)v.Loc.X - renderedVertexRadius / 2,
+                                (float)v.Loc.Y - renderedVertexRadius / 2, renderedVertexRadius, renderedVertexRadius);
+                        }
+                        if (SHOW_VERTEX_LABEL)
+                        {
+                            Brush b = new SolidBrush(Color.DarkBlue);
+                            Font f = new Font(SystemFonts.DefaultFont.Name, 6);
+                            graphics.DrawString(v.Label, f, b, (float)v.Loc.X, (float)v.Loc.Y);
+                        }
                     }
                 }
             }
         }
 
-        private void RenderShortestPath()
+        private bool RenderShortestPath()
         {
             Graph.Vertex[,] vertices = GameWorld.Instance.NavGraph.vertices;
             try
             {
-                Graph.Vertex start, goal;
-                start = vertices[1, 1];
-                goal = vertices[vertices.GetLength(0) - 2, vertices.GetLength(1) - 2];
-                List<Graph.Vertex> path = PathAlreadyCalculated;
-                if (path == null)
-                {
-                    path = Movement.Pathfinding.AStar(start, goal);
-                    PathAlreadyCalculated = path;
+                if (GameWorld.Instance.PathAlreadyCalculated == null) { 
+                    Random rand = new Random();
+                    Graph.Vertex start = null, goal = null;
+                    while (goal == null || start == null)
+                    {
+                        // Generate random start and goal for pathfinder example
+                        start = vertices[rand.Next(0, vertices.GetLength(0)), rand.Next(0, vertices.GetLength(1))];
+                        goal = vertices[rand.Next(0, vertices.GetLength(0)), rand.Next(0, vertices.GetLength(1))];
+                    }
+
+                    GameWorld.Instance.PathAlreadyCalculated = Movement.Pathfinding.AStar(start, goal);
                 }
 
-                Pen p = new Pen(Color.DeepPink);
-
+                List<Graph.Vertex> path = GameWorld.Instance.PathAlreadyCalculated;
+                Pen p = new Pen(Color.DeepPink, Math.Max(1, (float) GameWorld.Instance.Width / 250));
                 for (int i = 1; i < path.Count; i++)
                 {
                     Graph.Vertex v = path[i - 1];
                     Graph.Vertex w = path[i];
                     graphics.DrawLine(p, (float)v.Loc.X, (float)v.Loc.Y, (float)w.Loc.X, (float)w.Loc.Y);
                 }
+                return true;
             }
             catch (NullReferenceException e)
             {
-                //Console.WriteLine("Could not render Shortest Path");
-                return;
+                Console.WriteLine("Could not render Shortest Path");
+                return false;
             }
         }
     }

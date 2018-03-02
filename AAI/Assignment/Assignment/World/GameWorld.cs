@@ -19,8 +19,9 @@ namespace Assignment.World
 		public Graph NavGraph { get; private set; }
 		public List<BaseEntity> Entities { get; private set; }
 		public List<BaseObstacle> Obstacles { get; private set; }
+        internal List<Graph.Vertex> PathAlreadyCalculated = null; // Used to test pathfinding
 
-		public const int TickDelay = 50;
+        public const int TickDelay = 50;
 		public MainForm Screen;
 		public Random Random;
 
