@@ -12,16 +12,21 @@ namespace Assignment.Movement
 	{
 		public EntityType FleeFrom;
 		public double Radius;
-		public double Multiplier = 5;
+		public double Multiplier = 1000;
+
+		public Flee() : base()
+		{
+			Priority = 0.8;
+		}
 
 		public override SteeringForce Calculate(BaseEntity entity)
 		{
 			var fleeFromEntities = GameWorld.Instance.EntitiesInArea(entity.Location, Radius);
 			SteeringForce force = new SteeringForce();
 			int forcesCount = 0;
-			foreach(var fleeFromEntity in fleeFromEntities)
+			foreach (var fleeFromEntity in fleeFromEntities)
 			{
-				if(fleeFromEntity.Type == FleeFrom)
+				if (fleeFromEntity.Type == FleeFrom)
 				{
 					var direction = Utilities.Utilities.Direction(entity.Location, fleeFromEntity.Location) - Math.PI;
 					var distance = Utilities.Utilities.Distance(entity.Location, fleeFromEntity.Location);
@@ -30,9 +35,11 @@ namespace Assignment.Movement
 					forcesCount++;
 				}
 			}
+			if (forcesCount == 0)
+				return force;
+
 
 			force = force / forcesCount;
-
 			return force;
 		}
 	}

@@ -13,6 +13,11 @@ namespace Assignment.Movement
 		public BaseEntity ChaseEntity;
 		public double MaxDistance;
 
+		public Seek() : base()
+		{
+			Priority = 0.4;
+		}
+
 		public override SteeringForce Calculate(BaseEntity entity)
 		{
 			var distance = Utilities.Utilities.Distance(entity.Location, ChaseEntity.Location);

@@ -15,6 +15,11 @@ namespace Assignment.Movement
 		public double offsetMargin = 10;
 		public double avoidanceFactor = 100;
 
+		public ObstacleAvoidance() : base()
+		{
+			Priority = 1;
+		}
+
 		public override SteeringForce Calculate(BaseEntity entity)
 		{
 			var force = new SteeringForce();
@@ -33,11 +38,7 @@ namespace Assignment.Movement
 
 				var angleDiff = angle - entity.Direction;
 
-				g.DrawLine(Pens.Yellow, (float) entity.Location.X, (float) entity.Location.Y, (float) obstacle.Location.X, (float) obstacle.Location.Y);
-
 				var offset = Math.Sin(angleDiff) * distance;
-
-				//g.DrawString($"angle: {Math.Round(angle * 180 / Math.PI)}\nangledif: {Math.Round(angleDiff * 180 / Math.PI)}", new Font(FontFamily.GenericSerif, 10), Brushes.Yellow, (float) entity.Location.X, (float) entity.Location.Y);
 
 				while (angleDiff > Math.PI)
 					angleDiff -= Math.PI * 2;
@@ -50,8 +51,6 @@ namespace Assignment.Movement
 				{
 					if (Math.Abs(offset) < offsetMargin + obstacle.Radius)
 					{
-						g.FillEllipse(Brushes.Red, (float) obstacle.Location.X - 10, (float) obstacle.Location.Y - 10, 20, 20);
-
 						var amountToSteer = obstacle.Radius - Math.Abs(offset) + offsetMargin;
 						var steeringNeed = distance;
 
@@ -72,8 +71,9 @@ namespace Assignment.Movement
 
 			if (forceCounterL + forceCounterR > 1)
 			{
-				return new SteeringForce(entity.Direction + Math.PI, totalForce);
+				force = new SteeringForce(forceCounterL > forceCounterR ? entity.Direction + Math.PI / 2 : entity.Direction - Math.PI / 2, totalForce);
 			}
+
 			return force;
 		}
 	}

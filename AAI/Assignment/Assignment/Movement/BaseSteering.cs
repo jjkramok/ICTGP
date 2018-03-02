@@ -11,8 +11,8 @@ namespace Assignment.Movement
 	public abstract class BaseSteering
 	{
 		public double Priority;
-		public Graphics g;
 		public bool BehaviorDone = false;
+		public bool Render = false;
 
 		public BaseSteering()
 		{

@@ -22,7 +22,7 @@ namespace Assignment.Renderer
 
 			typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty
 				   | BindingFlags.Instance | BindingFlags.NonPublic, null,
-				   worldPanel1, new object[] { true });
+				   worldPanel, new object[] { true });
 
 			GameWorld.Instance.Screen = this;
 
@@ -35,10 +35,9 @@ namespace Assignment.Renderer
 			world.Screen = this;
 		}
 
-		private void worldPanel1_Paint(object sender, PaintEventArgs e)
+		private void worldPanel_Paint(object sender, PaintEventArgs e)
 		{
-
-			var renderer = new Rendering(e.Graphics, worldPanel1);
+			var renderer = new Rendering(e.Graphics, worldPanel);
 			renderer.Render();
 		}
 
@@ -49,7 +48,7 @@ namespace Assignment.Renderer
 
 		public void Render()
 		{
-			worldPanel1.Invalidate();
+			worldPanel.Invalidate();
 		}
 	}
 }

@@ -41,7 +41,7 @@ namespace Assignment.World
 
 		public void GameTick(object sender = null, EventArgs e = null)
 		{
-			//UpdateEntites();
+			UpdateEntites();
 			Screen.Render();
 		}
 
@@ -50,8 +50,14 @@ namespace Assignment.World
 			Random = new Random();
 			Entities = new List<BaseEntity>
 			{
-				new Herbivore{ Direction = Math.PI * 2 * 1, Location = new Location(70, 90.01)},
+				new Herbivore{ Direction = Math.PI * 2, Location = new Location(70, 90.01)},
+				new Omnivore{ Direction = Math.PI * 1.2, Location = new Location(130, 120.01)},
+				new Omnivore{ Direction = Math.PI * 0.4, Location = new Location(530, 320.01)},
 			};
+			for(int i = 0; i < 100; i++)
+			{
+				Entities.Add(new Herbivore { Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(40 + Random.Next(0, 500), 40 + Random.Next(0, 500)) });
+			}
 
 			Obstacles = new List<BaseObstacle>
 			{
@@ -63,9 +69,9 @@ namespace Assignment.World
 				new Rock(new Location(80,10), 20),
 			};
 
-			Width = 200;
-			Height = 200;
-			SteeringForceCalculationType = SteeringForceCalculationType.Priorization;
+			Width = 1000;
+			Height = 1000;
+			SteeringForceCalculationType = SteeringForceCalculationType.WeightedTruncatedSum;
 		}
 
 		private void StoneEdge()
