@@ -60,9 +60,10 @@ namespace Assignment.World
             {
                 for (int y = 0; y < vertices.GetLength(1); y++)
                 {
-                    if (gw.ObstaclesInArea(new Location(XOffset + x * step, YOffset + y * step), AgentCollisionSpacing).Count > 0)
+                    int amountOfCollisions = gw.ObstaclesInArea(new Location(XOffset + x * step, YOffset + y * step), AgentCollisionSpacing).Count;
+                    if (amountOfCollisions > 0)
                     {
-                        //break; //TODO code for edge stitching assumes all slots in vertices[,] are not null, breaking here breaks stuff
+                        //continue; //TODO code for edge stitching assumes all slots in vertices[,] are not null, breaking here breaks stuff
                     }
                     
 
