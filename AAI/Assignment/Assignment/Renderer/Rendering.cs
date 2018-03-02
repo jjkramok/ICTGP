@@ -14,8 +14,12 @@ namespace Assignment.Renderer
         private static Bitmap screen;
         private static Graphics graphics;
 
+		public static bool RenderNavGraphOption = false;
+		public static bool RenderAStarPathOption = false;
+		public static bool RenderGridOption = false;
+		public static bool RenderEntitiesInfoOption = false;
 
-        public static void Render(Graphics g, Panel p)
+		public static void Render(Graphics g, Panel p)
         {
             graphicsPanel = g;
             panel = p;
@@ -25,10 +29,17 @@ namespace Assignment.Renderer
             {
                 RenderBackground();
                 RenderObstacles();
-                //RenderGrid();
-                //RenderEntities();
-                RenderNavGraph();
-                RenderShortestPath();
+
+				if(RenderGridOption)
+					RenderGrid();
+
+                RenderEntities();
+
+				if(RenderNavGraphOption)
+					RenderNavGraph();
+
+				if(RenderAStarPathOption)
+					RenderShortestPath();
             }
 
             graphicsPanel.DrawImage(screen, 0, 0, panel.Width, panel.Height);
@@ -132,9 +143,9 @@ namespace Assignment.Renderer
                     while (goal == null || start == null)
                     {
                         // Generate random start and goal for pathfinder example
-                        start = vertices[rand.Next(0, vertices.GetLength(0)), rand.Next(0, vertices.GetLength(1))];
-                        goal = vertices[rand.Next(0, vertices.GetLength(0)), rand.Next(0, vertices.GetLength(1))];
-                    }
+                        start = vertices[15, 10];
+                        goal = vertices[90, 90];
+					}
 
                     GameWorld.Instance.PathAlreadyCalculated = Movement.Pathfinding.AStar(start, goal);
                 }

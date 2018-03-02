@@ -38,17 +38,26 @@ namespace Assignment.Movement
                 flops++;
                 
                 Graph.Vertex v = pq.Get();
+
                 if (flops > 10000)
                 {
-                    flops = 0;
+					Console.WriteLine($"fail: {v}");
+					flops = 0;
                     return reconstructPath(v);
                 }
-                v.Known = true;
+
+				if (v.Known)
+				{
+					continue;
+				}
+
+				v.Known = true;
 
                 // End-case : goal found, retrieve path to goal node.
                 if (v == goal)
                 {
-                    flops = 0;
+					Console.WriteLine($"x{v.Loc.X}, y{v.Loc.Y}");
+					flops = 0;
                     return reconstructPath(goal);
                 }
 
@@ -65,14 +74,12 @@ namespace Assignment.Movement
                     // Calculate distance from start till current vertex
                     double tentative_dist = v.Dist + e.Cost;
 
-                    if (w.Dist < tentative_dist)
+                    if (w.Dist > tentative_dist)
                     {
-                        continue; // Previous path was better
-                    }
-
-                    // Current best path
-                    w.Prev = v;
-                    w.Dist = tentative_dist;
+						// Current best path
+						w.Prev = v;
+						w.Dist = tentative_dist;
+					}
                 }
             }
             return null; // goal not reached

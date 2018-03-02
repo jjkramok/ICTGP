@@ -110,29 +110,9 @@ namespace Assignment.World
                 }
             }
         }
-
-        public void AddVertex(Vertex v) {
-            if (v.Loc != null)
-            {
-                Location loc = v.Loc;
-                vertices[(int) loc.X, (int) loc.Y] = v;
-            }
-        }
     
-        private Vertex GetVertex(String label) {
-            for (int x = 0; x < vertices.GetLength(0); x++)
-            {
-                for (int y = 0; y < vertices.GetLength(1); y++)
-                {
-                    if (vertices[x,y].Label.Equals(label))
-                        return vertices[x,y];
-                }
-            }
-            return null;
-        }
-    
-        public override String ToString() {
-            String res = "";
+        public override string ToString() {
+            string res = "";
             foreach (var entry in vertices)
                 res += entry + "\n";
             return res;
@@ -141,7 +121,7 @@ namespace Assignment.World
         public class Vertex : IComparable<Vertex>
         {      
             public string Label;
-            public HashSet<Edge> Adj;
+            public List<Edge> Adj;
             public Vertex Prev;
             public double Dist;
             public double HDist;
@@ -151,7 +131,7 @@ namespace Assignment.World
             
             public Vertex(Location loc, string label) {
                 Label = label;
-                Adj = new HashSet<Edge>();
+                Adj = new List<Edge>();
                 Prev = null;
                 Loc = loc;
                 Dist = -1;
@@ -160,7 +140,7 @@ namespace Assignment.World
             
             public Vertex(double x, double y, string label) {
                 Label = label;
-                Adj = new HashSet<Edge>();
+                Adj = new List<Edge>();
                 Prev = null;
                 Loc = new Location(x, y);
                 Dist = -1;

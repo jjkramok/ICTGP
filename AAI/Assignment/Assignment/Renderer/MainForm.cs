@@ -49,5 +49,25 @@ namespace Assignment.Renderer
 		{
 			worldPanel.Invalidate();
 		}
+
+		private void navigationButton_Click(object sender, EventArgs e)
+		{
+			Rendering.RenderNavGraphOption = !Rendering.RenderNavGraphOption;
+		}
+
+		private void entityButton_Click(object sender, EventArgs e)
+		{
+			Rendering.RenderEntitiesInfoOption = !Rendering.RenderEntitiesInfoOption;
+		}
+
+		private void aStarButton_Click(object sender, EventArgs e)
+		{
+			Rendering.RenderAStarPathOption = !Rendering.RenderAStarPathOption;
+		}
+
+		private void GridButton_Click(object sender, EventArgs e)
+		{
+			Rendering.RenderGridOption = !Rendering.RenderGridOption;
+		}
 	}
 }
