@@ -11,8 +11,8 @@ namespace Assignment.Obstacle
 		}
 
 		public override void Render(Graphics g)
-		{
+		{           
 			g.FillEllipse(Brushes.Gray, (int) Location.X - 10, (int) Location.Y - 10, 20, 20);
-		}
+        }
 	}
 }

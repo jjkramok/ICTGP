@@ -65,9 +65,9 @@ namespace Assignment.World
 
 			List<BaseEntity> entities = new List<BaseEntity>();
 
-			for (int x = Math.Max(centerCell.Item1 - cellDistanceX, 0); x < Math.Min(centerCell.Item1 + cellDistanceX, GridWidth); x++)
+			for (int x = Math.Max(centerCell.Item1 - cellDistanceX, 0); x < Math.Min(centerCell.Item1 + cellDistanceX + 1, GridWidth); x++)
 			{
-				for (int y = Math.Max(centerCell.Item2 - cellDistanceY, 0); y < Math.Min(centerCell.Item2 + cellDistanceY, GridHeight); y++)
+				for (int y = Math.Max(centerCell.Item2 - cellDistanceY, 0); y < Math.Min(centerCell.Item2 + cellDistanceY + 1, GridHeight); y++)
 				{
 					entities.AddRange(GridCells[x, y].Entities);
 				}
@@ -98,17 +98,17 @@ namespace Assignment.World
 
 		public List<ObstacleCircle> ObstacleCirclesNearLocation(Location location, double distance)
 		{
-			var centerCell = GetGridCellForLocation(location);
+            var centerCell = GetGridCellForLocation(location);
 			var cellDistanceX = (int) Math.Floor(distance / CellWidth) + 1;
 			var cellDistanceY = (int) Math.Floor(distance / CellHeight) + 1;
 
 			List<ObstacleCircle> circles = new List<ObstacleCircle>();
 
-			for (int x = Math.Max(centerCell.Item1 - cellDistanceX, 0); x < Math.Min(centerCell.Item1 + cellDistanceX, GridWidth); x++)
+			for (int x = Math.Max(centerCell.Item1 - cellDistanceX, 0); x < Math.Min(centerCell.Item1 + cellDistanceX + 1, GridWidth); x++)
 			{
-				for (int y = Math.Max(centerCell.Item2 - cellDistanceY, 0); y < Math.Min(centerCell.Item2 + cellDistanceY, GridHeight); y++)
+				for (int y = Math.Max(centerCell.Item2 - cellDistanceY, 0); y < Math.Min(centerCell.Item2 + cellDistanceY + 1, GridHeight); y++)
 				{
-					circles.AddRange(GridCells[x, y].Obstacles);
+                    circles.AddRange(GridCells[x, y].Obstacles);
 				}
 			}
 
