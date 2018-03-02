@@ -123,6 +123,8 @@ namespace Assignment.Renderer
 
         private static bool RenderShortestPath()
         {
+            const bool SHOW_SMOOTHED_PATH = true;
+
             Graph.Vertex[,] vertices = GameWorld.Instance.NavGraph.vertices;
             try
             {
@@ -140,13 +142,25 @@ namespace Assignment.Renderer
                 }
 
                 List<Graph.Vertex> path = GameWorld.Instance.PathAlreadyCalculated;
-                Pen p = new Pen(Color.DeepPink, Math.Max(1, (float) GameWorld.Instance.Width / 250));
+                Pen p = new Pen(Color.MediumPurple, Math.Max(1, (float) GameWorld.Instance.Width / 250));
                 for (int i = 1; i < path.Count; i++)
                 {
                     Graph.Vertex v = path[i - 1];
                     Graph.Vertex w = path[i];
                     graphics.DrawLine(p, (float)v.Loc.X, (float)v.Loc.Y, (float)w.Loc.X, (float)w.Loc.Y);
                 }
+                if (SHOW_SMOOTHED_PATH)
+                {
+                    List<Graph.Vertex> smoothedPath = Movement.Pathfinding.FinePathSmoothing(path);
+                    p = new Pen(Color.DeepPink, Math.Max(1, (float)GameWorld.Instance.Width / 250));
+                    for (int i = 1; i < smoothedPath.Count; i++)
+                    {
+                        Graph.Vertex v = smoothedPath[i - 1];
+                        Graph.Vertex w = smoothedPath[i];
+                        graphics.DrawLine(p, (float)v.Loc.X, (float)v.Loc.Y, (float)w.Loc.X, (float)w.Loc.Y);
+                    }
+                }
+
                 return true;
             }
             catch (NullReferenceException e)
