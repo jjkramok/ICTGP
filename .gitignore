@@ -47,7 +47,7 @@ AAI/Assignment/Assignment/Debug/*
 AAI/Assignment/Assignment/x64/*
 AAI/Assignment/x64/*
 
-
+*.suo
 
 # vs sjoerd 
 cpp/sjoerd/cpp/debug/*

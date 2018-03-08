@@ -14,6 +14,9 @@ namespace Assignment.Movement
 	{
 		public double offsetMargin = 10;
 		public double avoidanceFactor = 100;
+		public double searchArea = 50;
+
+		private List<ObstacleCircle> avoidedObstacles;
 
 		public ObstacleAvoidance() : base()
 		{
@@ -22,9 +25,11 @@ namespace Assignment.Movement
 
 		public override SteeringForce Calculate(BaseEntity entity)
 		{
+			avoidedObstacles = new List<ObstacleCircle>();
+
 			var force = new SteeringForce();
 
-			var obstacles = GameWorld.Instance.ObstaclesInArea(entity.Location, 50);
+			var obstacles = GameWorld.Instance.ObstaclesInArea(entity.Location, searchArea);
 
 			double totalForce = 0;
 
@@ -51,6 +56,8 @@ namespace Assignment.Movement
 				{
 					if (Math.Abs(offset) < offsetMargin + obstacle.Radius)
 					{
+						avoidedObstacles.Add(obstacle);
+
 						var amountToSteer = obstacle.Radius - Math.Abs(offset) + offsetMargin;
 						var steeringNeed = distance;
 
@@ -75,6 +82,14 @@ namespace Assignment.Movement
 			}
 
 			return force;
+		}
+
+		public override void Render(Graphics g, BaseEntity entity)
+		{
+			foreach(var obstacle in avoidedObstacles)
+			{
+				g.DrawLine(Pens.DarkRed, (int) entity.Location.X, (int) entity.Location.Y, (int) obstacle.Location.X, (int) obstacle.Location.Y);
+			}
 		}
 	}
 }

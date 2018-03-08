@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace Assignment.Movement
 {
@@ -41,6 +42,18 @@ namespace Assignment.Movement
 
 			force = force / forcesCount;
 			return force;
+		}
+
+		public override void Render(Graphics g, BaseEntity entity)
+		{
+			var fleeFromEntities = GameWorld.Instance.EntitiesInArea(entity.Location, Radius);
+			foreach (var fleeFromEntity in fleeFromEntities)
+			{
+				if (fleeFromEntity.Type == FleeFrom)
+				{
+					g.DrawLine(Pens.Orange, (float) entity.Location.X, (float) entity.Location.Y, (float) fleeFromEntity.Location.X, (float) fleeFromEntity.Location.Y);
+				}
+			}
 		}
 	}
 }

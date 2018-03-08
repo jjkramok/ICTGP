@@ -13,7 +13,7 @@ namespace Assignment.Movement
 	{
 		public Location ArriveLocation;
 
-		public Arrive():base()
+		public Arrive() : base()
 		{
 			Priority = 0.7;
 		}
@@ -31,6 +31,11 @@ namespace Assignment.Movement
 
 			// todo nmn
 			return new SteeringForce(direction, Math.Min(distance, 10));
+		}
+
+		public override void Render(Graphics g, BaseEntity entity)
+		{
+			g.DrawLine(Pens.Red, (int) ArriveLocation.X, (int) ArriveLocation.Y, (int) entity.Location.X, (int) entity.Location.Y);
 		}
 	}
 }

@@ -35,6 +35,9 @@ namespace Assignment.Renderer
 
                 RenderEntities();
 
+				if (RenderEntitiesInfoOption)
+					RenderEntitiesInfo();
+
 				if(RenderNavGraphOption)
 					RenderNavGraph();
 
@@ -93,7 +96,16 @@ namespace Assignment.Renderer
             }
         }
 
-        private static void RenderNavGraph()
+		private static void RenderEntitiesInfo()
+		{
+			foreach (var entity in GameWorld.Instance.Entities)
+			{
+				entity.RenderDebug(graphics);
+			}
+		}
+
+
+		private static void RenderNavGraph()
         {
             const bool SHOW_VERTEX_LABEL = false;
             const bool SHOW_EDGES = true;
