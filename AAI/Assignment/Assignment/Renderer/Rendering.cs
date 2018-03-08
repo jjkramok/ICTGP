@@ -157,9 +157,9 @@ namespace Assignment.Renderer
                     while (goal == null || start == null)
                     {
                         // Generate random start and goal for pathfinder example
-                        start = vertices[15, 10];
-                        goal = vertices[90, 90];
-					}
+                        start = vertices[rand.Next(vertices.GetLength(0)), rand.Next(vertices.GetLength(1))];//start = vertices[15, 10];
+                        goal = vertices[rand.Next(vertices.GetLength(0)), rand.Next(vertices.GetLength(1))];//goal = vertices[90, 90];
+                    }
 
                     GameWorld.Instance.PathAlreadyCalculated = Movement.Pathfinding.AStar(start, goal);
                 }
