@@ -15,7 +15,6 @@ namespace Assignment.Entity
 		{
 			MaxSpeed = 5;
 			Type = EntityType.Omnivore;
-			State = new StateMachine(this);
 		}
 
 		public override void Render(Graphics g)
@@ -31,7 +30,7 @@ namespace Assignment.Entity
 
 		public override void Update(int tick)
 		{
-			State.Execute();
+			StateMachine.Execute(this);
 			CalculateSteeringForce();
 		}
 	}
