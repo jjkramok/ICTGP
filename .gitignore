@@ -32,8 +32,8 @@
 *.app
 
 # visual studio
-#**/.vs/*
-#AAI/AAI/.vs/*
+**/.vs/*
+AAI/AAI/.vs/*
 AAI/AAI/Debug/*
 AAI/AAI/Release/*
 
@@ -42,7 +42,7 @@ AAI/AAI/Release/*
 AAI/AAI/lib/*.hpp
 CG/Sjoerd/CS/CG/.vs/*
 
-#AAI/Assignment/.vs/*
+AAI/Assignment/.vs/*
 AAI/Assignment/Assignment/Debug/*
 AAI/Assignment/Assignment/x64/*
 AAI/Assignment/x64/*
