@@ -151,6 +151,7 @@ namespace Assignment.Movement
 
             var boundBoxWidth = 1; // Space / distance between the two sidepoints making up the rectangle bounding box.
             var sidepointAngle = (Math.PI / 2) - AtoBAngle; // Angle between origin and sidepoint, used to calculate location of the sidepoint below.
+            // Create two side points for both locations. These will be used to represent the bounding box of the agent from A till B.
             Location aSidePoint1 = new Location(a.X + boundBoxWidth * Math.Cos(sidepointAngle), a.Y + boundBoxWidth * Math.Sin(sidepointAngle));
             Location aSidePoint2 = new Location(a.X + boundBoxWidth * Math.Cos(sidepointAngle + Math.PI / 2), a.Y + boundBoxWidth * Math.Sin(sidepointAngle + Math.PI / 2));
 
@@ -158,6 +159,13 @@ namespace Assignment.Movement
             Location bSidePoint2 = new Location(b.X + boundBoxWidth * Math.Cos(sidepointAngle + Math.PI / 2), b.Y + boundBoxWidth * Math.Sin(sidepointAngle + Math.PI / 2));
 
             
+            // TODO use Grid to avoid calling against all objects in the GameWorld
+
+            foreach(Obstacle.BaseObstacle obstacle in GameWorld.Instance.Obstacles)
+            {
+
+            }
+
             /*
             while (angleDiff > Math.PI)
                 angleDiff -= Math.PI * 2;

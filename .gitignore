@@ -61,3 +61,6 @@ cpp/sjoerd/cpp/.vs/*
 **/cmake-build-release/*
 **/bin/*
 **/obj/*
+/CG/Sjoerd/CS/CG/_CG.csproj
+/CG/Sjoerd/CS/CG/_CG.sln
+/.gitattributes
