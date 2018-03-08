@@ -2,6 +2,7 @@
 using Assignment.Movement;
 using Assignment.Obstacle;
 using Assignment.Renderer;
+using Assignment.State;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -48,6 +49,8 @@ namespace Assignment.World
 
 		private GameWorld()
 		{
+			StateMachine.Initialize();
+
 			Random = new Random();
 			Obstacles = new List<BaseObstacle>
 			{

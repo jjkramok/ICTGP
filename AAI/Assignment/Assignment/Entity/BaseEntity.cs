@@ -21,7 +21,9 @@ namespace Assignment.Entity
 		public double MaxSpeed;
 		public double MaxForce;
 		public double DirectionMaxChange = 0.3;
-		public StateMachine State;
+		public string PreviousState;
+		public string State;
+		public int Strength = 1;
 
 		public Location Location;
 
@@ -32,6 +34,10 @@ namespace Assignment.Entity
 			Speed = 1;
 			MaxSpeed = 6;
 			MaxForce = 100;
+
+			// todo fix default state
+			PreviousState = "";
+			State = "patrol";
 		}
 
 		public abstract void Update(int tick);

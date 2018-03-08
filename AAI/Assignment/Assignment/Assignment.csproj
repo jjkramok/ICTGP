@@ -117,10 +117,22 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="scripts\herbivore.lua">
+    <None Include="scripts\herbivore\attack.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="scripts\omnivore.lua">
+    <None Include="scripts\herbivore\hide.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="scripts\herbivore\patrol.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="scripts\omnivore\attack.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="scripts\omnivore\patrol.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="scripts\omnivore\hide.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -130,7 +142,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
-xcopy /s /y "D:\Dev\C\GamesProgramming\AAI\Assignment\Assignment\packages\NLua.1.3.2.1\lib\native\*.*" "$(TargetDir)"
-xcopy /s /y "C:\Users\Tim\source\repos\ICTGP\AAI\Assignment\Assignment\packages\NLua.1.3.2.1\lib\native\*.*" "$(TargetDir)"</PostBuildEvent>
+xcopy /s /y "C:\Users\Tim\source\repos\ICTGP\AAI\Assignment\Assignment\packages\NLua.1.3.2.1\lib\native\*.*" "$(TargetDir)"
+xcopy /s /y "D:\Dev\C\GamesProgramming\AAI\Assignment\Assignment\packages\NLua.1.3.2.1\lib\native\*.*" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

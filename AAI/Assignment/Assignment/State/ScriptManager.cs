@@ -5,31 +5,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NLua;
+using Assignment.Entity;
+using Assignment.World;
 
 namespace Assignment.State
 {
 	public static class ScriptManager
 	{
-		public const string SCRIPTPATH = "./scripts/";
+		public static readonly string SCRIPTPATH = Path.Combine(".", "scripts");
 		public const string SCRIPTEXTENSION = ".lua";
 
 		private static Dictionary<string, string> loadedFiles = new Dictionary<string, string>();
 
-		public static Lua LoadScript(string scriptName, Dictionary<string, object> objectsToParse)
+		public static Lua LoadScript(string scriptName)
 		{
 			try
 			{
 				Lua script = new Lua();
 				script.LoadCLRPackage();
 				script.DoString(OpenFile(scriptName));
-
-				if (objectsToParse != null)
-				{
-					foreach (var objectParse in objectsToParse)
-					{
-						script[objectParse.Key] = objectParse.Value;
-					}
-				}
 
 				return script;
 			}
@@ -44,10 +38,15 @@ namespace Assignment.State
 			return Directory.GetFiles(SCRIPTPATH, "*" + SCRIPTEXTENSION, SearchOption.AllDirectories);
 		}
 
-		public static void ExecuteScript(Lua script)
+		public static string RunFunctionScript(Lua script, string functionName, BaseEntity entity)
 		{
-			LuaFunction scriptFunction = script[(string) script["state"]] as LuaFunction;
-			scriptFunction.Call();
+			LuaFunction scriptFunction = script[functionName] as LuaFunction;
+			var returnValue = scriptFunction.Call(entity, GameWorld.Instance);
+			if(returnValue != null && returnValue.Length == 1)
+			{
+				return returnValue.First().ToString();
+			}
+			return null;
 		}
 
 		private static string OpenFile(string scriptName)
