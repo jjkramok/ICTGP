@@ -128,7 +128,13 @@ namespace Assignment.Movement
             smoothedPath.Add(start); // Add start node since it cannot be smoothed anyway.
             for (int i = path.Count - 1; i > 1; i--)
             {
+                eval = path[i];
                 // Call walkable and return first solution found for each step
+                if (Walkable(start.Loc, eval.Loc))
+                {
+                    // TODO smooth path
+                }
+                
             }
 
             return smoothedPath;
@@ -142,65 +148,25 @@ namespace Assignment.Movement
         /// <returns></returns>
         private static bool Walkable(Location a, Location b)
         {
-            // TODO call obstacles in area
-            // Check for all obstacles if they intersect with the rectangle formed by the four 'sidepoints'
             double AtoBDistance = Utilities.Utilities.Distance(a, b);
             double AtoBAngle = Utilities.Utilities.Direction(a, b);
 
-            //var offset = Math.Sin(AtoBAngle) * AtoBDistance; // y distance from a to b (not used in my case)
+            var boundBoxWidth = 1; // Width / radius of the agent
+            // ^-- might need to be passed to the pathfinder function or possible to be retreived by it
 
-            var boundBoxWidth = 1; // Space / distance between the two sidepoints making up the rectangle bounding box.
-            var sidepointAngle = (Math.PI / 2) - AtoBAngle; // Angle between origin and sidepoint, used to calculate location of the sidepoint below.
-            // Create two side points for both locations. These will be used to represent the bounding box of the agent from A till B.
-            Location aSidePoint1 = new Location(a.X + boundBoxWidth * Math.Cos(sidepointAngle), a.Y + boundBoxWidth * Math.Sin(sidepointAngle));
-            Location aSidePoint2 = new Location(a.X + boundBoxWidth * Math.Cos(sidepointAngle + Math.PI / 2), a.Y + boundBoxWidth * Math.Sin(sidepointAngle + Math.PI / 2));
-
-            Location bSidePoint1 = new Location(b.X + boundBoxWidth * Math.Cos(sidepointAngle), b.Y + boundBoxWidth * Math.Sin(sidepointAngle));
-            Location bSidePoint2 = new Location(b.X + boundBoxWidth * Math.Cos(sidepointAngle + Math.PI / 2), b.Y + boundBoxWidth * Math.Sin(sidepointAngle + Math.PI / 2));
-
-            
-            // TODO use Grid to avoid calling against all objects in the GameWorld
-
-            foreach(Obstacle.BaseObstacle obstacle in GameWorld.Instance.Obstacles)
+            int step = 5; // distance between each sample point on the line from A to B. Lower distance means more precision.
+            for (int d = 0; d < AtoBDistance; d += step)
             {
-
-            }
-
-            /*
-            while (angleDiff > Math.PI)
-                angleDiff -= Math.PI * 2;
-
-            while (angleDiff < -Math.PI)
-                angleDiff += Math.PI * 2;
-
-            // ignore obstacles behind the entity
-            if (Math.Abs(angleDiff) < Math.PI / 2)
-            {
-                if (Math.Abs(offset) < offsetMargin + obstacle.Radius)
+                // Create the current point to be evaluated. It is 'd' distance away from A among the AtoB line.
+                Location currEval = new Location(a.X + d * Math.Cos(AtoBAngle), a.Y + d * Math.Sin(AtoBAngle));
+                var obstacles = GameWorld.Instance.ObstaclesInArea(currEval, boundBoxWidth);
+                
+                if (obstacles.Count > 0)
                 {
-                    var amountToSteer = obstacle.Radius - Math.Abs(offset) + offsetMargin;
-                    var steeringNeed = AtoBDistance;
-
-                    if (offset < 0)
-                    {
-                        force += new SteeringForce(entity.Direction + Math.PI / 2, avoidanceFactor / steeringNeed * amountToSteer);
-                        forceCounterL++;
-                    }
-                    else
-                    {
-                        force += new SteeringForce(entity.Direction - Math.PI / 2, avoidanceFactor / steeringNeed * amountToSteer);
-                        forceCounterR++;
-                    }
-                    totalForce += force.Amount;
+                    return false;
                 }
             }
-
-
-            var angle = Utilities.Utilities.Direction(a, b);
-            Geometry boundBox = new RectangleGeometry(new System.Windows.Rect(50, 50, 50, 50));
-            CombinedGeometry collision = new CombinedGeometry();
-            */
-            return false;
+            return true;
         }
 
     }
