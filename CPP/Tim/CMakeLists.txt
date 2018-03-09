@@ -8,6 +8,8 @@ find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 #find_package(GLM REQUIRED) <-- problem
 
+set(PE PracticeExam)
+
 include_directories( ${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS} )
 
 #set(GLPath /usr/include/GL)
@@ -26,6 +28,7 @@ target_link_libraries(${APP_EXE} MyStaticLibrary ${CMAKE_DL_LIBS})
 # Actual executables
 add_executable(Tim main.cpp Week1/Week1.cpp Week1/Week1.h Week2/Program.cpp Week2/Program.h)
 add_executable(Week2 Week2/Program.cpp Week2/Program.h)
+add_executable(PracticeExam ${PE}/Program.cpp PracticeExam/BST.cpp PracticeExam/BST.h)
 
 #set(GL_EXE Week4)
 #add_executable(${GL_EXE} Week4/Program.cpp)
