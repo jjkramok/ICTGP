@@ -6,7 +6,7 @@ import ('Assignment.World')
 
 function enter(entity, world)
 	local arrive = Arrive()
-	arrive.ArriveLocation = Location(500, 500)
+	arrive.ArriveLocation = Location(world.Random:Next(50, world.Width - 50), world.Random:Next(50, world.Width - 50))
 
 	entity.SteeringBehaviours:Add(arrive)
 end

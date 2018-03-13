@@ -94,7 +94,7 @@ namespace Assignment.World
 			};
 			for (int i = 0; i < 100; i++)
 			{
-				Entities.Add(new Herbivore { Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(40 + Random.Next(0, 500), 40 + Random.Next(0, 500)) });
+				// Entities.Add(new Herbivore { Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(40 + Random.Next(0, 500), 40 + Random.Next(0, 500)) });
 			}
 
 			Grid = new Grid();

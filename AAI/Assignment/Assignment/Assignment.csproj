@@ -62,7 +62,7 @@
     <Compile Include="Entity\Omnivore.cs" />
     <Compile Include="Movement\Arrive.cs" />
     <Compile Include="Movement\BaseSteering.cs" />
-    <Compile Include="Movement\Explore.cs" />
+    <Compile Include="Movement\PathFollowing.cs" />
     <Compile Include="Movement\Flee.cs" />
     <Compile Include="Movement\Hide.cs" />
     <Compile Include="Movement\ObstacleAvoidance.cs" />

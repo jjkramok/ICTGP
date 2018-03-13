@@ -13,8 +13,8 @@ namespace Assignment.Movement
 	{
 		private double wanderDirection = Math.PI * 2;
 		public double DirectionChangeMax = 0.8;
-		public double CircleSize = 5;
-		public double CircleOffset = 10;
+		public double CircleSize = 50;
+		public double CircleOffset = 25;
 
 		public Wander() : base()
 		{
@@ -49,9 +49,9 @@ namespace Assignment.Movement
 
 			g.DrawEllipse(Pens.Brown, (float) circleX - (float) CircleSize / 2, (float) circleY - (float) CircleSize / 2, (float) CircleSize, (float) CircleSize);
 
-			g.FillEllipse(Brushes.BlueViolet, (float) circleDotX - 4, (float) circleDotY - 4, 8, 8);
+			g.FillEllipse(Brushes.BlueViolet, (float) circleDotX - 10, (float) circleDotY - 10, 20, 20);
 
-			g.DrawLine(Pens.Black, (float) circleX, (float) circleY, (float) circleDotX, (float) circleDotY);
+			g.DrawLine(Pens.Red, (float) circleX, (float) circleY, (float) circleDotX, (float) circleDotY);
 		}
 	}
 }

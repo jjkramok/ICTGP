@@ -5,10 +5,6 @@ import ('Assignment.Entity')
 import ('Assignment.World')
 
 function enter(entity, world)
-	local flee = Flee()
-	flee.FleeFrom = EntityType.Omnivore
-
-	entity.SteeringBehaviours:Add(flee)
 	entity.SteeringBehaviours:Add(Wander())
 end
 

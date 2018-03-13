@@ -8,7 +8,7 @@ function enter(entity, world)
 	local flee = Flee()
 	flee.FleeFrom = EntityType.Omnivore
 	flee.Radius = 200
-
+	
 	entity.SteeringBehaviours:Add(flee)
 	entity.SteeringBehaviours:Add(Wander())
 end

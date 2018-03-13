@@ -23,7 +23,7 @@ namespace Assignment.Movement
 			var distance = Utilities.Utilities.Distance(entity.Location, ArriveLocation);
 			var direction = Utilities.Utilities.Direction(entity.Location, ArriveLocation);
 
-			if (distance < 5)
+			if (distance < 25)
 			{
 				BehaviorDone = true;
 				return new SteeringForce();

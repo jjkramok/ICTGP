@@ -1,0 +1,5 @@
+Writing sample to a file: 0
+Writing sample to a file: 1
+Writing sample to a file: 2
+Writing sample to a file: 3
+Writing sample to a file: 4

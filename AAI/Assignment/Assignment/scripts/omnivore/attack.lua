@@ -5,10 +5,10 @@ import ('Assignment.Entity')
 import ('Assignment.World')
 
 function enter(entity, world)
-	local arrive = Arrive()
-	arrive.ArriveLocation = Location(400, 500)
+	local path = PathFollowing()
+	path.Goal = Location(400, 500)
 
-	entity.SteeringBehaviours:Add(arrive)
+	entity.SteeringBehaviours:Add(path)
 end
 
 function execute(entity, world)

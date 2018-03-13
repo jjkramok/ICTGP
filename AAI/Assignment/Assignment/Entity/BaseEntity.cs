@@ -46,10 +46,15 @@ namespace Assignment.Entity
 
 		public void RenderDebug(Graphics g)
 		{
-			foreach(var behaviour in SteeringBehaviours)
+			string info = $"State: {State} \n";
+
+			foreach (var behaviour in SteeringBehaviours)
 			{
 				behaviour.Render(g, this);
+				info += $" {behaviour.GetType().Name}\n";
 			}
+
+			g.DrawString(info, new Font(FontFamily.GenericSansSerif, 10), Brushes.Black, (int) Location.X + 5, (int) Location.Y + 5);
 		}
 
 		protected void CalculateSteeringForce()
@@ -136,11 +141,17 @@ namespace Assignment.Entity
 		{
 			SteeringForce force = new SteeringForce();
 
-			foreach (var behavior in SteeringBehaviours)
+			for (int i = 0; i < SteeringBehaviours.Count; i++)
 			{
-				if (GameWorld.Instance.Random.NextDouble() < behavior.Priority)
+				if (GameWorld.Instance.Random.NextDouble() < SteeringBehaviours[i].Priority)
 				{
-					force += behavior.Calculate(this);
+					force += SteeringBehaviours[i].Calculate(this);
+
+					if (SteeringBehaviours[i].BehaviorDone)
+					{
+						SteeringBehaviours.RemoveAt(i);
+						i--;
+					}
 				}
 			}
 
@@ -158,6 +169,7 @@ namespace Assignment.Entity
 				if (SteeringBehaviours[i].BehaviorDone)
 				{
 					SteeringBehaviours.RemoveAt(i);
+					i--;
 				}
 			}
 
@@ -168,9 +180,14 @@ namespace Assignment.Entity
 		{
 			SteeringForce force = new SteeringForce();
 
-			foreach (var behavior in SteeringBehaviours)
+			for (int i = 0; i < SteeringBehaviours.Count; i++)
 			{
-				force += behavior.Calculate(this);
+				force += SteeringBehaviours[i].Calculate(this);
+				if (SteeringBehaviours[i].BehaviorDone)
+				{
+					SteeringBehaviours.RemoveAt(i);
+					i--;
+				}
 			}
 
 			return force;
