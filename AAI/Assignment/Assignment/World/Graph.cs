@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assignment.Entity;
+using Assignment.Movement;
 using Assignment.Utilities;
 
 namespace Assignment.World
@@ -9,15 +10,15 @@ namespace Assignment.World
 	{
 		public Vertex[,] vertices;
 
-		private const double NodeSpreadFactor = 10; // Distance between vertices, less means more vertices in the graph.
-		private double AmountOfNodesInRow = GameWorld.Instance.Width / NodeSpreadFactor;
-		private double AmountOfNodesInCol = GameWorld.Instance.Height / NodeSpreadFactor;
-		private const double AgentCollisionSpacing = 5f; // Used as a collision circle for all pathfinding agents
-		private long nextVertexLabel = 0; // Used to generate vertex label.
-		private const int XOffset = 1; // Should at least be one.
-		private const int YOffset = 1; // Should at leats be one.
-		private const double CardinalEdgesCost = NodeSpreadFactor;
-		public double DiagonalEdgesCost = Math.Sqrt(Math.Pow(CardinalEdgesCost, 2) * 2); // Negative value disables diagonal edges.
+        private const double NodeSpreadFactor = 50; // Distance between vertices, less means more vertices in the graph.
+        private double AmountOfNodesInRow = GameWorld.Instance.Width / NodeSpreadFactor;
+        private double AmountOfNodesInCol = GameWorld.Instance.Height / NodeSpreadFactor;
+        private const double AgentCollisionSpacing = 5f; // Used as a collision circle for all pathfinding agents
+        private long nextVertexLabel = 0; // Used to generate vertex label.
+        private const int XOffset = 1; // Should at least be one.
+        private const int YOffset = 1; // Should at leats be one.
+        private const double CardinalEdgesCost = NodeSpreadFactor;
+        public double DiagonalEdgesCost = Math.Sqrt(Math.Pow(CardinalEdgesCost, 2) * 2); // Negative value disables diagonal edges.
 
 		/// <summary>
 		/// Initialize a navMap from point (0, 0)
@@ -85,73 +86,73 @@ namespace Assignment.World
 			// Declare help variables
 			double step = NodeSpreadFactor;
 
-			// Place vertices every step distance in the game world
-			for (int x = 0; x < vertices.GetLength(0); x++)
-			{
-				for (int y = 0; y < vertices.GetLength(1); y++)
-				{
-					int amountOfCollisions = gw.ObstaclesInArea(new Location(XOffset + x * step, YOffset + y * step), AgentCollisionSpacing).Count;
-					if (amountOfCollisions > 0)
-					{
-						continue; //TODO code for edge stitching assumes all slots in vertices[,] are not null, breaking here breaks stuff
-								  // To save computing power: store result of amoutOfCollisions seperatly or in the Vertex class
-					}
+            // Place vertices every step distance in the game world
+            for (int x = 0; x < vertices.GetLength(0); x++)
+            {
+                for (int y = 0; y < vertices.GetLength(1); y++)
+                {
+                    int amountOfCollisions = gw.ObstaclesInArea(new Location(XOffset + x * step, YOffset + y * step), AgentCollisionSpacing).Count;
+                    if (amountOfCollisions > 0)
+                    {
+                        continue;
+                        // To save computing power: store result of amoutOfCollisions seperatly or in the Vertex class
+                    }
+                    
+                    Location loc = new Location(XOffset + x * step, YOffset + y * step);
+                    vertices[x, y] = new Vertex(loc, nextVertexLabel.ToString());
+                    nextVertexLabel++;
+                }
+            }
+            
+            // Stitch edges to all adjacent vertices
+            for (int x = 0; x < vertices.GetLength(0); x++)
+            {
+                for (int y = 0; y < vertices.GetLength(1); y++)
+                {
+                    int amountOfCollisions = gw.ObstaclesInArea(new Location(XOffset + x * step, YOffset + y * step), AgentCollisionSpacing).Count;
+                    if (amountOfCollisions > 0)
+                    {
+                        continue; //TODO code for edge stitching assumes all slots in vertices[,] are not null, breaking here breaks stuff
+                        // To save computing power: store result of amoutOfCollisions seperatly or in the Vertex class
+                    }
 
-					Location loc = new Location(XOffset + x * step, YOffset + y * step);
-					vertices[x, y] = new Vertex(loc, nextVertexLabel.ToString());
-					nextVertexLabel++;
-				}
-			}
+                    for (int xx = Math.Max(x - 1, 0); xx < Math.Min(x + 2, vertices.GetLength(0)); xx++)
+                    {
+                        for (int yy = Math.Max(y - 1, 0); yy < Math.Min(y + 2, vertices.GetLength(1)); yy++)
+                        {
+                            // Only connect edges while both vertices (src and dest) are instantiated
+                            if (vertices[x, y] != null && vertices[xx, yy] != null) {
+                                if (xx == x && yy == y)
+                                {
+                                    // We wouldn't want to connect an edge to the src vertex itself now, would we?.
+                                    continue;
+                                }
 
-			// Stitch edges to all adjacent vertices
-			for (int x = 0; x < vertices.GetLength(0); x++)
-			{
-				for (int y = 0; y < vertices.GetLength(1); y++)
-				{
-					int amountOfCollisions = gw.ObstaclesInArea(new Location(XOffset + x * step, YOffset + y * step), AgentCollisionSpacing).Count;
-					if (amountOfCollisions > 0)
-					{
-						continue; //TODO code for edge stitching assumes all slots in vertices[,] are not null, breaking here breaks stuff
-								  // To save computing power: store result of amoutOfCollisions seperatly or in the Vertex class
-					}
-					for (int xx = Math.Max(x - 1, 0); xx < Math.Min(x + 1, vertices.GetLength(0)); xx++)
-					{
-						for (int yy = Math.Max(y - 1, 0); yy < Math.Min(y + 1, vertices.GetLength(1)); yy++)
-						{
-							// Only connect edges while both vertices (src and dest) are instantiated
-							if (vertices[x, y] != null && vertices[xx, yy] != null)
-							{
-								if (xx == x && yy == y)
-								{
-									// We wouldn't want to connect an edge to the src vertex itself now, would we?.
-									continue;
-								}
+                                Location a = new Location(vertices[x, y].Loc.X, vertices[x, y].Loc.Y);
+                                Location b = new Location(vertices[xx, yy].Loc.X, vertices[xx, yy].Loc.Y);
+                                // Add diagonal edges when enabled (non-neg. cost) and when not on the same cardinal axis as the src vertex.
+                                if (DiagonalEdgesCost >= 0 && (xx != x && yy != y) && Pathfinding.Walkable(a, b))
+                                {
+                                    vertices[x, y].Adj.Add(new Edge(vertices[xx, yy], DiagonalEdgesCost));
+                                }
 
-								// Add diagonal edges when enabled (non-neg. cost) and when not on the same cardinal axis as the src vertex.
-								if (DiagonalEdgesCost >= 0 && (xx != x && yy != y))
-								{
-									vertices[x, y].Adj.Add(new Edge(vertices[xx, yy], DiagonalEdgesCost));
-								}
-
-								// Add cardinal edges when dest is on the same cardinal axis as the src vertex.
-								if (xx == x || yy == y)
-								{
-									vertices[x, y].Adj.Add(new Edge(vertices[xx, yy], CardinalEdgesCost));
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
-		public override string ToString()
-		{
-			string res = "";
-			foreach (var entry in vertices)
-				res += entry + "\n";
-			return res;
-		}
+                                // Add cardinal edges when dest is on the same cardinal axis as the src vertex.
+                                if ((xx == x || yy == y) && Pathfinding.Walkable(a, b)) {
+                                    vertices[x, y].Adj.Add(new Edge(vertices[xx, yy], CardinalEdgesCost));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    
+        public override string ToString() {
+            string res = "";
+            foreach (var entry in vertices)
+                res += entry + "\n";
+            return res;
+        }
 
 		public class Vertex : IComparable<Vertex>
 		{
