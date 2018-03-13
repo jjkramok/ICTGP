@@ -122,19 +122,40 @@ namespace Assignment.Movement
         {
             // Using Erik's suggestion - Whilst smoothing always start checking from the goal node and move down towards the start node and return the first viable smoothing option.
             List<Graph.Vertex> smoothedPath = new List<Graph.Vertex>();
-            Graph.Vertex start = path[0];
+            int i = 0;
+            Graph.Vertex start = path[i];
             Graph.Vertex eval; // Node currently being evaluated by the algorithm
-
-            smoothedPath.Add(start); // Add start node since it cannot be smoothed anyway.
-            for (int i = path.Count - 1; i > 1; i--)
+            bool smoothed = false;
+            
+            while (true)
             {
-                eval = path[i];
-                // Call walkable and return first solution found for each step
-                if (Walkable(start.Loc, eval.Loc))
+                smoothed = false;
+                for (int j = path.Count - 1; j > i + 1; j--)
                 {
-                    // TODO smooth path
+                    eval = path[j];
+                    if (Walkable(start.Loc, eval.Loc))
+                    {
+                        // We found the best smoothing for our two nodes, save it.
+                        smoothedPath.Add(start);
+                        smoothedPath.Add(eval);
+                        start = eval;
+                        i = j;
+                        smoothed = true;
+                        break;
+                    }
                 }
-                
+
+                // Move to next node to avoid evaluating the same start node
+                if (!smoothed)
+                {
+                    i++;
+                    // end-case
+                    if (i >= path.Count - 1)
+                    {
+                        break;
+                    }
+                    start = path[i];
+                }
             }
 
             return smoothedPath;
@@ -142,16 +163,17 @@ namespace Assignment.Movement
 
         /// <summary>
         /// Helper function of pathsmoothing.
+        /// Determines if an entity (see: boundBoxWidth) can travel across a line from A to B without colliding with obstacles.
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        private static bool Walkable(Location a, Location b)
+        public static bool Walkable(Location a, Location b)
         {
             double AtoBDistance = Utilities.Utilities.Distance(a, b);
             double AtoBAngle = Utilities.Utilities.Direction(a, b);
 
-            var boundBoxWidth = 1; // Width / radius of the agent
+            var boundBoxWidth = 10; // Width / radius of the agent
             // ^-- might need to be passed to the pathfinder function or possible to be retreived by it
 
             int step = 5; // distance between each sample point on the line from A to B. Lower distance means more precision.

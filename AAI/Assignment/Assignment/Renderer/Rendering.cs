@@ -14,12 +14,12 @@ namespace Assignment.Renderer
         private static Bitmap screen;
         private static Graphics graphics;
 
-		public static bool RenderNavGraphOption = false;
-		public static bool RenderAStarPathOption = false;
-		public static bool RenderGridOption = false;
-		public static bool RenderEntitiesInfoOption = false;
+        public static bool RenderNavGraphOption = false;
+        public static bool RenderAStarPathOption = false;
+        public static bool RenderGridOption = false;
+        public static bool RenderEntitiesInfoOption = false;
 
-		public static void Render(Graphics g, Panel p)
+        public static void Render(Graphics g, Panel p)
         {
             graphicsPanel = g;
             panel = p;
@@ -30,19 +30,19 @@ namespace Assignment.Renderer
                 RenderBackground();
                 RenderObstacles();
 
-				if(RenderGridOption)
-					RenderGrid();
+                if (RenderGridOption)
+                    RenderGrid();
 
                 RenderEntities();
 
-				if (RenderEntitiesInfoOption)
-					RenderEntitiesInfo();
+                if (RenderEntitiesInfoOption)
+                    RenderEntitiesInfo();
 
-				if(RenderNavGraphOption)
-					RenderNavGraph();
+                if (RenderNavGraphOption)
+                    RenderNavGraph();
 
-				if(RenderAStarPathOption)
-					RenderShortestPath();
+                if (RenderAStarPathOption)
+                    RenderShortestPath();
             }
 
             graphicsPanel.DrawImage(screen, 0, 0, panel.Width, panel.Height);
@@ -96,16 +96,16 @@ namespace Assignment.Renderer
             }
         }
 
-		private static void RenderEntitiesInfo()
-		{
-			foreach (var entity in GameWorld.Instance.Entities)
-			{
-				entity.RenderDebug(graphics);
-			}
-		}
+        private static void RenderEntitiesInfo()
+        {
+            foreach (var entity in GameWorld.Instance.Entities)
+            {
+                entity.RenderDebug(graphics);
+            }
+        }
 
 
-		private static void RenderNavGraph()
+        private static void RenderNavGraph()
         {
             const bool SHOW_VERTEX_LABEL = false;
             const bool SHOW_EDGES = true;
@@ -125,6 +125,11 @@ namespace Assignment.Renderer
                             {
                                 Graph.Vertex w = e.Dest;
                                 graphics.DrawLine(new Pen(Color.Black, 1), (float)v.Loc.X, (float)v.Loc.Y, (float)w.Loc.X, (float)w.Loc.Y);
+                                //if (v.Loc.X > w.Loc.X)
+                                //{
+                                //    graphics.DrawLine(new Pen(Color.Black, 1), (float)w.Loc.X, (float)w.Loc.Y, (float)w.Loc.X + 5, (float)w.Loc.Y + 5);
+                                //    graphics.DrawLine(new Pen(Color.Black, 1), (float)w.Loc.X, (float)w.Loc.Y, (float)w.Loc.X + 5, (float)w.Loc.Y - 5);
+                                //}
                             }
                         }
                         if (SHOW_VERTICES)
@@ -151,21 +156,22 @@ namespace Assignment.Renderer
             Graph.Vertex[,] vertices = GameWorld.Instance.NavGraph.vertices;
             try
             {
-                if (GameWorld.Instance.PathAlreadyCalculated == null) { 
+                if (GameWorld.Instance.PathAlreadyCalculated == null)
+                {
                     Random rand = new Random();
                     Graph.Vertex start = null, goal = null;
                     while (goal == null || start == null)
                     {
                         // Generate random start and goal for pathfinder example
-                        start = vertices[rand.Next(vertices.GetLength(0)), rand.Next(vertices.GetLength(1))];//start = vertices[15, 10];
-                        goal = vertices[rand.Next(vertices.GetLength(0)), rand.Next(vertices.GetLength(1))];//goal = vertices[90, 90];
+                        start = vertices[2, 1];//start = vertices[rand.Next(vertices.GetLength(0)), rand.Next(vertices.GetLength(1))];//start = vertices[15, 10];
+                        goal = vertices[1, 15];//goal = vertices[rand.Next(vertices.GetLength(0)), rand.Next(vertices.GetLength(1))];//goal = vertices[90, 90];
                     }
 
                     GameWorld.Instance.PathAlreadyCalculated = Movement.Pathfinding.AStar(start, goal);
                 }
 
                 List<Graph.Vertex> path = GameWorld.Instance.PathAlreadyCalculated;
-                Pen p = new Pen(Color.MediumPurple, Math.Max(1, (float) GameWorld.Instance.Width / 250));
+                Pen p = new Pen(Color.MediumPurple, Math.Max(1, (float)GameWorld.Instance.Width / 250));
                 for (int i = 1; i < path.Count; i++)
                 {
                     Graph.Vertex v = path[i - 1];
@@ -183,7 +189,6 @@ namespace Assignment.Renderer
                         graphics.DrawLine(p, (float)v.Loc.X, (float)v.Loc.Y, (float)w.Loc.X, (float)w.Loc.Y);
                     }
                 }
-
                 return true;
             }
             catch (NullReferenceException e)

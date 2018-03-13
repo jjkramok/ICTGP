@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assignment.Entity;
+using Assignment.Movement;
 
 namespace Assignment.World
 {
@@ -8,7 +9,7 @@ namespace Assignment.World
     {
         public Vertex[,] vertices;
 
-        private const double NodeSpreadFactor = 10; // Distance between vertices, less means more vertices in the graph.
+        private const double NodeSpreadFactor = 50; // Distance between vertices, less means more vertices in the graph.
         private double AmountOfNodesInRow = GameWorld.Instance.Width / NodeSpreadFactor;
         private double AmountOfNodesInCol = GameWorld.Instance.Height / NodeSpreadFactor;
         private const double AgentCollisionSpacing = 5f; // Used as a collision circle for all pathfinding agents
@@ -61,7 +62,7 @@ namespace Assignment.World
                     int amountOfCollisions = gw.ObstaclesInArea(new Location(XOffset + x * step, YOffset + y * step), AgentCollisionSpacing).Count;
                     if (amountOfCollisions > 0)
                     {
-                        continue; //TODO code for edge stitching assumes all slots in vertices[,] are not null, breaking here breaks stuff
+                        continue;
                         // To save computing power: store result of amoutOfCollisions seperatly or in the Vertex class
                     }
                     
@@ -82,9 +83,10 @@ namespace Assignment.World
                         continue; //TODO code for edge stitching assumes all slots in vertices[,] are not null, breaking here breaks stuff
                         // To save computing power: store result of amoutOfCollisions seperatly or in the Vertex class
                     }
-                    for (int xx = Math.Max(x - 1, 0); xx < Math.Min(x + 1, vertices.GetLength(0)); xx++)
+
+                    for (int xx = Math.Max(x - 1, 0); xx < Math.Min(x + 2, vertices.GetLength(0)); xx++)
                     {
-                        for (int yy = Math.Max(y - 1, 0); yy < Math.Min(y + 1, vertices.GetLength(1)); yy++)
+                        for (int yy = Math.Max(y - 1, 0); yy < Math.Min(y + 2, vertices.GetLength(1)); yy++)
                         {
                             // Only connect edges while both vertices (src and dest) are instantiated
                             if (vertices[x, y] != null && vertices[xx, yy] != null) {
@@ -94,14 +96,16 @@ namespace Assignment.World
                                     continue;
                                 }
 
+                                Location a = new Location(vertices[x, y].Loc.X, vertices[x, y].Loc.Y);
+                                Location b = new Location(vertices[xx, yy].Loc.X, vertices[xx, yy].Loc.Y);
                                 // Add diagonal edges when enabled (non-neg. cost) and when not on the same cardinal axis as the src vertex.
-                                if (DiagonalEdgesCost >= 0 && (xx != x && yy != y))
+                                if (DiagonalEdgesCost >= 0 && (xx != x && yy != y) && Pathfinding.Walkable(a, b))
                                 {
                                     vertices[x, y].Adj.Add(new Edge(vertices[xx, yy], DiagonalEdgesCost));
                                 }
 
                                 // Add cardinal edges when dest is on the same cardinal axis as the src vertex.
-                                if (xx == x || yy == y) {
+                                if ((xx == x || yy == y) && Pathfinding.Walkable(a, b)) {
                                     vertices[x, y].Adj.Add(new Edge(vertices[xx, yy], CardinalEdgesCost));
                                 }
                             }
