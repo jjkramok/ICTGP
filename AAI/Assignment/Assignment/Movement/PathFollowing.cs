@@ -35,15 +35,19 @@ namespace Assignment.Movement
 			if (path == null)
 			{
 				path = Pathfinding.AStar(GameWorld.Instance.NavGraph.NearestVertexFromLocation(entity.Location), GameWorld.Instance.NavGraph.NearestVertexFromLocation(Goal));
+                path = Pathfinding.FinePathSmoothing(path);
 
-				if (path == null)
-					return new SteeringForce();
-
+                if (path == null || path.Count == 0)
+                {
+                    BehaviorDone = true;
+                    return new SteeringForce();
+                }
 				arrive.BehaviorDone = true;
 			}
 
 			if (arrive.BehaviorDone)
 			{
+                if (path.Count < 1) {}
 				path.RemoveAt(0);
 				if (path.Count == 0)
 				{
@@ -59,9 +63,10 @@ namespace Assignment.Movement
 
 		public override void Render(Graphics g, BaseEntity entity)
 		{
-			if (path != null)
+			if (path != null && path.Count > 0)
 			{
-				for (int i = 1; i < path.Count; i++)
+                g.DrawLine(Pens.Purple, (int)entity.Location.X, (int)entity.Location.Y, (int)path[0].Loc.X, (int)path[0].Loc.Y);
+                for (int i = 1; i < path.Count; i++)
 				{
 					g.DrawLine(Pens.Purple, (int) path[i - 1].Loc.X, (int) path[i - 1].Loc.Y, (int) path[i].Loc.X, (int) path[i].Loc.Y);
 				}

@@ -8,8 +8,6 @@ namespace Assignment.Movement
 {
     static class Pathfinding
     {
-        private static long flops = 0;
-
         public static List<Graph.Vertex> AStar(Graph.Vertex start, Graph.Vertex goal)
         {
             Graph nav = GameWorld.Instance.NavGraph;
@@ -33,17 +31,8 @@ namespace Assignment.Movement
             start.Prev = null;
 
             while (!pq.IsEmpty)
-            {
-                flops++;
-                
+            {   
                 Graph.Vertex v = pq.Get();
-
-                if (flops > 10000)
-                {
-					Console.WriteLine($"fail: {v}");
-					flops = 0;
-                    return reconstructPath(v);
-                }
 
 				if (v.Known)
 				{
@@ -56,7 +45,6 @@ namespace Assignment.Movement
                 if (v == goal)
                 {
 					Console.WriteLine($"x{v.Loc.X}, y{v.Loc.Y}");
-					flops = 0;
                     return reconstructPath(goal);
                 }
 
@@ -122,6 +110,11 @@ namespace Assignment.Movement
 
         public static List<Graph.Vertex> FinePathSmoothing(List<Graph.Vertex> path)
         {
+            if (path == null)
+            {
+                return null;
+            }
+
             // Using Erik's suggestion - Whilst smoothing always start checking from the goal node and move down towards the start node and return the first viable smoothing option.
             List<Graph.Vertex> smoothedPath = new List<Graph.Vertex>();
             int i = 0;
@@ -159,7 +152,6 @@ namespace Assignment.Movement
                     start = path[i];
                 }
             }
-
             return smoothedPath;
         }
 
@@ -177,18 +169,31 @@ namespace Assignment.Movement
 
             var boundBoxWidth = 10; // Width / radius of the agent
             // ^-- might need to be passed to the pathfinder function or possible to be retreived by it
+            if (a.X == 101 && a.Y == 51)
+            {
+                Math.Sin(0);
+            }
 
+            Location currEval;
+            List<Obstacle.ObstacleCircle> obstacles;
             int step = 5; // distance between each sample point on the line from A to B. Lower distance means more precision.
-            for (int d = 0; d < AtoBDistance; d += step)
+            for (int d = 0; d <= AtoBDistance; d += step)
             {
                 // Create the current point to be evaluated. It is 'd' distance away from A among the AtoB line.
-                Location currEval = new Location(a.X + d * Math.Cos(AtoBAngle), a.Y + d * Math.Sin(AtoBAngle));
-                var obstacles = GameWorld.Instance.ObstaclesInArea(currEval, boundBoxWidth);
+                currEval = new Location(a.X + d * Math.Cos(AtoBAngle), a.Y + d * Math.Sin(AtoBAngle));
+                obstacles = GameWorld.Instance.ObstaclesInArea(currEval, boundBoxWidth);
                 
                 if (obstacles.Count > 0)
                 {
                     return false;
                 }
+            }
+            // Check the very last point (b, or destination if you will) to ensure that there is enough space for the entity.
+            obstacles = GameWorld.Instance.ObstaclesInArea(b, boundBoxWidth);
+
+            if (obstacles.Count > 0)
+            {
+                return false;
             }
             return true;
         }

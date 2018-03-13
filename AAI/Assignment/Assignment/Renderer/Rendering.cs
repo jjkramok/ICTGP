@@ -33,19 +33,17 @@ namespace Assignment.Renderer
 				if (RenderGridOption)
 					RenderGrid();
 
-				RenderEntities();
+                if (RenderNavGraphOption)
+                    RenderNavGraph();
+
+                RenderEntities();
 
                 if (RenderEntitiesInfoOption)
                     RenderEntitiesInfo();
 
-				if (RenderNavGraphOption)
-					RenderNavGraph();
-
-				if (RenderAStarPathOption)
-					RenderShortestPath();
-
-				graphics.DrawString($"{GameWorld.Instance.TickTime} ms", new Font(FontFamily.GenericSansSerif, 15), Brushes.Red, 20, 20);
-			}
+                if (RenderAStarPathOption)
+                    RenderShortestPath();
+            }
 
 			graphicsPanel.DrawImage(screen, 0, 0, panel.Width, panel.Height);
 		}
@@ -165,8 +163,8 @@ namespace Assignment.Renderer
                     while (goal == null || start == null)
                     {
                         // Generate random start and goal for pathfinder example
-                        start = vertices[2, 1];//start = vertices[rand.Next(vertices.GetLength(0)), rand.Next(vertices.GetLength(1))];//start = vertices[15, 10];
-                        goal = vertices[1, 15];//goal = vertices[rand.Next(vertices.GetLength(0)), rand.Next(vertices.GetLength(1))];//goal = vertices[90, 90];
+                        start = vertices[rand.Next(vertices.GetLength(0)), rand.Next(vertices.GetLength(1))];//start = vertices[2, 1];
+                        goal = vertices[rand.Next(vertices.GetLength(0)), rand.Next(vertices.GetLength(1))];//goal = vertices[1, 15];
                     }
 
                     GameWorld.Instance.PathAlreadyCalculated = Movement.Pathfinding.AStar(start, goal);
