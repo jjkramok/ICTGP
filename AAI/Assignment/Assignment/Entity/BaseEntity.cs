@@ -44,6 +44,14 @@ namespace Assignment.Entity
 
 		public abstract void Render(Graphics g);
 
+		public void RenderDebug(Graphics g)
+		{
+			foreach(var behaviour in SteeringBehaviours)
+			{
+				behaviour.Render(g, this);
+			}
+		}
+
 		protected void CalculateSteeringForce()
 		{
 			SteeringForce force = null;

@@ -36,17 +36,22 @@ namespace Assignment.Movement
 			double direction = Math.Atan((circleDotY - entity.Location.Y) / (circleDotX - entity.Location.X));
 			direction = circleDotX < entity.Location.X ? direction + Math.PI : direction;
 
-			/*
-			if (Render)
-			{
-				g.DrawEllipse(Pens.Brown, (float) circleX - (float) CircleSize / 2, (float) circleY - (float) CircleSize / 2, (float) CircleSize, (float) CircleSize);
-
-				g.FillEllipse(Brushes.BlueViolet, (float) circleDotX - 4, (float) circleDotY - 4, 8, 8);
-
-				g.DrawLine(Pens.Black, (float) circleX, (float) circleY, (float) circleDotX, (float) circleDotY);
-			}
-			*/
 			return new SteeringForce(direction, force);
+		}
+
+		public override void Render(Graphics g, BaseEntity entity)
+		{
+			double circleX = Math.Cos(entity.Direction) * CircleOffset + entity.Location.X;
+			double circleY = Math.Sin(entity.Direction) * CircleOffset + entity.Location.Y;
+
+			double circleDotX = Math.Cos(wanderDirection) * CircleSize + circleX;
+			double circleDotY = Math.Sin(wanderDirection) * CircleSize + circleY;
+
+			g.DrawEllipse(Pens.Brown, (float) circleX - (float) CircleSize / 2, (float) circleY - (float) CircleSize / 2, (float) CircleSize, (float) CircleSize);
+
+			g.FillEllipse(Brushes.BlueViolet, (float) circleDotX - 4, (float) circleDotY - 4, 8, 8);
+
+			g.DrawLine(Pens.Black, (float) circleX, (float) circleY, (float) circleDotX, (float) circleDotY);
 		}
 	}
 }

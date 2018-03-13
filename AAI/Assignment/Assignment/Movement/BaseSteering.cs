@@ -12,7 +12,6 @@ namespace Assignment.Movement
 	{
 		public double Priority;
 		public bool BehaviorDone = false;
-		public bool Render = false;
 
 		public BaseSteering()
 		{
@@ -20,5 +19,9 @@ namespace Assignment.Movement
 		}
 
 		public abstract SteeringForce Calculate(BaseEntity entity);
+
+		public virtual void Render(Graphics g, BaseEntity entity)
+		{
+		}
 	}
 }
