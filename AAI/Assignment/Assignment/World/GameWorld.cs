@@ -52,20 +52,18 @@ namespace Assignment.World
 		{
 			StateMachine.Initialize();
 
-			Random = new Random();
-			Obstacles = new List<BaseObstacle>
-			{
-				new Rock(new Location(40,10), 20),
-				new Rock(new Location(110, 150), 20),
-				new Rock(new Location(40,90), 20),
-				new Rock(new Location(90,90), 20),
-				new Rock(new Location(80,40), 20),
-				new Rock(new Location(80,10), 20),
-			};
+            Width = 1000;
+            Height = 1000;
 
-			Width = 1000;
-			Height = 1000;
-			SteeringForceCalculationType = SteeringForceCalculationType.WeightedTruncatedSum;
+            Random = new Random();
+
+            Obstacles = new List<BaseObstacle>();
+            for (int i = 0; i < 100; i++)
+            {
+                Obstacles.Add(new Rock(new Location(Random.Next((int)Width), Random.Next((int)Height)), 30));
+            }
+
+            SteeringForceCalculationType = SteeringForceCalculationType.WeightedTruncatedSum;
 		}
 
 		private void StoneEdge()

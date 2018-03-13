@@ -35,15 +35,19 @@ namespace Assignment.Movement
 			if (path == null)
 			{
 				path = Pathfinding.AStar(GameWorld.Instance.NavGraph.NearestVertexFromLocation(entity.Location), GameWorld.Instance.NavGraph.NearestVertexFromLocation(Goal));
+                path = Pathfinding.FinePathSmoothing(path);
 
-				if (path == null)
-					return new SteeringForce();
-
+                if (path == null || path.Count == 0)
+                {
+                    BehaviorDone = true;
+                    return new SteeringForce();
+                }
 				arrive.BehaviorDone = true;
 			}
 
 			if (arrive.BehaviorDone)
 			{
+                if (path.Count < 1) {}
 				path.RemoveAt(0);
 				if (path.Count == 0)
 				{
