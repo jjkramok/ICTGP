@@ -58,7 +58,7 @@ namespace Assignment.World
             Random = new Random();
 
             Obstacles = new List<BaseObstacle>();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < Width / 20; i++)
             {
                 Obstacles.Add(new Rock(new Location(Random.Next((int)Width), Random.Next((int)Height)), 30));
             }

@@ -33,13 +33,13 @@ namespace Assignment.Renderer
                 if (RenderGridOption)
                     RenderGrid();
 
+                if (RenderNavGraphOption)
+                    RenderNavGraph();
+
                 RenderEntities();
 
                 if (RenderEntitiesInfoOption)
                     RenderEntitiesInfo();
-
-                if (RenderNavGraphOption)
-                    RenderNavGraph();
 
                 if (RenderAStarPathOption)
                     RenderShortestPath();
