@@ -9,7 +9,7 @@ function enter(entity, world)
 end
 
 function execute(entity, world)
-	entity.QuickEnergy = entity.QuickEnergy + 2
+	entity.QuickEnergy = entity.QuickEnergy + 0.02
 	entity.Food = entity.Food + 10
 	entity.SlowEnergy = entity.SlowEnergy - 0.5
 

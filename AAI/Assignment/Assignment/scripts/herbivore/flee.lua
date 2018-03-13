@@ -15,9 +15,9 @@ function enter(entity, world)
 end
 
 function execute(entity, world)
-	entity.QuickEnergy = entity.QuickEnergy - 5
+	entity.QuickEnergy = entity.QuickEnergy - 0.001
 	entity.SlowEnergy = entity.SlowEnergy - 2	
-	entity.Food = entity.Food - 2
+	entity.Food = entity.Food - 1
 
 
 	local nearEntities = world:EntitiesInArea(entity.Location, 200)

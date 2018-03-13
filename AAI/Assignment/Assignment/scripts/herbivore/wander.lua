@@ -11,8 +11,8 @@ end
 
 function execute(entity, world)
 	entity.SlowEnergy = entity.SlowEnergy - 1
-	entity.QuickEnergy = entity.QuickEnergy + 1
-	entity.Food = entity.Food - 1 
+	entity.QuickEnergy = entity.QuickEnergy + 0.002
+	entity.Food = entity.Food - 0.5 
 
 	local nearEntities = world:EntitiesInArea(entity.Location, 150)
 	for i=0, nearEntities.Count - 1 do 
@@ -25,7 +25,7 @@ function execute(entity, world)
 		return "sleep"
 	end
 
-	if entity.Food < 30 then
+	if entity.Food < 50 then
 		return "findfood"
 	end
 

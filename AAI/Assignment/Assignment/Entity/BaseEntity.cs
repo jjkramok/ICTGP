@@ -24,7 +24,6 @@ namespace Assignment.Entity
 		public Location Location;
 
 		// Default settings.
-		public readonly double MaxSpeedDefault;
 		public double MaxSpeed;
 		public double MaxForce;
 		public double DirectionMaxChange = 1;
@@ -45,8 +44,7 @@ namespace Assignment.Entity
 			Location = new Location(10, 20);
 			Direction = Math.PI * 0.5;
 			Speed = 1;
-			MaxSpeedDefault = 6;
-			MaxSpeed = MaxSpeedDefault;
+			MaxSpeed = 6;
 
 			MaxForce = 100;
 
@@ -92,6 +90,10 @@ namespace Assignment.Entity
 				behaviour.Render(g, this);
 				info += $" {behaviour.GetType().Name}\n";
 			}
+			info += $"QuickEnergy:\t{QuickEnergy}\n";
+			info += $"SlowEnergy:\t{SlowEnergy}\n";
+			info += $"Food:\t\t{Food}\n";
+
 
 			g.DrawString(info, new Font(FontFamily.GenericSansSerif, 10), Brushes.Black, (int) Location.X + 5, (int) Location.Y + 5);
 		}
@@ -128,11 +130,12 @@ namespace Assignment.Entity
 			*/
 
 			force = UpdateDirection(force);
+			QuickEnergy = Utility.BoundValue(QuickEnergy, 0.05, 1);
 
 			// todo nmn
 			Speed = Utility.BoundValueMin(Speed - 0.3, 0);
 			Speed += force.Amount * 0.1;// inertia
-			Speed = Utility.BoundValueMax(Speed, MaxSpeed);
+			Speed = Utility.BoundValueMax(Speed, MaxSpeed * QuickEnergy);
 
 			Location.X += Math.Cos(Direction) * Speed;
 			Location.Y += Math.Sin(Direction) * Speed;

@@ -43,26 +43,29 @@ namespace Assignment.State
 
 		public static void Execute(BaseEntity entity)
 		{
-			string scriptPath = Path.Combine(ScriptManager.SCRIPTPATH, entity.Type.ToString(), entity.State + ScriptManager.SCRIPTEXTENSION).ToLower();
-
-			if (string.IsNullOrEmpty(entity.State))
+			if (GameWorld.Instance.Random.NextDouble() > 0.7)
 			{
-				Console.WriteLine($"No state set for {entity.Type}");
-				return;
-			}
+				string scriptPath = Path.Combine(ScriptManager.SCRIPTPATH, entity.Type.ToString(), entity.State + ScriptManager.SCRIPTEXTENSION).ToLower();
 
-			if (entity.State != entity.PreviousState)
-			{
-				ScriptManager.RunFunctionScript(scripts[scriptPath], "enter", entity);
-				entity.PreviousState = entity.State;
-			}
+				if (string.IsNullOrEmpty(entity.State))
+				{
+					Console.WriteLine($"No state set for {entity.Type}");
+					return;
+				}
 
-			var newState = ScriptManager.RunFunctionScript(scripts[scriptPath], "execute", entity);
+				if (entity.State != entity.PreviousState)
+				{
+					ScriptManager.RunFunctionScript(scripts[scriptPath], "enter", entity);
+					entity.PreviousState = entity.State;
+				}
 
-			if (newState != entity.State)
-			{
-				ScriptManager.RunFunctionScript(scripts[scriptPath], "exit", entity);
-				entity.State = newState;
+				var newState = ScriptManager.RunFunctionScript(scripts[scriptPath], "execute", entity);
+
+				if (newState != entity.State)
+				{
+					ScriptManager.RunFunctionScript(scripts[scriptPath], "exit", entity);
+					entity.State = newState;
+				}
 			}
 		}
 	}
