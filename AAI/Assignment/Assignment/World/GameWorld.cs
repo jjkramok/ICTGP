@@ -3,6 +3,7 @@ using Assignment.Movement;
 using Assignment.Obstacle;
 using Assignment.Renderer;
 using Assignment.State;
+using Assignment.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -94,7 +95,7 @@ namespace Assignment.World
 			};
 			for (int i = 0; i < 100; i++)
 			{
-				Entities.Add(new Herbivore { Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(40 + Random.Next(0, 500), 40 + Random.Next(0, 500)) });
+				// Entities.Add(new Herbivore { Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(40 + Random.Next(0, 500), 40 + Random.Next(0, 500)) });
 			}
 
 			Grid = new Grid();
@@ -129,7 +130,7 @@ namespace Assignment.World
 			var closeEntities = new List<BaseEntity>();
 			foreach (var entity in searchableEntities)
 			{
-				if (Utilities.Utilities.Distance(entity.Location, location) < radius)
+				if (Utility.Distance(entity.Location, location) < radius)
 				{
 					closeEntities.Add(entity);
 				}
@@ -145,7 +146,7 @@ namespace Assignment.World
 			var closeCircles = new List<ObstacleCircle>();
 			foreach (var circle in searchableObstacleCircles)
 			{
-				if (Utilities.Utilities.Distance(circle.Location, location) < radius + circle.Radius)
+				if (Utility.Distance(circle.Location, location) < radius + circle.Radius)
                 {
 					closeCircles.Add(circle);
 				}

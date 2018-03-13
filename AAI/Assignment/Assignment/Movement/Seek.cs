@@ -1,4 +1,5 @@
 ﻿using Assignment.Entity;
+using Assignment.Utilities;
 using Assignment.World;
 using System;
 using System.Collections.Generic;
@@ -20,13 +21,13 @@ namespace Assignment.Movement
 
 		public override SteeringForce Calculate(BaseEntity entity)
 		{
-			var distance = Utilities.Utilities.Distance(entity.Location, ChaseEntity.Location);
+			var distance = Utility.Distance(entity.Location, ChaseEntity.Location);
 			if (distance > MaxDistance)
 			{
 				return new SteeringForce();
 			}
 
-			var direction = Utilities.Utilities.Direction(entity.Location, ChaseEntity.Location);
+			var direction = Utility.Direction(entity.Location, ChaseEntity.Location);
 
 			// todo nmn
 			return new SteeringForce(direction, 5);

@@ -14,6 +14,7 @@ namespace Assignment.Entity
 	{
 		public Herbivore() : base()
 		{
+			State = "wander";
 			MaxSpeed = 5;
 			
 			Type = EntityType.Herbivore;

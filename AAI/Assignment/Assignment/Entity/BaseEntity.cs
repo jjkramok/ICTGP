@@ -1,5 +1,6 @@
 ﻿using Assignment.Movement;
 using Assignment.State;
+using Assignment.Utilities;
 using Assignment.World;
 using System;
 using System.Collections.Generic;
@@ -13,26 +14,40 @@ namespace Assignment.Entity
 	public abstract class BaseEntity
 	{
 		// should always be ordered by prioity.
-		public List<BaseSteering> SteeringBehaviours = new List<BaseSteering>();
+		protected List<BaseSteering> SteeringBehaviours;
+
 		public EntityType Type { get; protected set; }
 
+		// Current values.
 		public double Direction;
 		public double Speed;
+		public Location Location;
+
+		// Default settings.
+		public readonly double MaxSpeedDefault;
 		public double MaxSpeed;
 		public double MaxForce;
-		public double DirectionMaxChange = 0.3;
+		public double DirectionMaxChange = 1;
+
+		// State behaviour variables.
 		public string PreviousState;
 		public string State;
-		public int Strength = 1;
 
-		public Location Location;
+		// Fuzzy logic variables.
+		public double Food = 100;
+		public double QuickEnergy = 100;
+		public double SlowEnergy = 200;
+
 
 		public BaseEntity()
 		{
+			SteeringBehaviours = new List<BaseSteering>();
 			Location = new Location(10, 20);
 			Direction = Math.PI * 0.5;
 			Speed = 1;
-			MaxSpeed = 6;
+			MaxSpeedDefault = 6;
+			MaxSpeed = MaxSpeedDefault;
+
 			MaxForce = 100;
 
 			// todo fix default state
@@ -44,12 +59,41 @@ namespace Assignment.Entity
 
 		public abstract void Render(Graphics g);
 
+		public void AddBehaviour(BaseSteering behaviour)
+		{
+			SteeringBehaviours.Add(behaviour);
+			SteeringBehaviours = SteeringBehaviours.OrderBy(x => x.Priority).ToList();
+		}
+
+		public void RemoveAllBehaviours()
+		{
+			SteeringBehaviours.Clear();
+		}
+
+		public BaseSteering GetBehaviourByType(BaseSteering behaviour)
+		{
+			foreach(var item in SteeringBehaviours)
+			{
+				if(item.GetType().Name == behaviour.GetType().Name)
+				{
+					return item;
+				}
+			}
+
+			return null;
+		}
+
 		public void RenderDebug(Graphics g)
 		{
-			foreach(var behaviour in SteeringBehaviours)
+			string info = $"State: {State} \n";
+
+			foreach (var behaviour in SteeringBehaviours)
 			{
 				behaviour.Render(g, this);
+				info += $" {behaviour.GetType().Name}\n";
 			}
+
+			g.DrawString(info, new Font(FontFamily.GenericSansSerif, 10), Brushes.Black, (int) Location.X + 5, (int) Location.Y + 5);
 		}
 
 		protected void CalculateSteeringForce()
@@ -70,7 +114,7 @@ namespace Assignment.Entity
 					throw new Exception("Current SteeringForceCalculationType is invalid.");
 			}
 
-			force.Amount = Math.Min(force.Amount, MaxForce);
+			force.Amount = Utility.BoundValueMax(force.Amount, MaxForce);
 
 			ApplySteeringForce(force);
 		}
@@ -83,12 +127,12 @@ namespace Assignment.Entity
 			g.DrawLine(Pens.DarkGreen, (float) Location.X, (float) Location.Y, x, y);
 			*/
 
-			UpdateDirection(force);
+			force = UpdateDirection(force);
 
 			// todo nmn
-			Speed = Math.Max(Speed - 0.3, 0);
+			Speed = Utility.BoundValueMin(Speed - 0.3, 0);
 			Speed += force.Amount * 0.1;// inertia
-			Speed = Math.Min(Speed, MaxSpeed);
+			Speed = Utility.BoundValueMax(Speed, MaxSpeed);
 
 			Location.X += Math.Cos(Direction) * Speed;
 			Location.Y += Math.Sin(Direction) * Speed;
@@ -120,27 +164,43 @@ namespace Assignment.Entity
 			}
 		}
 
-		private void UpdateDirection(SteeringForce force)
+		private SteeringForce UpdateDirection(SteeringForce force)
 		{
+			if (force.Amount == 0)
+			{
+				return force;
+			}
+
 			while (Math.Abs(force.Direction - (Direction + Math.PI * 2)) < Math.Abs(force.Direction - Direction))
 				Direction += Math.PI * 2;
 
 			while (Math.Abs(force.Direction - (Direction - Math.PI * 2)) < Math.Abs(force.Direction - Direction))
 				Direction -= Math.PI * 2;
 
-			Direction += Math.Min(Math.Max(force.Direction - Direction, -DirectionMaxChange), DirectionMaxChange);
+			var directionChangeMax = DirectionMaxChange * 1 / Speed;
+			var directionDiff = force.Direction - Direction;
+			Direction += Utility.BoundValue(directionDiff, -directionChangeMax, directionChangeMax);
 
+			force.Amount = force.Amount * (1 - directionDiff / Math.PI);
+
+			return force;
 		}
 
 		private SteeringForce CalculateSteeringForceDithering()
 		{
 			SteeringForce force = new SteeringForce();
 
-			foreach (var behavior in SteeringBehaviours)
+			for (int i = 0; i < SteeringBehaviours.Count; i++)
 			{
-				if (GameWorld.Instance.Random.NextDouble() < behavior.Priority)
+				if (GameWorld.Instance.Random.NextDouble() < SteeringBehaviours[i].Priority)
 				{
-					force += behavior.Calculate(this);
+					force += SteeringBehaviours[i].Calculate(this);
+
+					if (SteeringBehaviours[i].BehaviorDone)
+					{
+						SteeringBehaviours.RemoveAt(i);
+						i--;
+					}
 				}
 			}
 
@@ -158,6 +218,7 @@ namespace Assignment.Entity
 				if (SteeringBehaviours[i].BehaviorDone)
 				{
 					SteeringBehaviours.RemoveAt(i);
+					i--;
 				}
 			}
 
@@ -168,9 +229,14 @@ namespace Assignment.Entity
 		{
 			SteeringForce force = new SteeringForce();
 
-			foreach (var behavior in SteeringBehaviours)
+			for (int i = 0; i < SteeringBehaviours.Count; i++)
 			{
-				force += behavior.Calculate(this);
+				force += SteeringBehaviours[i].Calculate(this);
+				if (SteeringBehaviours[i].BehaviorDone)
+				{
+					SteeringBehaviours.RemoveAt(i);
+					i--;
+				}
 			}
 
 			return force;

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Assignment.World;
 using System.Windows.Media;
+using Assignment.Utilities;
+
 namespace Assignment.Movement
 {
     static class Pathfinding
@@ -11,7 +13,7 @@ namespace Assignment.Movement
         public static List<Graph.Vertex> AStar(Graph.Vertex start, Graph.Vertex goal)
         {
             Graph nav = GameWorld.Instance.NavGraph;
-            Utilities.PriorityQueue<Graph.Vertex> pq = new Utilities.PriorityQueue<Graph.Vertex>();
+            PriorityQueue<Graph.Vertex> pq = new PriorityQueue<Graph.Vertex>();
 
             // Initialize graph
             foreach(Graph.Vertex v in nav.vertices)
@@ -88,7 +90,7 @@ namespace Assignment.Movement
             // Determine which heuristic is to be used based on the fact that diagonal edges are used or not.
             if (GameWorld.Instance.NavGraph.DiagonalEdgesCost >= 0)
             {
-                return Utilities.Utilities.Distance(v.Loc, w.Loc); // euclidian distance
+                return Utility.Distance(v.Loc, w.Loc); // euclidian distance
             }
             else {
                 return Math.Abs(v.Loc.X - w.Loc.X) + Math.Abs(v.Loc.Y - w.Loc.Y); // cardinal / manhattan distance
@@ -170,8 +172,8 @@ namespace Assignment.Movement
         /// <returns></returns>
         public static bool Walkable(Location a, Location b)
         {
-            double AtoBDistance = Utilities.Utilities.Distance(a, b);
-            double AtoBAngle = Utilities.Utilities.Direction(a, b);
+            double AtoBDistance = Utility.Distance(a, b);
+            double AtoBAngle = Utility.Direction(a, b);
 
             var boundBoxWidth = 10; // Width / radius of the agent
             // ^-- might need to be passed to the pathfinder function or possible to be retreived by it

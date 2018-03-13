@@ -40,11 +40,22 @@ namespace Assignment.State
 
 		public static string RunFunctionScript(Lua script, string functionName, BaseEntity entity)
 		{
-			LuaFunction scriptFunction = script[functionName] as LuaFunction;
-			var returnValue = scriptFunction.Call(entity, GameWorld.Instance);
-			if(returnValue != null && returnValue.Length == 1)
+			try
 			{
-				return returnValue.First().ToString();
+				LuaFunction scriptFunction = script[functionName] as LuaFunction;
+				var returnValue = scriptFunction.Call(entity, GameWorld.Instance);
+				if (returnValue != null && returnValue.Length == 1)
+				{
+					return returnValue.First().ToString();
+				}
+				return null;
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine($"Script could not be executed.");
+				Console.WriteLine(e.Message);
+				Console.WriteLine($"In file: {entity.Type}/{entity.State}.lua");
+				Console.WriteLine($"In function: {functionName}");
 			}
 			return null;
 		}
