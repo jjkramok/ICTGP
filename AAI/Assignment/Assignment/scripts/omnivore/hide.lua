@@ -5,6 +5,7 @@ import ('Assignment.Entity')
 import ('Assignment.World')
 
 function enter(entity, world)
+	entity.SteeringBehaviours:Add(ObstacleAvoidance())
 	entity.SteeringBehaviours:Add(Wander())
 end
 

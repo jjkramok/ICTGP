@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assignment.Entity;
+using Assignment.Utilities;
 
 namespace Assignment.World
 {
@@ -59,7 +60,7 @@ namespace Assignment.World
 					if (vertices[x, y] == null)
 						continue;
 
-					var distance = Utilities.Utilities.Distance(loc, vertices[x, y].Loc);
+					var distance = Utility.Distance(loc, vertices[x, y].Loc);
 					if (distance < nearestDistance)
 					{
 						nearestDistance = distance;

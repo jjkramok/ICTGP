@@ -7,6 +7,7 @@ using Assignment.Entity;
 using Assignment.World;
 using Assignment.Obstacle;
 using System.Drawing;
+using Assignment.Utilities;
 
 namespace Assignment.Movement
 {
@@ -38,8 +39,8 @@ namespace Assignment.Movement
 
 			foreach (var obstacle in obstacles)
 			{
-				var distance = Utilities.Utilities.Distance(obstacle.Location, entity.Location);
-				var angle = Utilities.Utilities.Direction(entity.Location, obstacle.Location);
+				var distance = Utility.Distance(obstacle.Location, entity.Location);
+				var angle = Utility.Direction(entity.Location, obstacle.Location);
 
 				var angleDiff = angle - entity.Direction;
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Assignment.Utilities
 {
-	static class Utilities
+	static class Utility
 	{
 		public static double Distance(Location location1, Location location2)
 		{
@@ -23,6 +23,21 @@ namespace Assignment.Utilities
 				return Math.Atan((from.Y - to.Y) / (from.X - to.X));
 			else
 				return Math.Atan((from.Y - to.Y) / (from.X - to.X)) + Math.PI;
+		}
+
+		public static double BoundValue(double value, double min, double max)
+		{
+			return Math.Min(Math.Max(value, min), max);
+		}
+
+		public static double BoundValueMin(double value, double min)
+		{
+			return Math.Max(value, min);
+		}
+
+		public static double BoundValueMax(double value, double max)
+		{
+			return Math.Min(value, max);
 		}
 	}
 }

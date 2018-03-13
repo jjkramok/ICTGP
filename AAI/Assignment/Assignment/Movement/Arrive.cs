@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Assignment.Entity;
 using Assignment.World;
 using System.Drawing;
+using Assignment.Utilities;
 
 namespace Assignment.Movement
 {
@@ -20,8 +21,8 @@ namespace Assignment.Movement
 
 		public override SteeringForce Calculate(BaseEntity entity)
 		{
-			var distance = Utilities.Utilities.Distance(entity.Location, ArriveLocation);
-			var direction = Utilities.Utilities.Direction(entity.Location, ArriveLocation);
+			var distance = Utility.Distance(entity.Location, ArriveLocation);
+			var direction = Utility.Direction(entity.Location, ArriveLocation);
 
 			if (distance < 25)
 			{

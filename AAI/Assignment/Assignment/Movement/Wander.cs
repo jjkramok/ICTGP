@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Assignment.Entity;
 using Assignment.World;
 using System.Drawing;
+using Assignment.Utilities;
 
 namespace Assignment.Movement
 {
@@ -31,7 +32,7 @@ namespace Assignment.Movement
 			double circleDotX = Math.Cos(wanderDirection) * CircleSize + circleX;
 			double circleDotY = Math.Sin(wanderDirection) * CircleSize + circleY;
 
-			double force = Utilities.Utilities.Distance(new Location(circleDotX, circleDotY), entity.Location);
+			double force = Utility.Distance(new Location(circleDotX, circleDotY), entity.Location);
 
 			double direction = Math.Atan((circleDotY - entity.Location.Y) / (circleDotX - entity.Location.X));
 			direction = circleDotX < entity.Location.X ? direction + Math.PI : direction;

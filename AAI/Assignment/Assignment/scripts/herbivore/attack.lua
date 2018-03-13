@@ -9,6 +9,7 @@ function enter(entity, world)
 	arrive.ArriveLocation = Location(world.Random:Next(50, world.Width - 50), world.Random:Next(50, world.Width - 50))
 
 	entity.SteeringBehaviours:Add(arrive)
+	entity.SteeringBehaviours:Add(ObstacleAvoidance())
 end
 
 function execute(entity, world)

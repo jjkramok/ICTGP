@@ -1,5 +1,6 @@
 ﻿using Assignment.Movement;
 using Assignment.State;
+using Assignment.Utilities;
 using Assignment.World;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace Assignment.Entity
 		public double Speed;
 		public double MaxSpeed;
 		public double MaxForce;
-		public double DirectionMaxChange = 0.3;
+		public double DirectionMaxChange = 1;
 		public string PreviousState;
 		public string State;
 		public int Strength = 1;
@@ -75,7 +76,7 @@ namespace Assignment.Entity
 					throw new Exception("Current SteeringForceCalculationType is invalid.");
 			}
 
-			force.Amount = Math.Min(force.Amount, MaxForce);
+			force.Amount = Utility.BoundValueMax(force.Amount, MaxForce);
 
 			ApplySteeringForce(force);
 		}
@@ -88,12 +89,12 @@ namespace Assignment.Entity
 			g.DrawLine(Pens.DarkGreen, (float) Location.X, (float) Location.Y, x, y);
 			*/
 
-			UpdateDirection(force);
+			force = UpdateDirection(force);
 
 			// todo nmn
-			Speed = Math.Max(Speed - 0.3, 0);
+			Speed = Utility.BoundValueMin(Speed - 0.3, 0);
 			Speed += force.Amount * 0.1;// inertia
-			Speed = Math.Min(Speed, MaxSpeed);
+			Speed = Utility.BoundValueMax(Speed, MaxSpeed);
 
 			Location.X += Math.Cos(Direction) * Speed;
 			Location.Y += Math.Sin(Direction) * Speed;
@@ -125,16 +126,26 @@ namespace Assignment.Entity
 			}
 		}
 
-		private void UpdateDirection(SteeringForce force)
+		private SteeringForce UpdateDirection(SteeringForce force)
 		{
+			if (force.Amount == 0)
+			{
+				return force;
+			}
+
 			while (Math.Abs(force.Direction - (Direction + Math.PI * 2)) < Math.Abs(force.Direction - Direction))
 				Direction += Math.PI * 2;
 
 			while (Math.Abs(force.Direction - (Direction - Math.PI * 2)) < Math.Abs(force.Direction - Direction))
 				Direction -= Math.PI * 2;
 
-			Direction += Math.Min(Math.Max(force.Direction - Direction, -DirectionMaxChange), DirectionMaxChange);
+			var directionChangeMax = DirectionMaxChange * 1 / Speed;
+			var directionDiff = force.Direction - Direction;
+			Direction += Utility.BoundValue(directionDiff, -directionChangeMax, directionChangeMax);
 
+			force.Amount = force.Amount * (1 - directionDiff / Math.PI);
+
+			return force;
 		}
 
 		private SteeringForce CalculateSteeringForceDithering()

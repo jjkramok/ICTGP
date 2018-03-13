@@ -8,6 +8,8 @@ function enter(entity, world)
 	local path = PathFollowing()
 	path.Goal = Location(400, 500)
 
+
+	entity.SteeringBehaviours:Add(ObstacleAvoidance())
 	entity.SteeringBehaviours:Add(path)
 end
 
