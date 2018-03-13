@@ -45,26 +45,24 @@ namespace Assignment.State
 		{
 			string scriptPath = Path.Combine(ScriptManager.SCRIPTPATH, entity.Type.ToString(), entity.State + ScriptManager.SCRIPTEXTENSION).ToLower();
 
-			try
+			if (string.IsNullOrEmpty(entity.State))
 			{
-				if (entity.State != entity.PreviousState)
-				{
-					Console.WriteLine(entity.PreviousState + " => " + entity.State);
-					ScriptManager.RunFunctionScript(scripts[scriptPath], "enter", entity);
-					entity.PreviousState = entity.State;
-				}
-
-				var newState = ScriptManager.RunFunctionScript(scripts[scriptPath], "execute", entity);
-
-				if(newState != entity.State)
-				{
-					ScriptManager.RunFunctionScript(scripts[scriptPath], "exit", entity);
-					entity.State = newState;
-				}
+				Console.WriteLine($"No state set for {entity.Type}");
+				return;
 			}
-			catch (Exception e)
+
+			if (entity.State != entity.PreviousState)
 			{
-				Console.WriteLine($"Script could not be executed\n{e.Message}");
+				ScriptManager.RunFunctionScript(scripts[scriptPath], "enter", entity);
+				entity.PreviousState = entity.State;
+			}
+
+			var newState = ScriptManager.RunFunctionScript(scripts[scriptPath], "execute", entity);
+
+			if (newState != entity.State)
+			{
+				ScriptManager.RunFunctionScript(scripts[scriptPath], "exit", entity);
+				entity.State = newState;
 			}
 		}
 	}

@@ -9,14 +9,14 @@ function enter(entity, world)
 	path.Goal = Location(400, 500)
 
 
-	entity.SteeringBehaviours:Add(ObstacleAvoidance())
-	entity.SteeringBehaviours:Add(path)
+	entity:AddBehaviour(ObstacleAvoidance())
+	entity:AddBehaviour(path)
 end
 
 function execute(entity, world)
-	entity.Strength = entity.Strength - 1
+	entity.SlowEnergy = entity.SlowEnergy - 1
 
-	if entity.Strength < 50 then
+	if entity.SlowEnergy < 50 then
 		return "hide"
 	end
 
@@ -24,5 +24,5 @@ function execute(entity, world)
 end 
 
 function exit(entity, world)
-	entity.SteeringBehaviours:Clear()
+	entity:RemoveAllBehaviours()
 end
