@@ -10,13 +10,11 @@ namespace Assignment.World
 {
 	public class GridCell
 	{
-		public List<BaseEntity> Entities { get; private set; }
-		public List<ObstacleCircle> Obstacles{ get; private set; }
+		public List<BaseObject> Objects { get; private set; }
 
 		public GridCell()
 		{
-			Entities = new List<BaseEntity>();
-			Obstacles = new List<ObstacleCircle>();
+			Objects = new List<BaseObject>();
 		}	
 	}
 }

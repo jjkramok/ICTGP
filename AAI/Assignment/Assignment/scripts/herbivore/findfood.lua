@@ -7,6 +7,8 @@ import ('Assignment.Utilities')
 
 function enter(entity, world)
 	local pathFollowing = PathFollowing()
+	local trees = world.Ob
+
 	pathFollowing.Goal = Location(500, 500)
 	
 	entity:AddBehaviour(pathFollowing)

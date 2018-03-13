@@ -8,20 +8,17 @@ using System.Threading.Tasks;
 
 namespace Assignment.Obstacle
 {
-	public abstract class BaseObstacle
+	public abstract class BaseObstacle : BaseObject
 	{
-		public Location Location;
-		public double Rotation;
 		public List<ObstacleCircle> CollisionCircles;
 
 		public BaseObstacle(Location location, double rotation)
 		{
 			Location = location;
-			Rotation = rotation;
+			Direction = rotation;
 
 			CollisionCircles = new List<ObstacleCircle>();
 		}
-
 		public abstract void Render(Graphics g);
 	}
 }

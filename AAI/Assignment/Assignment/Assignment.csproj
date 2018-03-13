@@ -90,6 +90,7 @@
     <Compile Include="State\StateMachine.cs" />
     <Compile Include="Utilities\PriorityQueue.cs" />
     <Compile Include="Utilities\Utility.cs" />
+    <Compile Include="World\BaseObject.cs" />
     <Compile Include="World\GameWorld.cs" />
     <Compile Include="World\Graph.cs" />
     <Compile Include="World\Grid.cs" />

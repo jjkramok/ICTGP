@@ -7,6 +7,7 @@ using Assignment.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Assignment.World
@@ -18,20 +19,26 @@ namespace Assignment.World
 		public SteeringForceCalculationType SteeringForceCalculationType;
 		public double Width { get; private set; }
 		public double Height { get; private set; }
-		public Grid Grid { get; private set; }
 		public Graph NavGraph { get; private set; }
 		public List<BaseEntity> Entities { get; private set; }
 		public List<BaseObstacle> Obstacles { get; private set; }
-        internal List<Graph.Vertex> PathAlreadyCalculated = null; // Used to test pathfinding
+		internal List<Graph.Vertex> PathAlreadyCalculated = null; // Used to test pathfinding
 
-        public const int TickDelay = 50;
+		public const int TickDelay = 50;
 		public MainForm Screen;
 		public Random Random;
 
 		private Stopwatch watch;
 		private Timer timer;
+		public long TickCounter;
 
 		public int TickTime;
+
+		// grids
+		public const int GRIDENTITY = 0;
+		public const int GRIDOBSTACLE = 1;
+		public const int GRIDFOOD = 2;
+		public Grid[] Grids = new Grid[3];
 
 		public static GameWorld Instance
 		{
@@ -54,6 +61,7 @@ namespace Assignment.World
 			watch.Stop();
 			TickTime = (int) watch.ElapsedMilliseconds;
 			watch.Restart();
+			TickCounter++;
 		}
 
 		private GameWorld()
@@ -61,16 +69,8 @@ namespace Assignment.World
 			StateMachine.Initialize();
 
 			Random = new Random();
-			Obstacles = new List<BaseObstacle>
-			{
-				new Rock(new Location(40,10), 20),
-				new Rock(new Location(110, 150), 20),
-				new Rock(new Location(40,90), 20),
-				new Rock(new Location(90,90), 20),
-				new Rock(new Location(80,40), 20),
-				new Rock(new Location(80,10), 20),
-			};
 
+			TickCounter = 0;
 			Width = 1000;
 			Height = 1000;
 			SteeringForceCalculationType = SteeringForceCalculationType.WeightedTruncatedSum;
@@ -78,6 +78,9 @@ namespace Assignment.World
 
 		private void StoneEdge()
 		{
+			if(Obstacles == null)
+				Obstacles = new List<BaseObstacle>();
+
 			for (int i = 5; i < Width; i += 10)
 			{
 				Obstacles.Add(new Rock(new Location(i, 5), 1));
@@ -95,6 +98,19 @@ namespace Assignment.World
 		{
 			StoneEdge();
 
+			Obstacles = new List<BaseObstacle>
+			{
+				new Rock(new Location(40,10), 20),
+				new Rock(new Location(110, 150), 20),
+				new Rock(new Location(40,90), 20),
+				new Rock(new Location(90,90), 20),
+				new Rock(new Location(80,40), 20),
+				new Rock(new Location(80,10), 20),
+				new Tree(new Location(300,150), 20),
+				new Tree(new Location(600,400), 20),
+				new Tree(new Location(700,800), 20),
+			};
+
 			Entities = new List<BaseEntity>
 			{
 				new Herbivore{ Direction = Math.PI * 2, Location = new Location(70, 90.01)},
@@ -105,7 +121,7 @@ namespace Assignment.World
 				Entities.Add(new Herbivore { Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(40 + Random.Next(0, 500), 40 + Random.Next(0, 500)) });
 			}
 
-			Grid = new Grid();
+			InitGrids();
 			NavGraph = new Graph();
 
 			watch = new Stopwatch();
@@ -123,7 +139,7 @@ namespace Assignment.World
 			{
 				Location oldLocation = new Location(entity.Location.X, entity.Location.Y);
 				entity.Update(1);
-				Grid.UpdateEntity(entity, oldLocation);
+				Grids[GRIDENTITY].UpdateObject(entity, oldLocation);
 			}
 		}
 
@@ -135,34 +151,47 @@ namespace Assignment.World
 
 		public List<BaseEntity> EntitiesInArea(Location location, double radius)
 		{
-			var searchableEntities = Grid.EntitiesNearLocation(location, radius);
-
-			var closeEntities = new List<BaseEntity>();
-			foreach (var entity in searchableEntities)
-			{
-				if (Utility.Distance(entity.Location, location) < radius)
-				{
-					closeEntities.Add(entity);
-				}
-			}
-
-			return closeEntities;
+			return ObjectFinder(GRIDENTITY, location, radius).Select(x => (BaseEntity) x).ToList();
 		}
 
 		public List<ObstacleCircle> ObstaclesInArea(Location location, double radius)
 		{
-			var searchableObstacleCircles = Grid.ObstacleCirclesNearLocation(location, radius);
+			return ObjectFinder(GRIDOBSTACLE, location, radius).Select(x => (ObstacleCircle) x).ToList();
+		}
 
-			var closeCircles = new List<ObstacleCircle>();
-			foreach (var circle in searchableObstacleCircles)
+		public List<Tree> FoodInArea(Location location, double radius)
+		{
+			return ObjectFinder(GRIDFOOD, location, radius).Select(x => (Tree) x).ToList();
+		}
+
+		private List<BaseObject> ObjectFinder(int gridIndex, Location location, double radius)
+		{
+			var searchableObjects = Grids[gridIndex].ObjectsNearLocation(location, radius);
+
+			var closeObjects = new List<BaseObject>();
+			foreach (var baseobject in searchableObjects)
 			{
-				if (Utility.Distance(circle.Location, location) < radius + circle.Radius)
-                {
-					closeCircles.Add(circle);
+				if (Utility.Distance(baseobject.Location, location) < radius)
+				{
+					closeObjects.Add(baseobject);
 				}
 			}
 
-			return closeCircles;
+			return closeObjects;
+		}
+
+		private void InitGrids()
+		{
+			Grids[GRIDENTITY] = new Grid();
+			Grids[GRIDFOOD] = new Grid();
+			Grids[GRIDOBSTACLE] = new Grid();
+
+			Grids[GRIDFOOD].MapObjects(Obstacles.Where(x => x.GetType().Name == "Tree").Select(x => (BaseObject) x).ToList());
+			Grids[GRIDENTITY].MapObjects(Entities.Select(x => (BaseObject) x).ToList());
+			foreach (var obstacle in Obstacles)
+			{
+				Grids[GRIDOBSTACLE].MapObjects(obstacle.CollisionCircles.Select(x => (BaseObject) x).ToList());
+			}
 		}
 	}
 }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Assignment.Entity
 {
-	public abstract class BaseEntity
+	public abstract class BaseEntity : BaseObject
 	{
 		// should always be ordered by prioity.
 		protected List<BaseSteering> SteeringBehaviours;
@@ -19,9 +19,7 @@ namespace Assignment.Entity
 		public EntityType Type { get; protected set; }
 
 		// Current values.
-		public double Direction;
 		public double Speed;
-		public Location Location;
 
 		// Default settings.
 		public double MaxSpeed;
@@ -70,9 +68,9 @@ namespace Assignment.Entity
 
 		public BaseSteering GetBehaviourByType(BaseSteering behaviour)
 		{
-			foreach(var item in SteeringBehaviours)
+			foreach (var item in SteeringBehaviours)
 			{
-				if(item.GetType().Name == behaviour.GetType().Name)
+				if (item.GetType().Name == behaviour.GetType().Name)
 				{
 					return item;
 				}
@@ -87,7 +85,6 @@ namespace Assignment.Entity
 
 			foreach (var behaviour in SteeringBehaviours)
 			{
-				behaviour.Render(g, this);
 				info += $" {behaviour.GetType().Name}\n";
 			}
 			info += $"QuickEnergy:\t{QuickEnergy}\n";
@@ -96,6 +93,14 @@ namespace Assignment.Entity
 
 
 			g.DrawString(info, new Font(FontFamily.GenericSansSerif, 10), Brushes.Black, (int) Location.X + 5, (int) Location.Y + 5);
+		}
+
+		public void RenderSteering(Graphics g)
+		{
+			foreach (var behaviour in SteeringBehaviours)
+			{
+				behaviour.Render(g, this);
+			}
 		}
 
 		protected void CalculateSteeringForce()
