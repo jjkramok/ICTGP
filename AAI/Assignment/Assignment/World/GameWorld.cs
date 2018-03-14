@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace Assignment.World
 {
-	class GameWorld
+	public class GameWorld
 	{
 		private static GameWorld _instance = null;
 
@@ -35,9 +35,6 @@ namespace Assignment.World
 		public int TickTime;
 
 		// grids
-		public const int GRIDENTITY = 0;
-		public const int GRIDOBSTACLE = 1;
-		public const int GRIDFOOD = 2;
 		public Grid<BaseEntity> GridEntity;
 		public Grid<ObstacleCircle> GridObstacle;
 		public Grid<Tree> GridFood;
@@ -69,20 +66,58 @@ namespace Assignment.World
 		#region initialize
 		private GameWorld()
 		{
+
+		}
+
+		private void PostInitialize()
+		{
+			var settings = Settings.LoadSettings();
+
+			Width = settings.Width;
+			Height = settings.Height;
+
 			StateMachine.Initialize();
 
-			Width = 550;
-			Height = 550;
-
-			Random = new Random();
+			if(settings.RandomSeed != 0)
+				Random = new Random(settings.RandomSeed);
+			else
+				Random = new Random();
 
 			Obstacles = new List<BaseObstacle>();
-			for (int i = 0; i < Width / 20; i++)
+			for (int i = 0; i < settings.RockCount; i++)
 			{
 				Obstacles.Add(new Rock(new Location(Random.Next((int) Width), Random.Next((int) Height)), 30));
 			}
+			for (int i = 0; i < settings.TreeCount; i++)
+			{
+				Obstacles.Add(new Tree(new Location(Random.Next((int) Width), Random.Next((int) Height)), 30));
+			}
 
 			SteeringForceCalculationType = SteeringForceCalculationType.WeightedTruncatedSum;
+
+			StoneEdge();
+
+			Entities = new List<BaseEntity>();
+			for (int i = 0; i < settings.HerbivoreCount; i++)
+			{
+				Entities.Add(new Herbivore { State = settings.HerbivoreStartState,  Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(Random.Next(40, (int) Width - 40), Random.Next(40, (int) Height - 40)) });
+			}
+
+			for (int i = 0; i < settings.OmnivoreCount; i++)
+			{
+				Entities.Add(new Omnivore { State = settings.OmnivoreStartState, Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(Random.Next(40, (int) Width - 40), Random.Next(40, (int) Height - 40)) });
+			}
+
+			InitGrids();
+			NavGraph = new Graph();
+
+			watch = new Stopwatch();
+			watch.Start();
+
+			timer = new Timer();
+			timer.Interval = TickDelay;
+			timer.Tick += new EventHandler(GameTick);
+			timer.Start();
 		}
 
 		private void StoneEdge()
@@ -101,32 +136,6 @@ namespace Assignment.World
 				Obstacles.Add(new Rock(new Location(5, i), 1));
 				Obstacles.Add(new Rock(new Location(Width - 5, i), 1));
 			}
-		}
-
-		private void PostInitialize()
-		{
-			StoneEdge();
-
-			Entities = new List<BaseEntity>
-			{
-				new Herbivore{ Direction = Math.PI * 2, Location = new Location(70, 90.01)},
-				new Omnivore{ Direction = Math.PI * 0.4, Location = new Location(530, 320.01)},
-            };
-			for (int i = 0; i < 100; i++)
-			{
-				Entities.Add(new Herbivore { Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(40 + Random.Next(0, 500), 40 + Random.Next(0, 500)) });
-			}
-
-			InitGrids();
-			NavGraph = new Graph();
-
-			watch = new Stopwatch();
-			watch.Start();
-
-			timer = new Timer();
-			timer.Interval = TickDelay;
-			timer.Tick += new EventHandler(GameTick);
-			timer.Start();
 		}
 
 		private void InitGrids()
@@ -191,6 +200,6 @@ namespace Assignment.World
 			return closeObjects;
 		}
 
-		
+
 	}
 }

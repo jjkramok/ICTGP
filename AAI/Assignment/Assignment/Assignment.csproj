@@ -85,6 +85,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Renderer\Rendering.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="State\ScriptManager.cs" />
     <Compile Include="State\StateMachine.cs" />
     <Compile Include="Utilities\PriorityQueue.cs" />
@@ -137,6 +138,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="scripts\omnivore\hide.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="settings.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

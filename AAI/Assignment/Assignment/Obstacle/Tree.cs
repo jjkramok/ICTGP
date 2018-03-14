@@ -9,11 +9,12 @@ namespace Assignment.Obstacle
 		private double food;
 		private long lastTickUpdate;
 		private double maxFood = 150;
-		private double foodPerTick;
+		private double foodPerTick = 0.5;
 
 		public Tree(Location location, double rotation) : base(location, rotation)
 		{
 			food = 100;
+			CollisionCircles.Add(new ObstacleCircle(Location, 30));
 		}
 
 		public double EatFood(double amount)

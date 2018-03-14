@@ -15,7 +15,7 @@ namespace Assignment.Movement
 	{
 		public double offsetMargin = 10;
 		public double avoidanceFactor = 100;
-		public double searchArea = 50;
+		public double searchArea = 60;
 
 		private List<ObstacleCircle> avoidedObstacles;
 

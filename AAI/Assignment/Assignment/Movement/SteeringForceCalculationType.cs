@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assignment.Movement
 {
-	enum SteeringForceCalculationType
+	public enum SteeringForceCalculationType
 	{
 		WeightedTruncatedSum,
 		Priorization,
