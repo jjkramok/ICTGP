@@ -37,8 +37,7 @@ namespace Assignment.World
             Image image = null;
             string flatName = entityName.ToLower();
 
-            images.TryGetValue(flatName, out image);
-            if (image == null)
+            if (!images.TryGetValue(flatName, out image))
             {
                 try
                 {
@@ -47,7 +46,9 @@ namespace Assignment.World
                     images.TryGetValue(flatName, out image);
                 } catch (ArgumentException e)
                 {
+                    // No image found, add a debug image
                     Console.WriteLine("Image {0}.png not found", flatName);
+                    images.Add(flatName, null); // TODO use debug / no-texture-available img instead?
                 }
             }
             return image;

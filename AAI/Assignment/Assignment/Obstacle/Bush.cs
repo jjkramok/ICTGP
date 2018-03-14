@@ -16,6 +16,7 @@ namespace Assignment.Obstacle
 
 		public override void Render(Graphics g)
 		{
+            base.Render(g);
 		}
 	}
 }
