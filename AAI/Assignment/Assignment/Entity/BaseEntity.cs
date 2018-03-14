@@ -48,7 +48,6 @@ namespace Assignment.Entity
 
 			// todo fix default state
 			PreviousState = "";
-			State = "patrol";
 		}
 
 		public abstract void Update(int tick);
