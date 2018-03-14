@@ -21,9 +21,16 @@ namespace Assignment.Movement
 
 		public override SteeringForce Calculate(BaseEntity entity)
 		{
+			if(ChaseEntity == null || entity == ChaseEntity)
+			{
+				BehaviorDone = true;
+				return new SteeringForce();
+			}
+
 			var distance = Utility.Distance(entity.Location, ChaseEntity.Location);
 			if (distance > MaxDistance)
 			{
+				BehaviorDone = true;
 				return new SteeringForce();
 			}
 

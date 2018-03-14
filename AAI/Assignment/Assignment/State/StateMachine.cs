@@ -14,22 +14,6 @@ namespace Assignment.State
 	{
 		private static Dictionary<string, Lua> scripts;
 
-		/*
-		public StateMachine(BaseEntity entity)
-		{
-			var objectsToParse = new Dictionary<string, object>();
-			objectsToParse.Add("entity", entity);
-			objectsToParse.Add("world", GameWorld.Instance);
-
-			script = ScriptManager.LoadScript(ScriptManager.SCRIPTPATH + entity.Type.ToString() + ScriptManager.SCRIPTEXTENSION, objectsToParse);
-
-			if(script == null)
-			{
-				Console.WriteLine("Failed to open script");
-				Console.WriteLine(ScriptManager.SCRIPTPATH + entity.Type.ToString() + ScriptManager.SCRIPTEXTENSION);
-			}
-		}
-		*/
 
 		public static void Initialize()
 		{
@@ -48,6 +32,10 @@ namespace Assignment.State
 			if (string.IsNullOrEmpty(entity.State))
 			{
 				Console.WriteLine($"No state set for {entity.Type}");
+				return;
+			}
+			if(entity.State == "DEBUGSTATE")
+			{
 				return;
 			}
 

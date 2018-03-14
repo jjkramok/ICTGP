@@ -12,17 +12,26 @@ namespace Assignment.Movement
 {
 	public class Flocking : BaseSteering
 	{
-		public double searchRadius = 40;
+		public double searchRadius = 100;
 		public double SeperationStrength = 0.5;
-		public double CohesionStrength = 0.5;
-		public double AlignmentStrength = 10;
+		public double CohesionStrength = 1;
+		public double AlignmentStrength = 15;
+
+		public Flocking() : base()
+		{
+			Priority = 0.4;
+		}
 
 		public override SteeringForce Calculate(BaseEntity entity)
 		{
 			var closeEntities = GameWorld.Instance.EntitiesInArea(entity.Location, searchRadius);
 			closeEntities = closeEntities.Where(x => x.Type == entity.Type && x != entity).ToList();
 
-			return Alignment(entity, closeEntities) + Seperation(entity, closeEntities) + Cohesion(entity, closeEntities);
+			if (closeEntities.Count == 0)
+				return new SteeringForce();
+
+			var result = Alignment(entity, closeEntities) + Seperation(entity, closeEntities) + Cohesion(entity, closeEntities);
+			return result;
 		}
 
 		public override void Render(Graphics g, BaseEntity entity)

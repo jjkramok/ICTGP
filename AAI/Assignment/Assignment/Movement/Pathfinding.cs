@@ -8,6 +8,8 @@ namespace Assignment.Movement
 {
     static class Pathfinding
     {
+		public static bool PathSmoothing = true;
+
         public static List<Graph.Vertex> AStar(Graph.Vertex start, Graph.Vertex goal)
         {
             Graph nav = GameWorld.Instance.NavGraph;
@@ -110,7 +112,12 @@ namespace Assignment.Movement
 
         public static List<Graph.Vertex> FinePathSmoothing(List<Graph.Vertex> path)
         {
-            if (path == null)
+			if (!PathSmoothing)
+			{
+				return path;
+			}
+
+			if (path == null)
             {
                 return null;
             }

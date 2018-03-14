@@ -18,6 +18,7 @@ namespace Assignment.Renderer
         public static bool RenderAStarPathOption = false;
         public static bool RenderGridOption = false;
         public static bool RenderEntitiesInfoOption = false;
+		public static bool RenderEntitiesForcesOption = false;
 
 		public static void Render(Graphics g, Panel p)
 		{
@@ -41,7 +42,10 @@ namespace Assignment.Renderer
                 if (RenderEntitiesInfoOption)
                     RenderEntitiesInfo();
 
-                if (RenderAStarPathOption)
+				if (RenderEntitiesForcesOption)
+					RenderEntitiesForces();
+
+				if (RenderAStarPathOption)
                     RenderShortestPath();
             }
 
@@ -100,12 +104,19 @@ namespace Assignment.Renderer
         {
             foreach (var entity in GameWorld.Instance.Entities)
             {
-                entity.RenderSteering(graphics);
+                entity.RenderDebug(graphics);
             }
         }
 
+		private static void RenderEntitiesForces()
+		{
+			foreach (var entity in GameWorld.Instance.Entities)
+			{
+				entity.RenderSteering(graphics);
+			}
+		}
 
-        private static void RenderNavGraph()
+		private static void RenderNavGraph()
         {
             const bool SHOW_VERTEX_LABEL = false;
             const bool SHOW_EDGES = true;
