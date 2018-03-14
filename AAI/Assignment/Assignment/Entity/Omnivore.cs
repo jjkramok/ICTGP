@@ -20,16 +20,7 @@ namespace Assignment.Entity
 
 		public override void Render(Graphics g)
 		{
-			int size = 10;
-
-            Image sprite = ImageManager.Instance.GetImage(GetType().Name);
-            if (sprite == null)
-            {
-                g.FillEllipse(Brushes.Red, (int)Location.X - (size / 2), (int)Location.Y - (size / 2), size, size);
-            } else
-            {
-                g.DrawImage(sprite, (int)Location.X - (size / 2), (int)Location.Y - (size / 2), size, size);
-            }
+            base.Render(g);
 
 			int x = (int) (Location.X + (Math.Cos(Direction) * 30));
 			int y = (int) (Location.Y + (Math.Sin(Direction) * 30));
