@@ -9,6 +9,8 @@ Explorer state / steering behaviour
 
 A* heuristics to Euclidian
 
+Only call pathfinding when there is no direct way to your goal (either that or pathfinding returns path with only the goal node)
+
 Order a Entity to move using pathfinding
 
 Add omnivore script states
