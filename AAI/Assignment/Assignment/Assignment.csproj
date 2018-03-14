@@ -151,6 +151,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Images\grass-background.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\herbivore.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
