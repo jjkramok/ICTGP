@@ -29,14 +29,7 @@ namespace Assignment.Renderer
 			GameWorld.Instance.Screen = this;
 			SetCheckedCalculationType();
 		}
-		/*
-		private void startButton_Click(object sender, EventArgs e)
-		{
-			GameWorld.DeleteWorld();
-			var world = GameWorld.Instance;
-			world.Screen = this;
-		}
-		*/
+	
 		private void worldPanel_Paint(object sender, PaintEventArgs e)
 		{
 			Rendering.Render(e.Graphics, worldPanel);
@@ -277,11 +270,11 @@ namespace Assignment.Renderer
 			}
 		}
 
-		#endregion
-
 		private void pathSmoothingToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Pathfinding.PathSmoothing = pathSmoothingToolStripMenuItem.Checked;
 		}
+
+		#endregion
 	}
 }
