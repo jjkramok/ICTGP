@@ -95,6 +95,7 @@
     <Compile Include="World\Graph.cs" />
     <Compile Include="World\Grid.cs" />
     <Compile Include="World\GridCell.cs" />
+    <Compile Include="World\ImageManager.cs" />
     <Compile Include="World\Location.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -147,6 +148,15 @@
     <None Include="scripts\herbivore\findfood.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Images\herbivore.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\omnivore.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

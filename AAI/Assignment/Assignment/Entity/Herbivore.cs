@@ -12,9 +12,9 @@ namespace Assignment.Entity
 {
 	public class Herbivore : BaseEntity
 	{
-		public Herbivore() : base()
+        public Herbivore() : base()
 		{
-			State = "wander";
+            State = "wander";
 			MaxSpeed = 5;
 			
 			Type = EntityType.Herbivore;
@@ -23,7 +23,15 @@ namespace Assignment.Entity
 		public override void Render(Graphics g)
 		{
 			int size = 10;
-			g.FillEllipse(Brushes.Blue, (int) Location.X - (size / 2), (int) Location.Y - (size / 2), size, size);
+
+            Image sprite = ImageManager.Instance.GetImage(GetType().Name);
+            if (sprite == null)
+            {
+                g.FillEllipse(Brushes.Blue, (int)Location.X - (size / 2), (int)Location.Y - (size / 2), size, size);
+            } else
+            {
+                g.DrawImage(sprite, (int)Location.X - (size / 2), (int)Location.Y - (size / 2), size, size);
+            }
 
 			int x = (int) (Location.X + (Math.Cos(Direction) * 30));
 			int y = (int) (Location.Y + (Math.Sin(Direction) * 30));
