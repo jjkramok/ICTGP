@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace Assignment.World
 {
-	public class GridCell
+	public class GridCell<T> where T : BaseObject
 	{
-		public List<BaseObject> Objects { get; private set; }
+		public List<T> Objects { get; private set; }
 
 		public GridCell()
 		{
-			Objects = new List<BaseObject>();
+			Objects = new List<T>();
 		}	
 	}
 }
