@@ -10,6 +10,7 @@ namespace Assignment.World
 	{
 		public Vertex[,] vertices;
 
+        private const double BiggestAssumedObstacleRadius = 30;
         private const double NodeSpreadFactor = 50; // Distance between vertices, less means more vertices in the graph.
         private double AmountOfNodesInRow = GameWorld.Instance.Width / NodeSpreadFactor;
         private double AmountOfNodesInCol = GameWorld.Instance.Height / NodeSpreadFactor;
@@ -91,15 +92,28 @@ namespace Assignment.World
             {
                 for (int y = 0; y < vertices.GetLength(1); y++)
                 {
-                    int amountOfCollisions = gw.ObstaclesInArea(new Location(XOffset + x * step, YOffset + y * step), AgentCollisionSpacing).Count;
-                    if (amountOfCollisions > 0)
+                    Location newVertex = new Location(XOffset + x * step, YOffset + y * step);
+
+                    // Get all obstacles within the immediate area, guess their area / radius
+                    var possibleCloseObstacles = gw.ObstaclesInArea(new Location(XOffset + x * step, YOffset + y * step), AgentCollisionSpacing + BiggestAssumedObstacleRadius);
+
+                    // Now check if any obstacle is too close
+                    bool closeObstacle = false;
+                    foreach (var tentativeObstacle in possibleCloseObstacles)
+                    {
+                        if (Utility.Distance(tentativeObstacle.Location, newVertex) <= AgentCollisionSpacing + tentativeObstacle.Radius)
+                        {
+                            closeObstacle = true;
+                            break;
+                        }
+                    }
+                    if (closeObstacle)
                     {
                         continue;
                         // To save computing power: store result of amoutOfCollisions seperatly or in the Vertex class
                     }
                     
-                    Location loc = new Location(XOffset + x * step, YOffset + y * step);
-                    vertices[x, y] = new Vertex(loc, nextVertexLabel.ToString());
+                    vertices[x, y] = new Vertex(newVertex, nextVertexLabel.ToString());
                     nextVertexLabel++;
                 }
             }

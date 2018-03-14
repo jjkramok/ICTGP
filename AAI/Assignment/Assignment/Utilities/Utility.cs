@@ -72,7 +72,7 @@ namespace Assignment.Utilities
 
             //set the InterpolationMode to HighQualityBicubic so to ensure a high
             //quality image once it is transformed to the specified size
-            //gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
             //now draw our new image onto the graphics object
             gfx.DrawImage(img, new Point(0, 0));
@@ -82,6 +82,11 @@ namespace Assignment.Utilities
 
             //return the image
             return bmp;
+        }
+
+        public static double RadToDeg(double rad)
+        {
+            return (360 * rad) / (2 * Math.PI);
         }
     }
 }
