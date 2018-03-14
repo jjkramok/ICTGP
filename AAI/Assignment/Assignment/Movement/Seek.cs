@@ -6,10 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace Assignment.Movement
 {
-	class Seek : BaseSteering
+	public class Seek : BaseSteering
 	{
 		public BaseEntity ChaseEntity;
 		public double MaxDistance;
@@ -38,6 +39,11 @@ namespace Assignment.Movement
 
 			// todo nmn
 			return new SteeringForce(direction, 5);
+		}
+
+		public override void Render(Graphics g, BaseEntity entity)
+		{
+			g.DrawLine(Pens.White, (float) entity.Location.X, (float) entity.Location.Y, (float) ChaseEntity.Location.X, (float) ChaseEntity.Location.Y);
 		}
 	}
 }

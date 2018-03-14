@@ -20,8 +20,6 @@ namespace Assignment.Movement
 
 		public abstract SteeringForce Calculate(BaseEntity entity);
 
-		public virtual void Render(Graphics g, BaseEntity entity)
-		{
-		}
+		public abstract void Render(Graphics g, BaseEntity entity);
 	}
 }
