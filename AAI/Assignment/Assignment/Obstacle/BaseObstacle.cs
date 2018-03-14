@@ -19,6 +19,19 @@ namespace Assignment.Obstacle
 
 			CollisionCircles = new List<ObstacleCircle>();
 		}
-		public abstract void Render(Graphics g);
+		public virtual void Render(Graphics g)
+        {
+            int size = 10;
+
+            Image sprite = ImageManager.Instance.GetImage(GetType().Name);
+            if (sprite == null)
+            {
+                g.FillEllipse(Brushes.Gray, (int)Location.X - 10, (int)Location.Y - 10, 20, 20);
+            }
+            else
+            {
+                g.DrawImage(sprite, (int)Location.X - (size / 2), (int)Location.Y - (size / 2), size, size);
+            }
+        }
 	}
 }

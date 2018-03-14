@@ -48,6 +48,7 @@ namespace Assignment.Obstacle
 
 		public override void Render(Graphics g)
 		{
+            //base.Render(g);
 			g.FillEllipse(Brushes.Green, (float) Location.X - 10, (float) Location.Y - 20, 30, 30);
 			g.FillEllipse(Brushes.Green, (float) Location.X - 20, (float) Location.Y - 5, 25, 25);
 			g.FillEllipse(Brushes.Green, (float) Location.X, (float) Location.Y - 10, 20, 20);
