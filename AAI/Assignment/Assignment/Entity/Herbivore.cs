@@ -12,24 +12,23 @@ namespace Assignment.Entity
 {
 	public class Herbivore : BaseEntity
 	{
-		public Herbivore() : base()
+        public Herbivore() : base()
 		{
-			State = "wander";
+            State = "wander";
 			MaxSpeed = 5;
 			
 			Type = EntityType.Herbivore;
 		}
 
-		public override void Render(Graphics g)
+        public override void Render(Graphics g)
 		{
-			int size = 10;
-			g.FillEllipse(Brushes.Blue, (int) Location.X - (size / 2), (int) Location.Y - (size / 2), size, size);
+            base.Render(g);
 
-			int x = (int) (Location.X + (Math.Cos(Direction) * 30));
-			int y = (int) (Location.Y + (Math.Sin(Direction) * 30));
+            int x = (int)(Location.X + (Math.Cos(Direction) * 30));
+            int y = (int)(Location.Y + (Math.Sin(Direction) * 30));
 
-			g.DrawLine(Pens.Blue, (int) Location.X, (int) Location.Y, x, y);
-		}
+            g.DrawLine(Pens.Blue, (int)Location.X, (int)Location.Y, x, y);
+        }
 
 		public override void Update(int tick)
 		{

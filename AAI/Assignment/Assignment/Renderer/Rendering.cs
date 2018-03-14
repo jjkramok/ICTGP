@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 namespace Assignment.Renderer
@@ -54,7 +56,15 @@ namespace Assignment.Renderer
 
 		private static void RenderBackground()
 		{
-			graphics.FillRectangle(Brushes.White, 0, 0, (int) GameWorld.Instance.Width, (int) GameWorld.Instance.Height);
+            Image texture = ImageManager.Instance.GetImage("grass-background");
+            if (texture != null)
+            {
+                TextureBrush brush = new TextureBrush(texture, WrapMode.Tile);
+                graphics.FillRectangle(brush, 0, 0, (float)GameWorld.Instance.Width, (float)GameWorld.Instance.Height);
+            } else
+            {
+                graphics.FillRectangle(Brushes.White, 0, 0, (int)GameWorld.Instance.Width, (int)GameWorld.Instance.Height);
+            }
 		}
 
 		private static void RenderObstacles()

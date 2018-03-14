@@ -1,5 +1,6 @@
 ﻿using Assignment.Movement;
 using Assignment.State;
+using Assignment.World;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,16 +12,15 @@ namespace Assignment.Entity
 {
 	public class Omnivore : BaseEntity
 	{
-		public Omnivore() : base()
+        public Omnivore() : base()
 		{
-			MaxSpeed = 5;
+            MaxSpeed = 5;
 			Type = EntityType.Omnivore;
 		}
 
 		public override void Render(Graphics g)
 		{
-			int size = 10;
-			g.FillEllipse(Brushes.Red, (int) Location.X - (size / 2), (int) Location.Y - (size / 2), size, size);
+            base.Render(g);
 
 			int x = (int) (Location.X + (Math.Cos(Direction) * 30));
 			int y = (int) (Location.Y + (Math.Sin(Direction) * 30));
