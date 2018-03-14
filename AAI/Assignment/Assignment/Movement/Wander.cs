@@ -14,8 +14,8 @@ namespace Assignment.Movement
 	{
 		private double wanderDirection = Math.PI * 2;
 		public double DirectionChangeMax = 0.8;
-		public double CircleSize = 50;
-		public double CircleOffset = 25;
+		public double CircleSize = 20;
+		public double CircleOffset = 10;
 
 		public Wander() : base()
 		{

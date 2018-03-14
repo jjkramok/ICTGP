@@ -161,6 +161,17 @@ namespace Assignment.Entity
 			FixEntityOnEdge();
 		}
 
+		public void RemoveBehaviour(Type type)
+		{
+			for(int i = SteeringBehaviours.Count -1; i>=0; i--)
+			{
+				if(SteeringBehaviours[i].GetType().Name == type.Name)
+				{
+					SteeringBehaviours.RemoveAt(i);
+				}
+			}
+		}
+
 		private void FixEntityOnEdge()
 		{
 			if (Location.X < 2)
