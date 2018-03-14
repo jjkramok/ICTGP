@@ -73,15 +73,15 @@ namespace Assignment.Renderer
 		{
 			var pen = new Pen(Color.Red);
 			var font = new Font(FontFamily.GenericSansSerif, 7);
-			var grid = GameWorld.Instance.Grids[GameWorld.GRIDENTITY];
+			var grid = GameWorld.Instance.GridEntity;
 
 			for (int x = 0; x < grid.GridWidth; x++)
 			{
 				for (int y = 0; y < grid.GridHeight; y++)
 				{
-					graphics.DrawRectangle(pen, x * Grid.CellWidth, y * Grid.CellHeight, Grid.CellWidth, Grid.CellHeight);
+					graphics.DrawRectangle(pen, x * grid.CellWidth, y * grid.CellHeight, grid.CellWidth, grid.CellHeight);
 
-					graphics.DrawString(grid.GridCells[x, y].Objects.Count.ToString(), font, Brushes.Blue, x * Grid.CellWidth, y * Grid.CellHeight);
+					graphics.DrawString(grid.GridCells[x, y].Objects.Count.ToString(), font, Brushes.Blue, x * grid.CellWidth, y * grid.CellHeight);
 				}
 			}
 		}
@@ -92,7 +92,7 @@ namespace Assignment.Renderer
 			{
 				var oldLocation = new Location(entity.Location.X, entity.Location.Y);
 				entity.Render(graphics);
-				GameWorld.Instance.Grids[GameWorld.GRIDENTITY].UpdateObject(entity, oldLocation);
+				GameWorld.Instance.GridEntity.UpdateObject(entity, oldLocation);
 			}
 		}
 

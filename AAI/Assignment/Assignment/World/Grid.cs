@@ -8,33 +8,33 @@ using System.Threading.Tasks;
 
 namespace Assignment.World
 {
-	public class Grid
+	public class Grid<T> where T : BaseObject
 	{
-		public const int CellHeight = 20;
-		public const int CellWidth = 20;
+		public readonly int CellHeight = 20;
+		public readonly int CellWidth = 20;
 
 		public readonly int GridWidth;
 		public readonly int GridHeight;
 
-		public readonly GridCell[,] GridCells;
+		public readonly GridCell<T>[,] GridCells;
 
 		public Grid()
 		{
 			GridWidth = (int) Math.Ceiling((double) GameWorld.Instance.Width / CellWidth);
 			GridHeight = (int) Math.Ceiling((double) GameWorld.Instance.Height / CellHeight);
 
-			GridCells = new GridCell[GridWidth, GridHeight];
+			GridCells = new GridCell<T>[GridWidth, GridHeight];
 			for (var x = 0; x < GridWidth; x++)
 			{
 				for (var y = 0; y < GridHeight; y++)
 				{
-					GridCells[x, y] = new GridCell();
+					GridCells[x, y] = new GridCell<T>();
 				}
 			}
 
 		}
 
-		public void MapObjects(List<BaseObject> baseobjects)
+		public void MapObjects(List<T> baseobjects)
 		{
 			foreach (var baseobject in baseobjects)
 			{
@@ -43,13 +43,13 @@ namespace Assignment.World
 			}
 		}
 
-		public List<BaseObject> ObjectsNearLocation(Location location, double distance)
+		public List<T> ObjectsNearLocation(Location location, double distance)
 		{
 			var centerCell = GetGridCellForLocation(location);
 			var cellDistanceX = (int) Math.Floor(distance / CellWidth) + 1;
 			var cellDistanceY = (int) Math.Floor(distance / CellHeight) + 1;
 
-			List<BaseObject> objects = new List<BaseObject>();
+			List<T> objects = new List<T>();
 
 			for (int x = Math.Max(centerCell.Item1 - cellDistanceX, 0); x < Math.Min(centerCell.Item1 + cellDistanceX + 1, GridWidth); x++)
 			{
@@ -62,7 +62,7 @@ namespace Assignment.World
 			return objects;
 		}
 
-		public void UpdateObject(BaseObject baseobject, Location oldLocation)
+		public void UpdateObject(T baseobject, Location oldLocation)
 		{
 			var newCell = GetGridCellForLocation(baseobject.Location);
 			var oldCell = GetGridCellForLocation(oldLocation);
@@ -81,7 +81,7 @@ namespace Assignment.World
 
 			return new Tuple<int, int>(cellX, cellY);
 		}
-
+		/*
 		private Tuple<int, int> GetGridCellsAlongLine(Location l1, Location l2)
 		{
 			// TODO implement
@@ -111,5 +111,6 @@ namespace Assignment.World
 			//return circles;
 			return null;
 		}
+		*/
 	}
 }

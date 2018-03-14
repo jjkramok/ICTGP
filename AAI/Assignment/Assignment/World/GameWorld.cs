@@ -38,7 +38,9 @@ namespace Assignment.World
 		public const int GRIDENTITY = 0;
 		public const int GRIDOBSTACLE = 1;
 		public const int GRIDFOOD = 2;
-		public Grid[] Grids = new Grid[3];
+		public Grid<BaseEntity> GridEntity;
+		public Grid<ObstacleCircle> GridObstacle;
+		public Grid<Tree> GridFood;
 
 		public static GameWorld Instance
 		{
@@ -64,27 +66,28 @@ namespace Assignment.World
 			TickCounter++;
 		}
 
+		#region initialize
 		private GameWorld()
 		{
 			StateMachine.Initialize();
 
-            Width = 1000;
-            Height = 1000;
+			Width = 1000;
+			Height = 1000;
 
-            Random = new Random();
+			Random = new Random();
 
-            Obstacles = new List<BaseObstacle>();
-            for (int i = 0; i < Width / 20; i++)
-            {
-                Obstacles.Add(new Rock(new Location(Random.Next((int)Width), Random.Next((int)Height)), 30));
-            }
+			Obstacles = new List<BaseObstacle>();
+			for (int i = 0; i < Width / 20; i++)
+			{
+				Obstacles.Add(new Rock(new Location(Random.Next((int) Width), Random.Next((int) Height)), 30));
+			}
 
-            SteeringForceCalculationType = SteeringForceCalculationType.WeightedTruncatedSum;
+			SteeringForceCalculationType = SteeringForceCalculationType.WeightedTruncatedSum;
 		}
 
 		private void StoneEdge()
 		{
-			if(Obstacles == null)
+			if (Obstacles == null)
 				Obstacles = new List<BaseObstacle>();
 
 			for (int i = 5; i < Width; i += 10)
@@ -126,13 +129,28 @@ namespace Assignment.World
 			timer.Start();
 		}
 
+		private void InitGrids()
+		{
+			GridFood = new Grid<Tree>();
+			GridEntity = new Grid<BaseEntity>();
+			GridObstacle = new Grid<ObstacleCircle>();
+
+			GridFood.MapObjects(Obstacles.Where(x => x.GetType().Name == "Tree").Select(x => (Tree) x).ToList());
+			GridEntity.MapObjects(Entities);
+			foreach (var obstacle in Obstacles)
+			{
+				GridObstacle.MapObjects(obstacle.CollisionCircles);
+			}
+		}
+
+		#endregion
 		public void UpdateEntites()
 		{
 			foreach (var entity in Entities)
 			{
 				Location oldLocation = new Location(entity.Location.X, entity.Location.Y);
 				entity.Update(1);
-				Grids[GRIDENTITY].UpdateObject(entity, oldLocation);
+				GridEntity.UpdateObject(entity, oldLocation);
 			}
 		}
 
@@ -144,24 +162,24 @@ namespace Assignment.World
 
 		public List<BaseEntity> EntitiesInArea(Location location, double radius)
 		{
-			return ObjectFinder(GRIDENTITY, location, radius).Select(x => (BaseEntity) x).ToList();
+			return ObjectFinder(GridEntity, location, radius);
 		}
 
 		public List<ObstacleCircle> ObstaclesInArea(Location location, double radius)
 		{
-			return ObjectFinder(GRIDOBSTACLE, location, radius).Select(x => (ObstacleCircle) x).ToList();
+			return ObjectFinder(GridObstacle, location, radius);
 		}
 
 		public List<Tree> FoodInArea(Location location, double radius)
 		{
-			return ObjectFinder(GRIDFOOD, location, radius).Select(x => (Tree) x).ToList();
+			return ObjectFinder(GridFood, location, radius);
 		}
 
-		private List<BaseObject> ObjectFinder(int gridIndex, Location location, double radius)
+		private List<T> ObjectFinder<T>(Grid<T> grid, Location location, double radius) where T : BaseObject
 		{
-			var searchableObjects = Grids[gridIndex].ObjectsNearLocation(location, radius);
+			var searchableObjects = grid.ObjectsNearLocation(location, radius);
 
-			var closeObjects = new List<BaseObject>();
+			var closeObjects = new List<T>();
 			foreach (var baseobject in searchableObjects)
 			{
 				if (Utility.Distance(baseobject.Location, location) < radius)
@@ -173,18 +191,6 @@ namespace Assignment.World
 			return closeObjects;
 		}
 
-		private void InitGrids()
-		{
-			Grids[GRIDENTITY] = new Grid();
-			Grids[GRIDFOOD] = new Grid();
-			Grids[GRIDOBSTACLE] = new Grid();
-
-			Grids[GRIDFOOD].MapObjects(Obstacles.Where(x => x.GetType().Name == "Tree").Select(x => (BaseObject) x).ToList());
-			Grids[GRIDENTITY].MapObjects(Entities.Select(x => (BaseObject) x).ToList());
-			foreach (var obstacle in Obstacles)
-			{
-				Grids[GRIDOBSTACLE].MapObjects(obstacle.CollisionCircles.Select(x => (BaseObject) x).ToList());
-			}
-		}
+		
 	}
 }
