@@ -96,9 +96,9 @@ namespace Assignment.Renderer
 			{
 				for (int y = 0; y < grid.GridHeight; y++)
 				{
-					graphics.DrawRectangle(pen, x * grid.CellWidth, y * grid.CellHeight, grid.CellWidth, grid.CellHeight);
+					graphics.DrawRectangle(pen, x * grid.CellSize, y * grid.CellSize, grid.CellSize, grid.CellSize);
 
-					graphics.DrawString(grid.GridCells[x, y].Objects.Count.ToString(), font, Brushes.Blue, x * grid.CellWidth, y * grid.CellHeight);
+					graphics.DrawString(grid.GridCells[x, y].Objects.Count.ToString(), font, Brushes.Blue, x * grid.CellSize, y * grid.CellSize);
 				}
 			}
 		}
@@ -194,23 +194,23 @@ namespace Assignment.Renderer
 					GameWorld.Instance.PathAlreadyCalculated = Movement.Pathfinding.AStar(start, goal);
 				}
 
-				List<Graph.Vertex> path = GameWorld.Instance.PathAlreadyCalculated;
+				List<Location> path = GameWorld.Instance.PathAlreadyCalculated;
 				Pen p = new Pen(Color.MediumPurple, Math.Max(1, (float) GameWorld.Instance.Width / 250));
 				for (int i = 1; i < path.Count; i++)
 				{
-					Graph.Vertex v = path[i - 1];
-					Graph.Vertex w = path[i];
-					graphics.DrawLine(p, (float) v.Loc.X, (float) v.Loc.Y, (float) w.Loc.X, (float) w.Loc.Y);
+					Location v = path[i - 1];
+					Location w = path[i];
+					graphics.DrawLine(p, (float) v.X, (float) v.Y, (float) w.X, (float) w.Y);
 				}
 				if (SHOW_SMOOTHED_PATH)
 				{
-					List<Graph.Vertex> smoothedPath = Movement.Pathfinding.FinePathSmoothing(path);
+					List<Location> smoothedPath = Movement.Pathfinding.FinePathSmoothing(path);
 					p = new Pen(Color.DeepPink, Math.Max(1, (float) GameWorld.Instance.Width / 250));
 					for (int i = 1; i < smoothedPath.Count; i++)
 					{
-						Graph.Vertex v = smoothedPath[i - 1];
-						Graph.Vertex w = smoothedPath[i];
-						graphics.DrawLine(p, (float) v.Loc.X, (float) v.Loc.Y, (float) w.Loc.X, (float) w.Loc.Y);
+						Location v = smoothedPath[i - 1];
+						Location w = smoothedPath[i];
+						graphics.DrawLine(p, (float) v.X, (float) v.Y, (float) w.X, (float) w.Y);
 					}
 				}
 				return true;

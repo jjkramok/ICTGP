@@ -28,13 +28,12 @@ namespace Assignment.Movement
 			var distance = Utility.Distance(entity.Location, ArriveLocation);
 			var direction = Utility.Direction(entity.Location, ArriveLocation);
 
-			if (distance < DistanceDone && entity.Speed < 0.5)
+			if (distance < DistanceDone && entity.Speed < MaxSpeed)
 			{
 				BehaviorDone = true;
 				return new SteeringForce();
 			}
-			Console.WriteLine($"{StopDistance} * {entity.Speed} / {entity.SlowDownSpeed} = {StopDistance * entity.Speed / entity.SlowDownSpeed}");
-			if(distance < StopDistance * entity.Speed / entity.SlowDownSpeed)
+			if (distance < StopDistance * entity.Speed / entity.SlowDownSpeed)
 			{
 				return new SteeringForce();
 			}

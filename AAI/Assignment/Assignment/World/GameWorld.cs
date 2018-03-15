@@ -22,7 +22,7 @@ namespace Assignment.World
 		public Graph NavGraph { get; private set; }
 		public List<BaseEntity> Entities { get; private set; }
 		public List<BaseObstacle> Obstacles { get; private set; }
-		internal List<Graph.Vertex> PathAlreadyCalculated = null; // Used to test pathfinding
+		internal List<Location> PathAlreadyCalculated = null; // Used to test pathfinding
 
 		public const int TickDelay = 50;
 		public MainForm Screen;
@@ -140,9 +140,9 @@ namespace Assignment.World
 
 		private void InitGrids()
 		{
-			GridFood = new Grid<Tree>();
-			GridEntity = new Grid<BaseEntity>();
-			GridObstacle = new Grid<ObstacleCircle>();
+			GridFood = new Grid<Tree>(Settings.Instance.SpatialPartitioningGridSize);
+			GridEntity = new Grid<BaseEntity>(Settings.Instance.SpatialPartitioningGridSize);
+			GridObstacle = new Grid<ObstacleCircle>(Settings.Instance.SpatialPartitioningGridSize);
 
 			GridFood.MapObjects(Obstacles.Where(x => x.GetType().Name == "Tree").Select(x => (Tree) x).ToList());
 			GridEntity.MapObjects(Entities);

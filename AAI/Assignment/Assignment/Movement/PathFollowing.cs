@@ -11,9 +11,9 @@ namespace Assignment.Movement
 {
 	class PathFollowing : BaseSteering
 	{
-		private Arrive arrive = new Arrive();
+		private Arrive arrive = new Arrive { Force = 50 };
 
-		private List<Graph.Vertex> path = null;
+		private List<Location> path = null;
 		private Location _goal;
 		public Location Goal
 		{
@@ -38,29 +38,46 @@ namespace Assignment.Movement
 			if (path == null)
 			{
 				path = Pathfinding.AStar(GameWorld.Instance.NavGraph.NearestVertexFromLocation(entity.Location), GameWorld.Instance.NavGraph.NearestVertexFromLocation(Goal));
-				path = Pathfinding.FinePathSmoothing(path);
-
-				if (path == null || path.Count == 0)
+				if (path == null)
 				{
-					BehaviorDone = true;
-					return new SteeringForce();
+					path = new List<Location> { Goal };
+				}
+				else
+				{
+					path.Add(Goal);
+					path = Pathfinding.FinePathSmoothing(path);
 				}
 				arrive.BehaviorDone = true;
 			}
 
 			if (arrive.BehaviorDone)
 			{
-				if (path.Count < 1) { }
-				path.RemoveAt(0);
+				if (path.Count > 0)
+				{
+					path.RemoveAt(0);
+				}
 				if (path.Count == 0)
 				{
 					path = null;
 					BehaviorDone = true;
 					return new SteeringForce();
 				}
-				arrive.ArriveLocation = path.First().Loc;
+				arrive.ArriveLocation = path.First();
 				arrive.BehaviorDone = false;
 			}
+			if(path.Count > 1)
+			{
+				arrive.StopDistance = 0;
+				arrive.DistanceDone = 20;
+				arrive.MaxSpeed = 50;
+			}
+			else
+			{
+				arrive.StopDistance = 3;
+				arrive.DistanceDone = 5;
+				arrive.MaxSpeed = 0.5;
+			}
+
 			return arrive.Calculate(entity);
 		}
 
@@ -68,10 +85,10 @@ namespace Assignment.Movement
 		{
 			if (path != null && path.Count > 0)
 			{
-				g.DrawLine(Pens.Purple, (int) entity.Location.X, (int) entity.Location.Y, (int) path[0].Loc.X, (int) path[0].Loc.Y);
+				g.DrawLine(Pens.Purple, (int) entity.Location.X, (int) entity.Location.Y, (int) path[0].X, (int) path[0].Y);
 				for (int i = 1; i < path.Count; i++)
 				{
-					g.DrawLine(Pens.Purple, (int) path[i - 1].Loc.X, (int) path[i - 1].Loc.Y, (int) path[i].Loc.X, (int) path[i].Loc.Y);
+					g.DrawLine(Pens.Purple, (int) path[i - 1].X, (int) path[i - 1].Y, (int) path[i].X, (int) path[i].Y);
 				}
 			}
 		}

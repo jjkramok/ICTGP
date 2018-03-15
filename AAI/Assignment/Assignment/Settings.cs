@@ -25,6 +25,8 @@ namespace Assignment
         public int RockCount = 5;
 		public int TreeCount = 1;
 
+		public int SpatialPartitioningGridSize = 40;
+
         public int RandomSeed = 0;
 
         private const string settingsFile = "settings.ini";
@@ -37,7 +39,7 @@ namespace Assignment
 		{
 			get
 			{
-				if(_instance == null)
+				if (_instance == null)
 				{
 					LoadSettings();
 				}
@@ -52,6 +54,9 @@ namespace Assignment
 				Console.WriteLine("Settings file not found");
 				return new Settings();
 			}
+#if DEBUG
+			MoveFile();
+#endif
 			_instance = new Settings();
 			var settingsLines = File.ReadAllLines(settingsFile);
 
@@ -71,7 +76,7 @@ namespace Assignment
 				{
 					_instance.SetSetting(line);
 				}
-				catch(Exception e)
+				catch (Exception e)
 				{
 					Console.WriteLine($"Invalid setting on line {i + 1}, {e.Message}");
 				}
@@ -82,14 +87,14 @@ namespace Assignment
 		private void SetSetting(string line)
 		{
 			var lineParts = line.Split('=');
-			if(lineParts.Length != 2)
+			if (lineParts.Length != 2)
 			{
 				throw new Exception("line doesn't have one '=' character");
 			}
 
 			var field = GetType().GetFields().FirstOrDefault(x => x.Name == lineParts[0].Trim());
 
-			if(field != null)
+			if (field != null)
 			{
 				var value = Convert.ChangeType(lineParts[1].Trim(), field.FieldType);
 				field.SetValue(this, value);
@@ -100,7 +105,18 @@ namespace Assignment
 			}
 		}
 
-		
-		
+#if DEBUG
+		private static void MoveFile()
+		{
+			try
+			{
+				File.Copy("./../../settings.ini", "./settings.ini", true);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.Message);
+			}
+		}
+#endif
 	}
 }
