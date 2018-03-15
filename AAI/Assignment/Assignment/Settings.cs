@@ -27,6 +27,8 @@ namespace Assignment
 
 		public int SpatialPartitioningGridSize = 40;
 
+		public int GameTickTime = 50;
+
         public int RandomSeed = 0;
 
         private const string settingsFile = "settings.ini";
