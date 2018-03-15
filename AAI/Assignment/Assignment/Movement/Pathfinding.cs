@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assignment.World;
-using System.Windows.Media;
 using Assignment.Utilities;
 
 namespace Assignment.Movement
@@ -171,7 +170,8 @@ namespace Assignment.Movement
             double AtoBDistance = Utility.Distance(a, b);
             double AtoBAngle = Utility.Direction(a, b);
 
-            var boundBoxWidth = 10; // Width / radius of the agent
+            // TODO retrieve from settings.ini
+            var boundBoxWidth = 5f; // Width / radius of the agent
             // ^-- might need to be passed to the pathfinder function or possible to be retreived by it
             if (a.X == 101 && a.Y == 51)
             {

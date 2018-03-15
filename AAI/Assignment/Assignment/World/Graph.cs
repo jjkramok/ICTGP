@@ -14,6 +14,7 @@ namespace Assignment.World
         private const double NodeSpreadFactor = 50; // Distance between vertices, less means more vertices in the graph.
         private double AmountOfNodesInRow = GameWorld.Instance.Width / NodeSpreadFactor;
         private double AmountOfNodesInCol = GameWorld.Instance.Height / NodeSpreadFactor;
+        // TODO retrieve from settings.ini
         private const double AgentCollisionSpacing = 5f; // Used as a collision circle for all pathfinding agents
         private long nextVertexLabel = 0; // Used to generate vertex label.
         private const int XOffset = 1; // Should at least be one.
@@ -95,7 +96,7 @@ namespace Assignment.World
                     // Only place the vertex if there is enough space for the agent to fit in.
                     Location newVertexLoc = new Location(XOffset + x * step, YOffset + y * step);
 
-                    if (gw.ObstaclesInArea(newVertexLoc, AgentCollisionSpacing).Count > 0)
+                    if (gw.ObstaclesInArea(newVertexLoc, AgentCollisionSpacing, true).Count > 0)
                     {
                         continue;
                         // To save computing power: store result of amoutOfCollisions seperatly or in the Vertex class
