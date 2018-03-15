@@ -66,7 +66,10 @@
     <Compile Include="Movement\PathFollowing.cs" />
     <Compile Include="Movement\Flee.cs" />
     <Compile Include="Movement\ObstacleAvoidance.cs" />
-    <Compile Include="Movement\Pathfinding.cs" />
+    <Compile Include="Movement\Planning\ISearchTimeSliced.cs" />
+    <Compile Include="Movement\Planning\Pathfinding.cs" />
+    <Compile Include="Movement\Planning\PathPlanner.cs" />
+    <Compile Include="Movement\Planning\SearchStatus.cs" />
     <Compile Include="Movement\Seek.cs" />
     <Compile Include="Movement\SteeringForce.cs" />
     <Compile Include="Movement\SteeringForceCalculationType.cs" />
@@ -97,6 +100,7 @@
     <Compile Include="World\GridCell.cs" />
     <Compile Include="World\ImageManager.cs" />
     <Compile Include="World\Location.cs" />
+    <Compile Include="World\PathManager.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

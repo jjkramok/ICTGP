@@ -34,12 +34,12 @@ namespace Assignment.Movement
 
 			if (path == null)
 			{
-                if (Pathfinding.Walkable(entity.Location, Goal))
+                if (Planning.Pathfinding.Walkable(entity.Location, Goal))
                 {
                     path = new List<Location> { Goal };
                 } else
                 {
-                    path = Pathfinding.AStar(GameWorld.Instance.NavGraph.NearestVertexFromLocation(entity.Location), GameWorld.Instance.NavGraph.NearestVertexFromLocation(Goal));
+                    path = Planning.Pathfinding.AStar(GameWorld.Instance.NavGraph.NearestVertexFromLocation(entity.Location), GameWorld.Instance.NavGraph.NearestVertexFromLocation(Goal));
                     if (path == null)
                     {
                         path = new List<Location> { Goal };
@@ -47,7 +47,7 @@ namespace Assignment.Movement
                     else
                     {
                         path.Add(Goal);
-                        path = Pathfinding.FinePathSmoothing(path);
+                        path = Planning.Pathfinding.FinePathSmoothing(path);
                     }
                 }
 				arrive[0].BehaviorDone = false;

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using Assignment.Movement;
+using Assignment.Movement.Planning;
 
 namespace Assignment.Renderer
 {
@@ -190,7 +192,7 @@ namespace Assignment.Renderer
 						goal = vertices[rand.Next(vertices.GetLength(0)), rand.Next(vertices.GetLength(1))];//goal = vertices[1, 15];
 					}
 
-					GameWorld.Instance.PathAlreadyCalculated = Movement.Pathfinding.AStar(start, goal);
+					GameWorld.Instance.PathAlreadyCalculated = Movement.Planning.Pathfinding.AStar(start, goal);
 				}
 
 				List<Location> path = GameWorld.Instance.PathAlreadyCalculated;
@@ -203,7 +205,7 @@ namespace Assignment.Renderer
 				}
 				if (SHOW_SMOOTHED_PATH)
 				{
-					List<Location> smoothedPath = Movement.Pathfinding.FinePathSmoothing(path);
+					List<Location> smoothedPath = Movement.Planning.Pathfinding.FinePathSmoothing(path);
 					p = new Pen(Color.DeepPink, Math.Max(1, (float) GameWorld.Instance.Width / 250));
 					for (int i = 1; i < smoothedPath.Count; i++)
 					{

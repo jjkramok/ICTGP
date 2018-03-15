@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Assignment.World;
 using Assignment.Utilities;
 
-namespace Assignment.Movement
+namespace Assignment.Movement.Planning
 {
     static class Pathfinding
     {
