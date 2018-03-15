@@ -13,10 +13,10 @@ namespace Assignment.Movement
 	public class Arrive : BaseSteering
 	{
 		public Location ArriveLocation;
-		public double DistanceDone = 5;
-		public double MaxSpeed = 0.5;
-		public double Force = 10;
-		public double StopDistance = 3;
+		public double DistanceDone = 10;
+		public double MaxSpeed = 2;
+		public double Force = 50;
+		public double StopDistance = 5;
 
 		public Arrive() : base()
 		{

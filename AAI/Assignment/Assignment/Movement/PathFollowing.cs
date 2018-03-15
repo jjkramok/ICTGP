@@ -8,7 +8,7 @@ namespace Assignment.Movement
 {
 	class PathFollowing : BaseSteering
 	{
-		private Arrive arrive = new Arrive { Force = 50 };
+		private Arrive[] arrive = new Arrive[] { new Arrive { Force = 25 }, new Arrive { MaxSpeed = 50, DistanceDone = 15, StopDistance = 0 } };
 
 		private List<Location> path = null;
 		private Location _goal;
@@ -44,10 +44,13 @@ namespace Assignment.Movement
 					path.Add(Goal);
 					path = Pathfinding.FinePathSmoothing(path);
 				}
-				arrive.BehaviorDone = true;
+				arrive[0].BehaviorDone = false;
+				arrive[1].BehaviorDone = false;
 			}
 
-			if (arrive.BehaviorDone)
+			int checkBehaviourIndex = path.Count >= 2 ? 1 : 0;
+
+			if (arrive[0].BehaviorDone || arrive[1].BehaviorDone)
 			{
 				if (path.Count > 0)
 				{
@@ -59,23 +62,10 @@ namespace Assignment.Movement
 					BehaviorDone = true;
 					return new SteeringForce();
 				}
-				arrive.ArriveLocation = path.First();
-				arrive.BehaviorDone = false;
 			}
-			if(path.Count > 1)
-			{
-				arrive.StopDistance = 0;
-				arrive.DistanceDone = 20;
-				arrive.MaxSpeed = 50;
-			}
-			else
-			{
-				arrive.StopDistance = 3;
-				arrive.DistanceDone = 5;
-				arrive.MaxSpeed = 0.5;
-			}
-
-			return arrive.Calculate(entity);
+			arrive[checkBehaviourIndex].ArriveLocation = path.First();
+			arrive[checkBehaviourIndex].BehaviorDone = false;
+			return arrive[checkBehaviourIndex].Calculate(entity);
 		}
 
 		public override void Render(Graphics g, BaseEntity entity)
