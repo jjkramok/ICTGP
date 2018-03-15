@@ -24,7 +24,7 @@ namespace Assignment.World
 		public List<BaseObstacle> Obstacles { get; private set; }
 		internal List<Location> PathAlreadyCalculated = null; // Used to test pathfinding
 
-		public const int TickDelay = 50;
+		public int TickDelay;
 		public MainForm Screen;
 		public Random Random;
 
@@ -72,9 +72,12 @@ namespace Assignment.World
 		private void PostInitialize()
 		{
 			Settings.LoadSettings();
+			
+			TickDelay = Settings.Instance.GameTickTime;
 
 			Width = Settings.Instance.Width;
 			Height = Settings.Instance.Height;
+
 
 			StateMachine.Initialize();
 
