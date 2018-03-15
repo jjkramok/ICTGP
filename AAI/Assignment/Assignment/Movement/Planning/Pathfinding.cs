@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Assignment.World;
 using Assignment.Utilities;
 
-namespace Assignment.Movement
+namespace Assignment.Movement.Planning
 {
     static class Pathfinding
     {
@@ -171,7 +171,7 @@ namespace Assignment.Movement
             double AtoBDistance = Utility.Distance(a, b);
             double AtoBAngle = Utility.Direction(a, b);
 
-            var boundBoxWidth = Settings.Instance.EntitySize; // Width / radius of the agent
+            var boundBoxWidth = 2 * Settings.Instance.EntitySize; // Width / radius of the agent
             // ^-- might need to be passed to the pathfinder function or possible to be retreived by it
             if (a.X == 101 && a.Y == 51)
             {

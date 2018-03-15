@@ -28,6 +28,7 @@ namespace Assignment
 		public int SpatialPartitioningGridSize = 40;
 
 		public int GameTickTime = 50;
+        public int PathManagerCyclesPerUpdate = 10;
 
         public int RandomSeed = 0;
 

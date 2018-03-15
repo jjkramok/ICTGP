@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Assignment.Movement;
+using Assignment.Movement.Planning;
 using Assignment.Utilities;
 
 namespace Assignment.World
