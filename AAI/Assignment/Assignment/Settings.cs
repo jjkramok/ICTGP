@@ -10,21 +10,24 @@ namespace Assignment
 {
 	public class Settings
 	{
-		public string OmnivoreStartState = "DEBUGSTATE";
-		public string HerbivoreStartState = "DEBUGSTATE";
+        public int Width = 500;
+        public int Height = 500;
+        public double NavigationCoarseness = 50;
 
 		public int OmnivoreCount = 10;
 		public int HerbivoreCount = 10;
 
-		public int RandomSeed = 0;
+        public double EntitySize = 5f;
 
-		public int Width = 500;
-		public int Height = 500;
+        public string OmnivoreStartState = "DEBUGSTATE";
+        public string HerbivoreStartState = "DEBUGSTATE";
 
-		public int RockCount = 5;
+        public int RockCount = 5;
 		public int TreeCount = 1;
 
-		private const string settingsFile = "settings.ini";
+        public int RandomSeed = 0;
+
+        private const string settingsFile = "settings.ini";
 
 		// settings is singleton
 		private static Settings _instance;
