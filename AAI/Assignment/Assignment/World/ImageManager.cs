@@ -23,7 +23,12 @@ namespace Assignment.World
             }
         }
 
-        public ImageManager()
+		public static void Delete()
+		{
+			_instance = null;
+		}
+
+        private ImageManager()
         {
             images = new Dictionary<string, RotatedImageContainer>();
         }

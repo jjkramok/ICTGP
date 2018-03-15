@@ -72,7 +72,9 @@ namespace Assignment.World
 		private void PostInitialize()
 		{
 			Settings.LoadSettings();
-			
+
+			ImageManager.Delete();
+
 			TickDelay = Settings.Instance.GameTickTime;
 
 			Width = Settings.Instance.Width;

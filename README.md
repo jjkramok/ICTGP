@@ -3,8 +3,6 @@ A common repo for all courses of the Games Programming semester
 
 
 ## AAI Final Assignment TODO
-Abstract classes BaseGameEntity and MovingEntity based on the C++-code (from Buckland)
-
 Explorer state / steering behaviour
 
 A* heuristics to Euclidian
