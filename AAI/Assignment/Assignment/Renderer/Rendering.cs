@@ -145,10 +145,10 @@ namespace Assignment.Renderer
 					{
 						if (SHOW_EDGES)
 						{
-							foreach (Graph.Edge e in v.Adj)
+							foreach (Graph.Edge e in v.Adjacent)
 							{
 								Graph.Vertex w = e.Dest;
-								graphics.DrawLine(new Pen(Color.Black, 1), (float) v.Loc.X, (float) v.Loc.Y, (float) w.Loc.X, (float) w.Loc.Y);
+								graphics.DrawLine(new Pen(Color.Black, 1), (float) v.Location.X, (float) v.Location.Y, (float) w.Location.X, (float) w.Location.Y);
 								//if (v.Loc.X > w.Loc.X)
 								//{
 								//    graphics.DrawLine(new Pen(Color.Black, 1), (float)w.Loc.X, (float)w.Loc.Y, (float)w.Loc.X + 5, (float)w.Loc.Y + 5);
@@ -159,14 +159,14 @@ namespace Assignment.Renderer
 						if (SHOW_VERTICES)
 						{
 							float renderedVertexRadius = 1;
-							graphics.DrawEllipse(new Pen(Color.LawnGreen), (float) v.Loc.X - renderedVertexRadius / 2,
-								(float) v.Loc.Y - renderedVertexRadius / 2, renderedVertexRadius, renderedVertexRadius);
+							graphics.DrawEllipse(new Pen(Color.LawnGreen), (float) v.Location.X - renderedVertexRadius / 2,
+								(float) v.Location.Y - renderedVertexRadius / 2, renderedVertexRadius, renderedVertexRadius);
 						}
 						if (SHOW_VERTEX_LABEL)
 						{
 							Brush b = new SolidBrush(Color.DarkBlue);
 							Font f = new Font(SystemFonts.DefaultFont.Name, 6);
-							graphics.DrawString(v.Label, f, b, (float) v.Loc.X, (float) v.Loc.Y);
+							graphics.DrawString(v.Label, f, b, (float) v.Location.X, (float) v.Location.Y);
 						}
 					}
 				}
