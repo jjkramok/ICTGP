@@ -46,7 +46,6 @@ namespace Assignment.Movement
                 // End-case : goal found, retrieve path to goal node.
                 if (v == goal)
                 {
-					Console.WriteLine($"x{v.Loc.X}, y{v.Loc.Y}");
                     return reconstructPath(goal);
                 }
 
@@ -99,8 +98,6 @@ namespace Assignment.Movement
             {
                 path.Insert(0, curr);
             }
-
-            //Console.WriteLine(String.Join(" -> ", path));
             return path;
         }
 
