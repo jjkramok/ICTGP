@@ -174,9 +174,9 @@ namespace Assignment.World
 			return ObjectFinder(GridEntity, location, radius);
 		}
 
-		public List<ObstacleCircle> ObstaclesInArea(Location location, double radius)
+		public List<ObstacleCircle> ObstaclesInArea(Location location, double radius, bool includeObstacleRadius = false)
 		{
-			return ObjectFinder(GridObstacle, location, radius);
+			return ObjectFinder(GridObstacle, location, radius, includeObstacleRadius);
 		}
 
 		public List<Tree> FoodInArea(Location location, double radius)
@@ -184,17 +184,25 @@ namespace Assignment.World
 			return ObjectFinder(GridFood, location, radius);
 		}
 
-		private List<T> ObjectFinder<T>(Grid<T> grid, Location location, double radius) where T : BaseObject
+        private List<T> ObjectFinder<T>(Grid<T> grid, Location location, double radius, bool includeObstacleRadius = false) where T : BaseObject
 		{
 			var searchableObjects = grid.ObjectsNearLocation(location, radius);
 
 			var closeObjects = new List<T>();
 			foreach (var baseobject in searchableObjects)
 			{
-				if (Utility.Distance(baseobject.Location, location) < radius)
+				if (!includeObstacleRadius && Utility.Distance(baseobject.Location, location) < radius)
 				{
 					closeObjects.Add(baseobject);
-				}
+				} 
+                if (includeObstacleRadius && (baseobject.GetType() == typeof(ObstacleCircle)))
+                {
+                    ObstacleCircle objectAsObstacle = (ObstacleCircle)Convert.ChangeType(baseobject, typeof(ObstacleCircle));
+                    if (Utility.Distance(baseobject.Location, location) < radius + objectAsObstacle.Radius)
+                    {
+                        closeObjects.Add(baseobject);
+                    }
+                }
 			}
 
 			return closeObjects;

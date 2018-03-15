@@ -92,28 +92,16 @@ namespace Assignment.World
             {
                 for (int y = 0; y < vertices.GetLength(1); y++)
                 {
-                    Location newVertex = new Location(XOffset + x * step, YOffset + y * step);
+                    // Only place the vertex if there is enough space for the agent to fit in.
+                    Location newVertexLoc = new Location(XOffset + x * step, YOffset + y * step);
 
-                    // Get all obstacles within the immediate area, guess their area / radius
-                    var possibleCloseObstacles = gw.ObstaclesInArea(new Location(XOffset + x * step, YOffset + y * step), AgentCollisionSpacing + BiggestAssumedObstacleRadius);
-
-                    // Now check if any obstacle is too close
-                    bool closeObstacle = false;
-                    foreach (var tentativeObstacle in possibleCloseObstacles)
-                    {
-                        if (Utility.Distance(tentativeObstacle.Location, newVertex) <= AgentCollisionSpacing + tentativeObstacle.Radius)
-                        {
-                            closeObstacle = true;
-                            break;
-                        }
-                    }
-                    if (closeObstacle)
+                    if (gw.ObstaclesInArea(newVertexLoc, AgentCollisionSpacing).Count > 0)
                     {
                         continue;
                         // To save computing power: store result of amoutOfCollisions seperatly or in the Vertex class
                     }
                     
-                    vertices[x, y] = new Vertex(newVertex, nextVertexLabel.ToString());
+                    vertices[x, y] = new Vertex(newVertexLoc, nextVertexLabel.ToString());
                     nextVertexLabel++;
                 }
             }
