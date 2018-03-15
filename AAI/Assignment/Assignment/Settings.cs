@@ -10,8 +10,8 @@ namespace Assignment
 {
 	public class Settings
 	{
-		public string OmnivoreStartState = "wander";
-		public string HerbivoreStartState = "wander";
+		public string OmnivoreStartState = "DEBUGSTATE";
+		public string HerbivoreStartState = "DEBUGSTATE";
 
 		public int OmnivoreCount = 10;
 		public int HerbivoreCount = 10;
@@ -26,6 +26,22 @@ namespace Assignment
 
 		private const string settingsFile = "settings.ini";
 
+		// settings is singleton
+		private static Settings _instance;
+		private Settings() { }
+
+		public static Settings Instance
+		{
+			get
+			{
+				if(_instance == null)
+				{
+					LoadSettings();
+				}
+				return _instance;
+			}
+		}
+
 		public static Settings LoadSettings()
 		{
 			if (!File.Exists(settingsFile))
@@ -33,7 +49,7 @@ namespace Assignment
 				Console.WriteLine("Settings file not found");
 				return new Settings();
 			}
-			var settings = new Settings();
+			_instance = new Settings();
 			var settingsLines = File.ReadAllLines(settingsFile);
 
 			for (var i = 0; i < settingsLines.Length; i++)
@@ -50,14 +66,14 @@ namespace Assignment
 
 				try
 				{
-					settings.SetSetting(line);
+					_instance.SetSetting(line);
 				}
 				catch(Exception e)
 				{
 					Console.WriteLine($"Invalid setting on line {i + 1}, {e.Message}");
 				}
 			}
-			return settings;
+			return _instance;
 		}
 
 		private void SetSetting(string line)
@@ -81,6 +97,7 @@ namespace Assignment
 			}
 		}
 
+		
 		
 	}
 }

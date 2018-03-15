@@ -25,6 +25,7 @@ namespace Assignment.Entity
 		public double MaxSpeed;
 		public double MaxForce;
 		public double DirectionMaxChange = 1;
+		public double SlowDownSpeed = 0.3;
 
 		// State behaviour variables.
 		public string PreviousState;
@@ -34,6 +35,7 @@ namespace Assignment.Entity
 		public double Food = 100;
 		public double QuickEnergy = 100;
 		public double SlowEnergy = 200;
+
 
 
 		public BaseEntity()
@@ -150,7 +152,7 @@ namespace Assignment.Entity
 			QuickEnergy = Utility.BoundValue(QuickEnergy, 0.05, 1);
 
 			// todo nmn
-			Speed = Utility.BoundValueMin(Speed - 0.3, 0);
+			Speed = Utility.BoundValueMin(Speed - SlowDownSpeed, 0);
 			Speed += force.Amount * 0.1;// inertia
 			Speed = Utility.BoundValueMax(Speed, MaxSpeed * QuickEnergy);
 

@@ -65,6 +65,7 @@
 			this.worldPanel.Name = "worldPanel";
 			this.worldPanel.Size = new System.Drawing.Size(804, 450);
 			this.worldPanel.TabIndex = 0;
+			this.worldPanel.Click += new System.EventHandler(this.worldPanel_Click);
 			this.worldPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.worldPanel_Paint);
 			// 
 			// menuStrip
@@ -97,7 +98,7 @@
 			// restartToolStripMenuItem
 			// 
 			this.restartToolStripMenuItem.Name = "restartToolStripMenuItem";
-			this.restartToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.restartToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
 			this.restartToolStripMenuItem.Text = "Restart";
 			this.restartToolStripMenuItem.Click += new System.EventHandler(this.restartToolStripMenuItem_Click);
 			// 
