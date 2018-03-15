@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Assignment.Entity;
 using Assignment.Movement;
 using Assignment.Utilities;
 
@@ -10,23 +9,29 @@ namespace Assignment.World
 	{
 		public Vertex[,] vertices;
 
-        private const double BiggestAssumedObstacleRadius = 30; // TODO possible set to biggest object radius. This variable is used to avoid placing vertices in obstacles and finding obstacles in range.
-        private const double NodeSpreadFactor = 50; // Distance between vertices, less means more vertices in the graph.
-        private double AmountOfNodesInRow = GameWorld.Instance.Width / NodeSpreadFactor;
-        private double AmountOfNodesInCol = GameWorld.Instance.Height / NodeSpreadFactor;
-        private const double AgentCollisionSpacing = 5f; // Used as a collision circle for all pathfinding agents
+        private readonly double NodeSpreadDistance;
+        private readonly double AgentCollisionSpacing; // Used as a collision circle for all pathfinding agents
+        private readonly int AmountOfNodesInRow;
+        private readonly int AmountOfNodesInCol;
         private long nextVertexLabel = 0; // Used to generate vertex label.
         private const int XOffset = 1; // Should at least be one.
         private const int YOffset = 1; // Should at leats be one.
-        private const double CardinalEdgesCost = NodeSpreadFactor;
-        public double DiagonalEdgesCost = Math.Sqrt(Math.Pow(CardinalEdgesCost, 2) * 2); // Negative value disables diagonal edges.
+        private readonly double CardinalEdgesCost;
+        public readonly double DiagonalEdgesCost; // Negative value disables diagonal edges.
 
 		/// <summary>
-		/// Initialize a navMap from point (0, 0)
+		/// Initialize a navMap
 		/// </summary>
 		public Graph()
 		{
-			BuildNavGraph();
+            NodeSpreadDistance = Settings.Instance.NavigationCoarseness;
+            AmountOfNodesInRow = (int) (GameWorld.Instance.Width / NodeSpreadDistance);
+            AmountOfNodesInCol = (int) (GameWorld.Instance.Height / NodeSpreadDistance);
+            AgentCollisionSpacing = Settings.Instance.EntitySize;
+            CardinalEdgesCost = NodeSpreadDistance;
+            DiagonalEdgesCost = Math.Sqrt(Math.Pow(CardinalEdgesCost, 2) * 2);
+
+            BuildNavGraph();
 		}
 
 		private Vertex VertexAtLocation(double x, double y)
@@ -80,12 +85,13 @@ namespace Assignment.World
 		/// </summary>
 		private void BuildNavGraph()
 		{
-			// Clear vertices
-			vertices = new Vertex[(int) AmountOfNodesInRow, (int) AmountOfNodesInCol];
-			GameWorld gw = GameWorld.Instance;
+            
+            // Declare help variables: Distance between vertices, less means more vertices in the graph.
+            double step = Settings.Instance.NavigationCoarseness;
 
-			// Declare help variables
-			double step = NodeSpreadFactor;
+            // Clear vertices
+            GameWorld gw = GameWorld.Instance;
+            vertices = new Vertex[AmountOfNodesInRow, AmountOfNodesInCol];
 
             // Place vertices every step distance in the game world
             for (int x = 0; x < vertices.GetLength(0); x++)
@@ -95,7 +101,7 @@ namespace Assignment.World
                     // Only place the vertex if there is enough space for the agent to fit in.
                     Location newVertexLoc = new Location(XOffset + x * step, YOffset + y * step);
 
-                    if (gw.ObstaclesInArea(newVertexLoc, AgentCollisionSpacing).Count > 0)
+                    if (gw.ObstaclesInArea(newVertexLoc, AgentCollisionSpacing, true).Count > 0)
                     {
                         continue;
                         // To save computing power: store result of amoutOfCollisions seperatly or in the Vertex class
@@ -206,7 +212,7 @@ namespace Assignment.World
                     result += e;
                 return result + "}";
                 */
-				return String.Format("<{0},{1}>", Math.Round(Loc.X / NodeSpreadFactor), Math.Round(Loc.Y / NodeSpreadFactor));
+				return String.Format("<{0},{1}>", Math.Round(Loc.X / Settings.Instance.NavigationCoarseness), Math.Round(Loc.Y / Settings.Instance.NavigationCoarseness));
 			}
 		}
 
