@@ -23,7 +23,7 @@ namespace Assignment.Obstacle
         {
             int size = 10;
 
-            Image sprite = ImageManager.Instance.GetImage(GetType().Name);
+            Image sprite = ImageManager.Instance.GetImage(GetType().Name, Direction);
             if (sprite == null)
             {
                 g.FillEllipse(Brushes.Gray, (int)Location.X - 10, (int)Location.Y - 10, 20, 20);

@@ -10,6 +10,7 @@ namespace Assignment.World
 	{
 		public Vertex[,] vertices;
 
+        private const double BiggestAssumedObstacleRadius = 30; // TODO possible set to biggest object radius. This variable is used to avoid placing vertices in obstacles and finding obstacles in range.
         private const double NodeSpreadFactor = 50; // Distance between vertices, less means more vertices in the graph.
         private double AmountOfNodesInRow = GameWorld.Instance.Width / NodeSpreadFactor;
         private double AmountOfNodesInCol = GameWorld.Instance.Height / NodeSpreadFactor;
@@ -91,15 +92,16 @@ namespace Assignment.World
             {
                 for (int y = 0; y < vertices.GetLength(1); y++)
                 {
-                    int amountOfCollisions = gw.ObstaclesInArea(new Location(XOffset + x * step, YOffset + y * step), AgentCollisionSpacing).Count;
-                    if (amountOfCollisions > 0)
+                    // Only place the vertex if there is enough space for the agent to fit in.
+                    Location newVertexLoc = new Location(XOffset + x * step, YOffset + y * step);
+
+                    if (gw.ObstaclesInArea(newVertexLoc, AgentCollisionSpacing).Count > 0)
                     {
                         continue;
                         // To save computing power: store result of amoutOfCollisions seperatly or in the Vertex class
                     }
                     
-                    Location loc = new Location(XOffset + x * step, YOffset + y * step);
-                    vertices[x, y] = new Vertex(loc, nextVertexLabel.ToString());
+                    vertices[x, y] = new Vertex(newVertexLoc, nextVertexLabel.ToString());
                     nextVertexLabel++;
                 }
             }
@@ -109,13 +111,6 @@ namespace Assignment.World
             {
                 for (int y = 0; y < vertices.GetLength(1); y++)
                 {
-                    int amountOfCollisions = gw.ObstaclesInArea(new Location(XOffset + x * step, YOffset + y * step), AgentCollisionSpacing).Count;
-                    if (amountOfCollisions > 0)
-                    {
-                        continue; //TODO code for edge stitching assumes all slots in vertices[,] are not null, breaking here breaks stuff
-                        // To save computing power: store result of amoutOfCollisions seperatly or in the Vertex class
-                    }
-
                     for (int xx = Math.Max(x - 1, 0); xx < Math.Min(x + 2, vertices.GetLength(0)); xx++)
                     {
                         for (int yy = Math.Max(y - 1, 0); yy < Math.Min(y + 2, vertices.GetLength(1)); yy++)

@@ -58,7 +58,7 @@ namespace Assignment.Renderer
 
 		private static void RenderBackground()
 		{
-			Image texture = ImageManager.Instance.GetImage("grass-background");
+			Image texture = ImageManager.Instance.GetImage("grass-background", 0);
 			if (texture != null)
 			{
 				TextureBrush brush = new TextureBrush(texture, WrapMode.Tile);

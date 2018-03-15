@@ -13,6 +13,8 @@ Only call pathfinding when there is no direct way to your goal (either that or p
 
 Order a Entity to move using pathfinding
 
+Edges occasionally get created whilst it should not (to close to obstacles along the way)
+
 Add omnivore script states
 
 Implement base fuzzy logic classes (see: book and sheets) (leave ones you don't need)

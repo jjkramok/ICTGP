@@ -46,7 +46,6 @@ namespace Assignment.Movement
                 // End-case : goal found, retrieve path to goal node.
                 if (v == goal)
                 {
-					Console.WriteLine($"x{v.Loc.X}, y{v.Loc.Y}");
                     return reconstructPath(goal);
                 }
 
@@ -99,8 +98,6 @@ namespace Assignment.Movement
             {
                 path.Insert(0, curr);
             }
-
-            //Console.WriteLine(String.Join(" -> ", path));
             return path;
         }
 
@@ -188,7 +185,7 @@ namespace Assignment.Movement
             {
                 // Create the current point to be evaluated. It is 'd' distance away from A among the AtoB line.
                 currEval = new Location(a.X + d * Math.Cos(AtoBAngle), a.Y + d * Math.Sin(AtoBAngle));
-                obstacles = GameWorld.Instance.ObstaclesInArea(currEval, boundBoxWidth);
+                obstacles = GameWorld.Instance.ObstaclesInArea(currEval, boundBoxWidth, true);
                 
                 if (obstacles.Count > 0)
                 {
@@ -196,12 +193,12 @@ namespace Assignment.Movement
                 }
             }
             // Check the very last point (b, or destination if you will) to ensure that there is enough space for the entity.
-            obstacles = GameWorld.Instance.ObstaclesInArea(b, boundBoxWidth);
+            //obstacles = GameWorld.Instance.ObstaclesInArea(b, boundBoxWidth);
 
-            if (obstacles.Count > 0)
-            {
-                return false;
-            }
+            //if (obstacles.Count > 0)
+            //{
+            //    return false;
+            //}
             return true;
         }
 

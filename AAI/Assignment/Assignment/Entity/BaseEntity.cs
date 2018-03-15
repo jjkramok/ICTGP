@@ -54,19 +54,16 @@ namespace Assignment.Entity
 
 		public abstract void Update(int tick);
 
-		public virtual void Render(Graphics g)
+		public virtual bool Render(Graphics g)
         {
             int size = 10;
-
-            Image sprite = ImageManager.Instance.GetImage(GetType().Name);
-            if (sprite == null)
-            {
-                g.FillEllipse(Brushes.Blue, (int)Location.X - (size / 2), (int)Location.Y - (size / 2), size, size);
-            }
-            else
+            Image sprite = ImageManager.Instance.GetImage(GetType().Name, Direction);
+            if (sprite != null)
             {
                 g.DrawImage(sprite, (int)Location.X - (size / 2), (int)Location.Y - (size / 2), size, size);
+                return true;
             }
+            return false;
         }
 
 		public void AddBehaviour(BaseSteering behaviour)
