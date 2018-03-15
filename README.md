@@ -7,8 +7,6 @@ Abstract classes BaseGameEntity and MovingEntity based on the C++-code (from Buc
 
 Explorer state / steering behaviour
 
-A* heuristics to Euclidian
-
 Only call pathfinding when there is no direct way to your goal (either that or pathfinding returns path with only the goal node)
 
 Add omnivore script states
