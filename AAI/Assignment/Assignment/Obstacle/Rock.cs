@@ -10,10 +10,13 @@ namespace Assignment.Obstacle
 			CollisionCircles.Add(new ObstacleCircle(Location, 10));
 		}
 
-		public override void Render(Graphics g)
+		public override bool Render(Graphics g)
 		{
-            base.Render(g);
-			//g.FillEllipse(Brushes.Gray, (int) Location.X - 10, (int) Location.Y - 10, 20, 20);
+            if (!base.Render(g))
+            {
+                g.FillEllipse(Brushes.Gray, (int)Location.X - 10, (int)Location.Y - 10, 20, 20);
+            }
+            return true;
         }
 	}
 }

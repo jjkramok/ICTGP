@@ -9,9 +9,9 @@ namespace Assignment.Obstacle
 		{
 		}
 
-		public override void Render(Graphics g)
+		public override bool Render(Graphics g)
 		{
-            base.Render(g);
+            return base.Render(g);
 		}
 	}
 }
