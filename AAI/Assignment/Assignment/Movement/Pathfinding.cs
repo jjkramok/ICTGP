@@ -180,7 +180,11 @@ namespace Assignment.Movement
 
             Location currEval;
             List<Obstacle.ObstacleCircle> obstacles;
-            int step = 5; // distance between each sample point on the line from A to B. Lower distance means more precision.
+            int step = (int) Settings.Instance.EntitySize; // distance between each sample point on the line from A to B. Lower distance means more precision.
+            if (step < 1)
+            {
+                step = 1;
+            }
             for (int d = 0; d <= AtoBDistance; d += step)
             {
                 // Create the current point to be evaluated. It is 'd' distance away from A among the AtoB line.
