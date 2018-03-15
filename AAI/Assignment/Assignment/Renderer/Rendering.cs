@@ -158,7 +158,7 @@ namespace Assignment.Renderer
 						}
 						if (SHOW_VERTICES)
 						{
-							float renderedVertexRadius = 1;
+							float renderedVertexRadius = 1.5f;
 							graphics.DrawEllipse(new Pen(Color.LawnGreen), (float) v.Loc.X - renderedVertexRadius / 2,
 								(float) v.Loc.Y - renderedVertexRadius / 2, renderedVertexRadius, renderedVertexRadius);
 						}
