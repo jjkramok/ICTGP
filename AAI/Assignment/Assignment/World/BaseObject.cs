@@ -16,6 +16,7 @@ namespace Assignment.World
         {
             set
             {
+                // Reminder: direction can still be between 2pi rads and -2pi rads
                 _direction = value;
                 _direction %= 2 * Math.PI;
             }
