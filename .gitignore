@@ -65,3 +65,7 @@ cpp/sjoerd/cpp/.vs/*
 /CG/Sjoerd/CS/CG/_CG.csproj
 /CG/Sjoerd/CS/CG/_CG.sln
 /.gitattributes
+
+# latex
+/AAI/Assignment/Report/report.pdf
+*.synctex.gz

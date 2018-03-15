@@ -1,5 +1,45 @@
 \documentclass{article}
-
+\title{Game AAI Assignment}
+\author{Tim Hintzbergen and Sjoerd Dekker}
+\date{March 2018}
 \begin{document}
-tekst
+   \maketitle
+   \newpage
+   
+   \tableofcontents{}
+   \newpage
+   \section {Introduction}
+   
+   \newpage
+   \section{Steering behaviours}
+   The following steering behaviours are implemented. 
+   \subsection{Simple steering behaviours}
+   \subsubsection {Arrive}
+   The entity will try to go in a straight line to a specified goal. When the entity gets close to the goal the entity will slow down. This behaviour will stop when the entity is on or very near its goal and the current speed of the entity is very low. 
+   \subsubsection {Flee}
+   The entity will try to run away from entities that are the same type as specified. The closer another entity is the more the current entity will try to run away from the other entity. This algoritm will only search in an area, if there are no entities in the area the entity will not try to run away.
+   \subsubsection {Seek}
+   This algoritm has the opposite behaviour from flee. However in this algoritm there is only one entity set to seek. If the specified entity to seek is to far away this behaviour will stop working.
+   \subsubsection {Wander}
+  This algoritm will create a circle in front of the entity, on this circle there is a dot. This dot will move randomly along the circle. The entity will go towards the dot, the farther away the dot is from the entity the more force is applied. 
+  \subsection{Advanced steering behaviours}
+  \subsubsection {Flocking}
+  
+  \subsubsection {Obstacle avoidance}
+  
+  \subsubsection {Path following}
+   This algoritm will create a path to a specified location using the A* algoritm. After the A* algoritm has found a path then this path will be smoothed. When the smoothing is done the agent will follow the path. This is done using the arrive algoritm. 
+   \newpage
+   \section {Path finding}
+   \subsection {Grid}
+   \subsection {A*}
+   \subsection {Time slicing}
+   
+   \newpage
+   \section {States}
+   \subsection {Scripting}
+   
+   \newpage
+   \section {Partitioning}
+   
 \end{document}
