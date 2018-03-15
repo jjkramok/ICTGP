@@ -11,61 +11,61 @@ namespace Assignment.Movement
 
         public static List<Location> AStar(Graph.Vertex start, Graph.Vertex goal)
         {
-            Graph nav = GameWorld.Instance.NavGraph;
-            PriorityQueue<Graph.Vertex> pq = new PriorityQueue<Graph.Vertex>();
+            Graph navigationGraph = GameWorld.Instance.NavGraph;
+            PriorityQueue<Graph.Vertex> priorityQueue = new PriorityQueue<Graph.Vertex>();
 
             // Initialize graph
-            foreach(Graph.Vertex v in nav.vertices)
+            foreach(Graph.Vertex vertex in navigationGraph.vertices)
             {
-                if (v != null)
+                if (vertex != null)
                 {
-                    v.Dist = Double.MaxValue;
-                    v.HDist = Double.MaxValue;
-                    v.Known = false;
+                    vertex.Distance = Double.MaxValue;
+                    vertex.HeuristicDistance = Double.MaxValue;
+                    vertex.Known = false;
                 }
             }
 
             // Add start node to queue
-            pq.Add(start);
-            start.Dist = 0;
-            start.HDist = h(start, goal);
-            start.Prev = null;
+            priorityQueue.Add(start);
+            start.Distance = 0;
+            start.HeuristicDistance = Heuristic(start, goal);
+            start.Previous = null;
 
-            while (!pq.IsEmpty)
+            while (!priorityQueue.IsEmpty)
             {   
-                Graph.Vertex v = pq.Get();
+                Graph.Vertex vertex = priorityQueue.Get();
 
-				if (v.Known)
+				if (vertex.Known)
 				{
 					continue;
 				}
 
-				v.Known = true;
+				vertex.Known = true;
 
                 // End-case : goal found, retrieve path to goal node.
-                if (v == goal)
+                if (vertex == goal)
                 {
                     return reconstructPath(goal);
                 }
 
-                foreach (Graph.Edge e in v.Adj)
+                foreach (Graph.Edge edge in vertex.Adjacent)
                 {
-                    Graph.Vertex w = e.Dest;
+                    Graph.Vertex w = edge.Dest;
                     if (w.Known)
                     {
                         continue; // Already evaluated
                     }
-                    w.HDist = v.Dist + e.Cost + h(w, goal);
-                    pq.Add(w); // Newly discovered node
+                    w.HeuristicDistance = vertex.Distance + edge.Cost + Heuristic(w, goal);
+                    priorityQueue.Add(w); // Newly discovered node
                     
                     // Calculate distance from start till current vertex
-                    double tentative_dist = v.Dist + e.Cost;
+                    double tentative_dist = vertex.Distance + edge.Cost;
 
-                    if (w.Dist > tentative_dist)
+                    if (w.Distance > tentative_dist)
                     {
 						// Current best path
-						w.Prev = v;
-						w.Dist = tentative_dist;
+						w.Previous = vertex;
+						w.Distance = tentative_dist;
 					}
                 }
             }
@@ -73,15 +73,16 @@ namespace Assignment.Movement
         }
 
         // Heuristic for A* based on euclidian distance.
-        private static double h(Graph.Vertex v, Graph.Vertex w)
+        private static double Heuristic(Graph.Vertex from, Graph.Vertex to)
         {
             // Determine which heuristic is to be used based on the fact that diagonal edges are used or not.
             if (GameWorld.Instance.NavGraph.DiagonalEdgesCost >= 0)
             {
-                return Utility.Distance(v.Loc, w.Loc); // euclidian distance
+                return Utility.Distance(from.Location, to.Location); // euclidian distance
             }
-            else {
-                return Math.Abs(v.Loc.X - w.Loc.X) + Math.Abs(v.Loc.Y - w.Loc.Y); // cardinal / manhattan distance
+            else
+			{
+                return Math.Abs(from.Location.X - to.Location.X) + Math.Abs(from.Location.Y - to.Location.Y); // cardinal / manhattan distance
             }
         }
 
@@ -92,10 +93,10 @@ namespace Assignment.Movement
             Graph nav = GameWorld.Instance.NavGraph;
 
             Graph.Vertex curr = goal;
-            path.Insert(0, curr.Loc);
-            while ((curr = curr.Prev) != null)
+            path.Insert(0, curr.Location);
+            while ((curr = curr.Previous) != null)
             {
-                path.Insert(0, curr.Loc);
+                path.Insert(0, curr.Location);
             }
             return path;
         }

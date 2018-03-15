@@ -40,7 +40,7 @@ namespace Assignment.World
 			{
 				double xDifference = x * 0.000001;
 				double yDifference = y * 0.000001;
-				if (Math.Abs(v.Loc.X - x) <= xDifference && Math.Abs(v.Loc.Y - y) <= yDifference)
+				if (Math.Abs(v.Location.X - x) <= xDifference && Math.Abs(v.Location.Y - y) <= yDifference)
 				{
 					return v;
 				}
@@ -67,7 +67,7 @@ namespace Assignment.World
 					if (vertices[x, y] == null)
 						continue;
 
-					var distance = Utility.Distance(loc, vertices[x, y].Loc);
+					var distance = Utility.Distance(loc, vertices[x, y].Location);
 					if (distance < nearestDistance)
 					{
 						nearestDistance = distance;
@@ -129,17 +129,17 @@ namespace Assignment.World
                                     continue;
                                 }
 
-                                Location a = new Location(vertices[x, y].Loc.X, vertices[x, y].Loc.Y);
-                                Location b = new Location(vertices[xx, yy].Loc.X, vertices[xx, yy].Loc.Y);
+                                Location a = new Location(vertices[x, y].Location.X, vertices[x, y].Location.Y);
+                                Location b = new Location(vertices[xx, yy].Location.X, vertices[xx, yy].Location.Y);
                                 // Add diagonal edges when enabled (non-neg. cost) and when not on the same cardinal axis as the src vertex.
                                 if (DiagonalEdgesCost >= 0 && (xx != x && yy != y) && Pathfinding.Walkable(a, b))
                                 {
-                                    vertices[x, y].Adj.Add(new Edge(vertices[xx, yy], DiagonalEdgesCost));
+                                    vertices[x, y].Adjacent.Add(new Edge(vertices[xx, yy], DiagonalEdgesCost));
                                 }
 
                                 // Add cardinal edges when dest is on the same cardinal axis as the src vertex.
                                 if ((xx == x || yy == y) && Pathfinding.Walkable(a, b)) {
-                                    vertices[x, y].Adj.Add(new Edge(vertices[xx, yy], CardinalEdgesCost));
+                                    vertices[x, y].Adjacent.Add(new Edge(vertices[xx, yy], CardinalEdgesCost));
                                 }
                             }
                         }
@@ -158,48 +158,47 @@ namespace Assignment.World
 		public class Vertex : IComparable<Vertex>
 		{
 			public string Label;
-			public List<Edge> Adj;
-			public Vertex Prev;
-			public double Dist;
-			public double HDist;
+			public List<Edge> Adjacent;
+			public Vertex Previous;
+			public double Distance;
+			public double HeuristicDistance;
 			public bool Known;
-			public Location Loc { get; set; }
-			public string ExtraInfo { get; set; } //TODO node should be able to contain items or other objects (change type later)
+			public Location Location { get; set; }
 
-			public Vertex(Location loc, string label)
+			public Vertex(Location location, string label)
 			{
 				Label = label;
-				Adj = new List<Edge>();
-				Prev = null;
-				Loc = loc;
-				Dist = -1;
+				Adjacent = new List<Edge>();
+				Previous = null;
+				Location = location;
+				Distance = -1;
 				Known = false;
 			}
 
 			public Vertex(double x, double y, string label)
 			{
 				Label = label;
-				Adj = new List<Edge>();
-				Prev = null;
-				Loc = new Location(x, y);
-				Dist = -1;
+				Adjacent = new List<Edge>();
+				Previous = null;
+				Location = new Location(x, y);
+				Distance = -1;
 				Known = false;
 			}
 
-			public bool Add(Edge e)
+			public bool Add(Edge edge)
 			{
-				foreach (Edge f in Adj)
+				foreach (Edge f in Adjacent)
 				{
-					if (f.Dest == e.Dest)
+					if (f.Dest == edge.Dest)
 						return false;
 				}
-				Adj.Add(e);
+				Adjacent.Add(edge);
 				return true;
 			}
 
 			public int CompareTo(Vertex v)
 			{
-				return (int) (HDist - v.HDist);
+				return (int) (HeuristicDistance - v.HeuristicDistance);
 			}
 
 			public override string ToString()
@@ -212,7 +211,7 @@ namespace Assignment.World
                     result += e;
                 return result + "}";
                 */
-				return String.Format("<{0},{1}>", Math.Round(Loc.X / Settings.Instance.NavigationCoarseness), Math.Round(Loc.Y / Settings.Instance.NavigationCoarseness));
+				return String.Format("<{0},{1}>", Math.Round(Location.X / Settings.Instance.NavigationCoarseness), Math.Round(Location.Y / Settings.Instance.NavigationCoarseness));
 			}
 		}
 

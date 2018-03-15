@@ -202,10 +202,10 @@ namespace Assignment.Entity
 			}
 
 			while (Math.Abs(force.Direction - (Direction + Math.PI * 2)) < Math.Abs(force.Direction - Direction))
-				Direction += Math.PI * 2;
+				force.Direction -= Math.PI * 2;
 
 			while (Math.Abs(force.Direction - (Direction - Math.PI * 2)) < Math.Abs(force.Direction - Direction))
-				Direction -= Math.PI * 2;
+				force.Direction += Math.PI * 2;
 
 			var directionChangeMax = DirectionMaxChange * 1 / Speed;
 			var directionDiff = force.Direction - Direction;

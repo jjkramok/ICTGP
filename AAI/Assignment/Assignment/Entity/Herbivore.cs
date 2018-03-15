@@ -24,13 +24,13 @@ namespace Assignment.Entity
             { 
                 int size = 10;
                 g.FillEllipse(Brushes.Blue, (int)Location.X - (size / 2), (int)Location.Y - (size / 2), size, size);
-            }
 
-            int x = (int)(Location.X + (Math.Cos(Direction) * 30));
-            int y = (int)(Location.Y + (Math.Sin(Direction) * 30));
+				int x = (int) (Location.X + (Math.Cos(Direction) * 30));
+				int y = (int) (Location.Y + (Math.Sin(Direction) * 30));
 
-            g.DrawLine(Pens.Blue, (int)Location.X, (int)Location.Y, x, y);
-            return true;
+				g.DrawLine(Pens.Blue, (int) Location.X, (int) Location.Y, x, y);
+			}
+			return true;
         }
 
 		public override void Update(int tick)
