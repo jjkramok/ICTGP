@@ -276,5 +276,18 @@ namespace Assignment.Renderer
 		}
 
 		#endregion
+
+		private void worldPanel_Click(object sender, EventArgs e)
+		{
+			var clickEvent = (MouseEventArgs) e; 
+			var world = GameWorld.Instance;
+			var goal = new Location((double)clickEvent.X / worldPanel.Width * world.Width, (double)clickEvent.Y / worldPanel.Height * world.Width);
+
+			foreach(var entity in world.Entities)
+			{
+				entity.RemoveBehaviour(typeof(PathFollowing));
+				entity.AddBehaviour(new PathFollowing { Goal = goal });
+			}
+		}
 	}
 }

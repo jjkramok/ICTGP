@@ -7,18 +7,28 @@ import ('Assignment.Utilities')
 
 function enter(entity, world)
 	local pathFollowing = PathFollowing()
-	local trees = world.Ob
 
-	pathFollowing.Goal = Location(500, 500)
-	
-	entity:AddBehaviour(pathFollowing)
+	local size = 50
+	local trees = world:FoodInArea(entity.Location, size)
+	while trees.Count == 0 and size < 5000 do
+		Console:WriteLine()
+		size = size + 50
+		trees = world:FoodInArea(entity.Location, size)
+	end
+
+	if trees.Count > 0 then
+		entity:AddBehaviour(pathFollowing)
+	else
+		Console:WriteLine()
+		entity:AddBehaviour(Wander())
+	end
 	entity:AddBehaviour(ObstacleAvoidance())
 end
 
 function execute(entity, world)
 	entity.SlowEnergy = entity.SlowEnergy - 1
-	entity.QuickEnergy = entity.QuickEnergy + 0.01
-	entity.Food = entity.Food - 0.5
+	entity.QuickEnergy = entity.QuickEnergy - 0.001
+	entity.Food = entity.Food - 0.3
 
 	local nearEntities = world:EntitiesInArea(entity.Location, 100)
 	for i=0, nearEntities.Count - 1 do 

@@ -71,24 +71,24 @@ namespace Assignment.World
 
 		private void PostInitialize()
 		{
-			var settings = Settings.LoadSettings();
+			Settings.LoadSettings();
 
-			Width = settings.Width;
-			Height = settings.Height;
+			Width = Settings.Instance.Width;
+			Height = Settings.Instance.Height;
 
 			StateMachine.Initialize();
 
-			if(settings.RandomSeed != 0)
-				Random = new Random(settings.RandomSeed);
+			if(Settings.Instance.RandomSeed != 0)
+				Random = new Random(Settings.Instance.RandomSeed);
 			else
 				Random = new Random();
 
 			Obstacles = new List<BaseObstacle>();
-			for (int i = 0; i < settings.RockCount; i++)
+			for (int i = 0; i < Settings.Instance.RockCount; i++)
 			{
 				Obstacles.Add(new Rock(new Location(Random.Next((int) Width), Random.Next((int) Height)), 30));
 			}
-			for (int i = 0; i < settings.TreeCount; i++)
+			for (int i = 0; i < Settings.Instance.TreeCount; i++)
 			{
 				Obstacles.Add(new Tree(new Location(Random.Next((int) Width), Random.Next((int) Height)), 30));
 			}
@@ -98,14 +98,14 @@ namespace Assignment.World
 			StoneEdge();
 
 			Entities = new List<BaseEntity>();
-			for (int i = 0; i < settings.HerbivoreCount; i++)
+			for (int i = 0; i < Settings.Instance.HerbivoreCount; i++)
 			{
-				Entities.Add(new Herbivore { State = settings.HerbivoreStartState,  Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(Random.Next(40, (int) Width - 40), Random.Next(40, (int) Height - 40)) });
+				Entities.Add(new Herbivore { State = Settings.Instance.HerbivoreStartState,  Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(Random.Next(40, (int) Width - 40), Random.Next(40, (int) Height - 40)) });
 			}
 
-			for (int i = 0; i < settings.OmnivoreCount; i++)
+			for (int i = 0; i < Settings.Instance.OmnivoreCount; i++)
 			{
-				Entities.Add(new Omnivore { State = settings.OmnivoreStartState, Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(Random.Next(40, (int) Width - 40), Random.Next(40, (int) Height - 40)) });
+				Entities.Add(new Omnivore { State = Settings.Instance.OmnivoreStartState, Direction = Math.PI * 2 * Random.NextDouble(), Location = new Location(Random.Next(40, (int) Width - 40), Random.Next(40, (int) Height - 40)) });
 			}
 
 			InitGrids();
