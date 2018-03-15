@@ -87,6 +87,8 @@ namespace Assignment.Movement
 
 		public override void Render(Graphics g, BaseEntity entity)
 		{
+			if (avoidedObstacles == null) return;
+
 			foreach(var obstacle in avoidedObstacles)
 			{
 				g.DrawLine(Pens.DarkRed, (int) entity.Location.X, (int) entity.Location.Y, (int) obstacle.Location.X, (int) obstacle.Location.Y);

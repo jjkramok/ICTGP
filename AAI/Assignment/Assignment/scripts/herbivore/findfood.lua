@@ -11,7 +11,6 @@ function enter(entity, world)
 	local size = 50
 	local trees = world:FoodInArea(entity.Location, size)
 	while trees.Count == 0 and size < 5000 do
-		Console:WriteLine()
 		size = size + 50
 		trees = world:FoodInArea(entity.Location, size)
 	end
@@ -19,7 +18,6 @@ function enter(entity, world)
 	if trees.Count > 0 then
 		entity:AddBehaviour(pathFollowing)
 	else
-		Console:WriteLine()
 		entity:AddBehaviour(Wander())
 	end
 	entity:AddBehaviour(ObstacleAvoidance())

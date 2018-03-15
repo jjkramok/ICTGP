@@ -10,18 +10,19 @@ namespace Assignment.World
 {
 	public class Grid<T> where T : BaseObject
 	{
-		public readonly int CellHeight = 20;
-		public readonly int CellWidth = 20;
+		public readonly int CellSize;
 
 		public readonly int GridWidth;
 		public readonly int GridHeight;
 
 		public readonly GridCell<T>[,] GridCells;
 
-		public Grid()
+		public Grid(int cellSize = 20)
 		{
-			GridWidth = (int) Math.Ceiling((double) GameWorld.Instance.Width / CellWidth);
-			GridHeight = (int) Math.Ceiling((double) GameWorld.Instance.Height / CellHeight);
+			CellSize = cellSize;
+
+			GridWidth = (int) Math.Ceiling((double) GameWorld.Instance.Width / CellSize);
+			GridHeight = (int) Math.Ceiling((double) GameWorld.Instance.Height / CellSize);
 
 			GridCells = new GridCell<T>[GridWidth, GridHeight];
 			for (var x = 0; x < GridWidth; x++)
@@ -46,8 +47,8 @@ namespace Assignment.World
 		public List<T> ObjectsNearLocation(Location location, double distance)
 		{
 			var centerCell = GetGridCellForLocation(location);
-			var cellDistanceX = (int) Math.Floor(distance / CellWidth) + 1;
-			var cellDistanceY = (int) Math.Floor(distance / CellHeight) + 1;
+			var cellDistanceX = (int) Math.Floor(distance / CellSize) + 1;
+			var cellDistanceY = (int) Math.Floor(distance / CellSize) + 1;
 
 			List<T> objects = new List<T>();
 
@@ -76,8 +77,8 @@ namespace Assignment.World
 
 		private Tuple<int, int> GetGridCellForLocation(Location location)
 		{
-			int cellX = (int) (location.X / CellWidth);
-			int cellY = (int) (location.Y / CellHeight);
+			int cellX = (int) (location.X / CellSize);
+			int cellY = (int) (location.Y / CellSize);
 
 			return new Tuple<int, int>(cellX, cellY);
 		}

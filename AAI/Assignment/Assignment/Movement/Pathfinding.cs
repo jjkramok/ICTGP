@@ -10,7 +10,7 @@ namespace Assignment.Movement
     {
 		public static bool PathSmoothing = true;
 
-        public static List<Graph.Vertex> AStar(Graph.Vertex start, Graph.Vertex goal)
+        public static List<Location> AStar(Graph.Vertex start, Graph.Vertex goal)
         {
             Graph nav = GameWorld.Instance.NavGraph;
             PriorityQueue<Graph.Vertex> pq = new PriorityQueue<Graph.Vertex>();
@@ -87,27 +87,27 @@ namespace Assignment.Movement
         }
 
         // Reconstructs a path from graph explored by A*
-        private static List<Graph.Vertex> reconstructPath(Graph.Vertex goal)
+        private static List<Location> reconstructPath(Graph.Vertex goal)
         {
-            List<Graph.Vertex> path = new List<Graph.Vertex>();
+            List<Location> path = new List<Location>();
             Graph nav = GameWorld.Instance.NavGraph;
 
             Graph.Vertex curr = goal;
-            path.Insert(0, curr);
+            path.Insert(0, curr.Loc);
             while ((curr = curr.Prev) != null)
             {
-                path.Insert(0, curr);
+                path.Insert(0, curr.Loc);
             }
             return path;
         }
 
-        public static List<Graph.Vertex> RoughPathSmoothing(List<Graph.Vertex> path)
+        public static List<Location> RoughPathSmoothing(List<Location> path)
         {
             Console.WriteLine("RoughPathSmoothing not implemented -> calling FinePathSmoothing instead");
             return FinePathSmoothing(path);
         }
 
-        public static List<Graph.Vertex> FinePathSmoothing(List<Graph.Vertex> path)
+        public static List<Location> FinePathSmoothing(List<Location> path)
         {
 			if (!PathSmoothing)
 			{
@@ -120,10 +120,10 @@ namespace Assignment.Movement
             }
 
             // Using Erik's suggestion - Whilst smoothing always start checking from the goal node and move down towards the start node and return the first viable smoothing option.
-            List<Graph.Vertex> smoothedPath = new List<Graph.Vertex>();
+            List<Location> smoothedPath = new List<Location>();
             int i = 0;
-            Graph.Vertex start = path[i];
-            Graph.Vertex eval; // Node currently being evaluated by the algorithm
+            Location start = path[i];
+            Location eval; // Node currently being evaluated by the algorithm
             bool smoothed = false;
             
             while (true)
@@ -132,7 +132,7 @@ namespace Assignment.Movement
                 for (int j = path.Count - 1; j > i + 1; j--)
                 {
                     eval = path[j];
-                    if (Walkable(start.Loc, eval.Loc))
+                    if (Walkable(start, eval))
                     {
                         // We found the best smoothing for our two nodes, save it.
                         smoothedPath.Add(start);
