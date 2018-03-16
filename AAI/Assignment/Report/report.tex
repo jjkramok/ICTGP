@@ -7,10 +7,13 @@
    \newpage
    
    \tableofcontents{}
+   %-------------------------------------------------------------------------------------------------------------------------------------------------------
    \newpage
    \section {Introduction}
-   
+   Something about animals and stuff
    \newpage
+   
+   %-------------------------------------------------------------------------------------------------------------------------------------------------------
    \section{Steering behaviours}
    The following steering behaviours are implemented. 
    \subsection{Simple steering behaviours}
@@ -24,22 +27,39 @@
   This algoritm will create a circle in front of the entity, on this circle there is a dot. This dot will move randomly along the circle. The entity will go towards the dot, the farther away the dot is from the entity the more force is applied. 
   \subsection{Advanced steering behaviours}
   \subsubsection {Flocking}
-  
+  First all entities of the same type are searched in a radius around the current entity, exluding itself. The current entity will do the following three behaviours: 
+  \begin{itemize}
+  \item Alignment: the entity will calculate the average direction off all the entities in the area. After this the entity will try to have the same direction as the average.
+  \item Cohesion: the entity will try to go towards the average location of all the entities in the area.
+  \item Separation: the entity  will try to go away from all the entities in the area. 
+  \end{itemize}
   \subsubsection {Obstacle avoidance}
   
   \subsubsection {Path following}
    This algoritm will create a path to a specified location using the A* algoritm. After the A* algoritm has found a path then this path will be smoothed. When the smoothing is done the agent will follow the path. This is done using the arrive algoritm. 
    \newpage
+   
+   %-------------------------------------------------------------------------------------------------------------------------------------------------------
    \section {Path finding}
    \subsection {Grid}
    \subsection {A*}
    \subsection {Time slicing}
    
-   \newpage
+ 
+   \newpage   
+   %-------------------------------------------------------------------------------------------------------------------------------------------------------
    \section {States}
+   
    \subsection {Scripting}
    
    \newpage
+   %-------------------------------------------------------------------------------------------------------------------------------------------------------
    \section {Partitioning}
-   
+   The world is split into multiple cells. These cells are layed out in a grid pattern. The size of the cells can be set in the settings.ini file. An entity is always in one of these cells. When an entity moves the corrresponding cell in which the entity is located is recalculated. Searching for entities in an area works in the following manner (the area to search in is always round):
+   \begin{enumerate}
+   \item Calculate which cells contain some of the area of the search circle.
+   \item Get all the entities from the cells in step 1.
+   \item for every entity calculate the distance from the center of the circle, if this is more than the radius of the circle then remove this entity.
+   \end{enumerate}
+   The cells can be rendered to the screen by clicking the "spatialPartitioning Grid" option under the "view" button. 
 \end{document}

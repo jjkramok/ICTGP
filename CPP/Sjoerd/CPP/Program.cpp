@@ -4,13 +4,22 @@
 #include <string>
 #include "file/fileio.h"
 #include "templates/stack.h"
+#include "testtentatmen\BinarySearchTree.h"
+#include "testtentatmen\file.h"
 
 void testFile();
 void testTemplate();
+void testTentamen();
 
 int main() {
 
-	std::cout << "hello World";
+	std::cout << "hello World" << std::endl;
+	testTentamen();
+
+	std::string s;
+	std::cin >> s;
+
+	return 0;
 
 	testoverload();
 
@@ -18,10 +27,7 @@ int main() {
 
 	testTemplate();
 
-	std::string s;
-	std::cin >> s;
-
-	return 0;
+	
 }
 
 
@@ -43,4 +49,17 @@ void testTemplate() {
 	stack.add(3);
 	std::cout << stack.pop() << std::endl;
 	std::cout << stack.pop() << std::endl;
+}
+
+void testTentamen() {
+	BinarySearchTree<int> bst;
+	bst.insert(3);
+	bst.insert(5);
+	bst.insert(5);
+	bst.insert(1);
+	bst.traverse();
+
+	std::cout << "file ------------------" << std::endl;
+
+	std::cout << "total: " << readFile("sample.txt") << std::endl;
 }
