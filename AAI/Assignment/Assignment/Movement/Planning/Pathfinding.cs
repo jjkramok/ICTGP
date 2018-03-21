@@ -87,7 +87,7 @@ namespace Assignment.Movement.Planning
         }
 
         // Reconstructs a path from graph explored by A*
-        private static List<Location> reconstructPath(Graph.Vertex goal)
+        public static List<Location> reconstructPath(Graph.Vertex goal)
         {
             List<Location> path = new List<Location>();
             Graph nav = GameWorld.Instance.NavGraph;

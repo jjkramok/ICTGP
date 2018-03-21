@@ -66,6 +66,7 @@
     <Compile Include="Movement\PathFollowing.cs" />
     <Compile Include="Movement\Flee.cs" />
     <Compile Include="Movement\ObstacleAvoidance.cs" />
+    <Compile Include="Movement\Planning\AStarTimeSliced.cs" />
     <Compile Include="Movement\Planning\ISearchTimeSliced.cs" />
     <Compile Include="Movement\Planning\Pathfinding.cs" />
     <Compile Include="Movement\Planning\PathPlanner.cs" />

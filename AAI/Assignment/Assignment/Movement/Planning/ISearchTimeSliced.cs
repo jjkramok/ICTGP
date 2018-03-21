@@ -17,6 +17,7 @@ namespace Assignment.Movement.Planning
         List<World.Graph.Edge> GetSPT();
 
         double CostToTarget();
+        double HeuristicCostToTarget();
 
         /// <summary>
         /// Returns final path to the goal when <see="CycleOnce()"/> returns a success
