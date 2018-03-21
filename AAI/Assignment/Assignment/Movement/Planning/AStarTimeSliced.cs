@@ -11,22 +11,27 @@ namespace Assignment.Movement.Planning
         private Graph NavigationGraph;
         private PriorityQueue<Graph.Vertex> PriorityQueue;
         private bool GoalAlreadyReached = false;
+        private AStarTSNode[,] NodesInfo;
 
         public AStarTimeSliced(Graph.Vertex start, Graph.Vertex goal)
         {
-            NavigationGraph = new Graph();//GameWorld.Instance.NavGraph;
+            NavigationGraph = GameWorld.Instance.NavGraph; //new Graph();
+            // TODO rework to use the prime NavGraph (remove NearestVertex calls etc.)
             Start = NavigationGraph.NearestVertexFromLocation(start.Location);
             Goal = NavigationGraph.NearestVertexFromLocation(goal.Location);
             PriorityQueue = new PriorityQueue<World.Graph.Vertex>();
+            int nodesInARow = GameWorld.Instance.NavGraph.AmountOfNodesInRow;
+            int nodesInACol = GameWorld.Instance.NavGraph.AmountOfNodesInCol;
 
             // Initialize graph
-            foreach (Graph.Vertex vertex in NavigationGraph.vertices)
+            // TODO use Sjoerds approach (See keep)
+            for (int x = 0; x < nodesInARow; x++)
             {
-                if (vertex != null)
+                for (int y = 0; y < nodesInACol; y++)
                 {
-                    vertex.Distance = Double.MaxValue;
-                    vertex.HeuristicDistance = Double.MaxValue;
-                    vertex.Known = false;
+                    AStarTSNode nodeInfo = new AStarTSNode();
+                    nodeInfo.IsNullInNavGraph = NavigationGraph.vertices[x, y] == null;
+                    NodesInfo[x, y] = nodeInfo;
                 }
             }
 
@@ -122,6 +127,23 @@ namespace Assignment.Movement.Planning
         public List<Graph.Edge> GetSPT()
         {
             throw new NotImplementedException();
+        }
+
+        class AStarTSNode
+        {
+            internal bool Known;
+            internal double Distance;
+            internal double HDistance;
+            internal bool IsNullInNavGraph;
+            internal AStarTSNode Prev;
+
+            public AStarTSNode()
+            {
+                Known = false;
+                Distance = Double.MaxValue;
+                HDistance = Double.MaxValue;
+                Prev = null;
+            }
         }
     }
 }
