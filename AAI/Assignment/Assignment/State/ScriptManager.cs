@@ -15,8 +15,6 @@ namespace Assignment.State
 		public static readonly string SCRIPTPATH = Path.Combine(".", "scripts");
 		public const string SCRIPTEXTENSION = ".lua";
 
-		private static Dictionary<string, string> loadedFiles = new Dictionary<string, string>();
-
 		public static Lua LoadScript(string scriptName)
 		{
 			try
@@ -62,19 +60,16 @@ namespace Assignment.State
 
 		private static string OpenFile(string scriptName)
 		{
-			if (!loadedFiles.ContainsKey(scriptName))
+			try
 			{
-				try
-				{
-					string text = File.ReadAllText(scriptName);
-					loadedFiles.Add(scriptName, text);
-				}
-				catch
-				{
-					return "";
-				}
+				return File.ReadAllText(scriptName);
 			}
-			return loadedFiles[scriptName];
+			catch(Exception e)
+			{
+				Console.WriteLine($"Could not open script: {scriptName}");
+				Console.WriteLine(e.Message);
+				return "";
+			}
 		}
 	}
-}
+}	

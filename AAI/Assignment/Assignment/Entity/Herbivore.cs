@@ -32,11 +32,5 @@ namespace Assignment.Entity
 			}
 			return true;
         }
-
-		public override void Update(int tick)
-		{
-			StateMachine.Execute(this);
-			CalculateSteeringForce();
-		}
 	}
 }

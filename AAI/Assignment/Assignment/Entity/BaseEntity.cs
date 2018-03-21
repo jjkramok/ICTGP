@@ -52,7 +52,11 @@ namespace Assignment.Entity
 			PreviousState = "";
 		}
 
-		public abstract void Update(int tick);
+		public void Update(long tick)
+		{
+			StateMachine.Execute(this);
+			CalculateSteeringForce();
+		}
 
 		public virtual bool Render(Graphics g)
         {
