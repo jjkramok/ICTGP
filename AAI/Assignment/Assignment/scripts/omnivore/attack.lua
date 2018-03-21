@@ -5,9 +5,8 @@ import ('Assignment.Entity')
 import ('Assignment.World')
 
 function enter(entity, world)
-	local path = PathFollowing()
-	path.Goal = Location(400, 500)
-
+	local Goal = Location(400, 500)
+	local path = PathFollowing(Goal)
 
 	entity:AddBehaviour(ObstacleAvoidance())
 	entity:AddBehaviour(path)

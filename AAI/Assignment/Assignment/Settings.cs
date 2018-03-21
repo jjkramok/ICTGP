@@ -26,9 +26,10 @@ namespace Assignment
 		public int TreeCount = 1;
 
 		public int SpatialPartitioningGridSize = 40;
+        public bool UseTimeSlicedNavigation = false;
 
-		public int GameTickTime = 50;
-        public int PathManagerCyclesPerUpdate = 10;
+        public int GameTickTime = 50;
+        public int MaxPathfindingCyclesPerTick = 100;
 
         public int RandomSeed = 0;
 

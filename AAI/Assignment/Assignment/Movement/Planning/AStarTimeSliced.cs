@@ -14,9 +14,9 @@ namespace Assignment.Movement.Planning
 
         public AStarTimeSliced(Graph.Vertex start, Graph.Vertex goal)
         {
-            Start = start;
-            Goal = goal;
-            NavigationGraph = GameWorld.Instance.NavGraph;
+            NavigationGraph = new Graph();//GameWorld.Instance.NavGraph;
+            Start = NavigationGraph.NearestVertexFromLocation(start.Location);
+            Goal = NavigationGraph.NearestVertexFromLocation(goal.Location);
             PriorityQueue = new PriorityQueue<World.Graph.Vertex>();
 
             // Initialize graph
@@ -31,10 +31,10 @@ namespace Assignment.Movement.Planning
             }
 
             // Add start node to queue
-            PriorityQueue.Add(start);
-            start.Distance = 0;
-            start.HeuristicDistance = Heuristic(start, goal);
-            start.Previous = null;
+            Start.Distance = 0;
+            Start.HeuristicDistance = Heuristic(Start, Goal);
+            Start.Previous = null;
+            PriorityQueue.Add(Start);
         }
 
         public SearchStatus CycleOnce()
@@ -46,6 +46,11 @@ namespace Assignment.Movement.Planning
                 if (vertex.Known)
                 {
                     return SearchStatus.TARGET_NOT_FOUND; // Node already evaluated. TODO Maybe call function again since we didn't really do anything this cycle?
+                }
+
+                if (vertex.Distance == -1 || vertex.HeuristicDistance == -1)
+                {
+                    Console.WriteLine("Vertex {0} has negative distance!", vertex);
                 }
 
                 vertex.Known = true;
@@ -81,7 +86,7 @@ namespace Assignment.Movement.Planning
             if (GoalAlreadyReached) {
                 return SearchStatus.TARGET_FOUND;
             } else {
-                return SearchStatus.SEARCH_INCOMPLETED; // Could not reach goal.
+                return SearchStatus.TARGET_NOT_FOUND;
             }
         }
 

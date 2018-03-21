@@ -18,9 +18,9 @@ namespace Assignment.Movement
 			set { _goal = value; path = null; }
 		}
 
-
-		public PathFollowing() : base()
+		public PathFollowing(Location goal) : base()
 		{
+            Goal = goal;
 			Priority = 0.8;
 		}
 

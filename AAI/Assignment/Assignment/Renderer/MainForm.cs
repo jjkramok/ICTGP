@@ -186,14 +186,31 @@ namespace Assignment.Renderer
 			{
 				if (pathFollowingToolStripMenuItem.Checked)
 				{
-					var behaviour = new PathFollowing();
-					behaviour.Goal = new Location(world.Random.Next(5, (int) world.Width - 5), world.Random.Next(5, (int) world.Height - 5));
+                    Location goal = new Location(world.Random.Next(5, (int)world.Width - 5), world.Random.Next(5, (int)world.Height - 5));
+                    BaseSteering behaviour;
 
-					entity.AddBehaviour(behaviour);
+                    if (Settings.Instance.UseTimeSlicedNavigation)
+                    {
+                        behaviour = new PathFollowingTimeSliced(goal);
+                    }
+                    else
+                    {
+                        behaviour = new PathFollowing(goal);
+                    }
+
+                    entity.AddBehaviour(behaviour);
 				}
 				else
 				{
-					entity.RemoveBehaviour(typeof(PathFollowing));
+                    if (Settings.Instance.UseTimeSlicedNavigation)
+                    {
+                        entity.RemoveBehaviour(typeof(PathFollowingTimeSliced));
+                    }
+                    else
+                    {
+                        entity.RemoveBehaviour(typeof(PathFollowing));
+                    }
+                    
 				}
 			}
 		}
@@ -284,10 +301,17 @@ namespace Assignment.Renderer
 			var world = GameWorld.Instance;
 			var goal = new Location((double)clickEvent.X / worldPanel.Width * world.Width, (double)clickEvent.Y / worldPanel.Height * world.Width);
 
-			foreach(var entity in world.Entities)
-			{
-				entity.RemoveBehaviour(typeof(PathFollowing));
-				entity.AddBehaviour(new PathFollowing { Goal = goal });
+            foreach (var entity in world.Entities)
+            {
+                if (Settings.Instance.UseTimeSlicedNavigation)
+                {
+                    entity.RemoveBehaviour(typeof(PathFollowingTimeSliced));
+                    entity.AddBehaviour(new PathFollowingTimeSliced(goal));
+                } else
+                {
+                    entity.RemoveBehaviour(typeof(PathFollowing));
+                    entity.AddBehaviour(new PathFollowing(goal));
+                }
 			}
 		}
 	}

@@ -25,7 +25,7 @@ namespace Assignment.World
         public PathManager()
         {
             SearchRequests = new HashSet<PathPlanner>();
-            NumSearchCyclesPerUpdate = Settings.Instance.PathManagerCyclesPerUpdate;
+            NumSearchCyclesPerUpdate = Settings.Instance.MaxPathfindingCyclesPerTick;
         }
 
         public void RegisterSearch(PathPlanner request)
@@ -35,7 +35,36 @@ namespace Assignment.World
 
         public void UpdateSearches()
         {
-            throw new NotImplementedException();
+            if (SearchRequests.Count < 1)
+            {
+                return;
+            }
+
+            if (SearchRequests.Count == 1) {
+                Math.Sin(0);
+            }
+
+            int NoOfCyclesPerRequest = (int) Math.Max(Math.Floor((double) (NumSearchCyclesPerUpdate / SearchRequests.Count)), 1d);
+
+            HashSet<PathPlanner> CompletedRequests = new HashSet<PathPlanner>();
+            foreach (var searchRequest in SearchRequests)
+            {
+                SearchStatus status = SearchStatus.NO_STATUS;
+                for (int cycles = 0; cycles < NoOfCyclesPerRequest; cycles++)
+                {
+                    status = searchRequest.CycleOnce();
+                    if (status == SearchStatus.TARGET_FOUND || status == SearchStatus.SEARCH_INCOMPLETED)
+                    {
+                        CompletedRequests.Add(searchRequest);
+                    }
+                }
+            }
+
+            // Remove all requests that are done.
+            foreach (var completedRequest in CompletedRequests)
+            {
+                SearchRequests.Remove(completedRequest);
+            }
         }
 
         public void Unregister(PathPlanner planner)
