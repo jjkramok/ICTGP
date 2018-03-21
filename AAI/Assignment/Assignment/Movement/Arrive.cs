@@ -25,6 +25,12 @@ namespace Assignment.Movement
 
 		public override SteeringForce Calculate(BaseEntity entity)
 		{
+			if(ArriveLocation == null)
+			{
+				BehaviorDone = true;
+				return new SteeringForce();
+			}
+
 			var distance = Utility.Distance(entity.Location, ArriveLocation);
 			var direction = Utility.Direction(entity.Location, ArriveLocation);
 
@@ -38,7 +44,6 @@ namespace Assignment.Movement
 				return new SteeringForce();
 			}
 
-			// todo nmn
 			return new SteeringForce(direction, Math.Min(distance, Force));
 		}
 

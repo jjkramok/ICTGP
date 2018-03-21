@@ -69,7 +69,7 @@ namespace Assignment.Movement
 					return new SteeringForce();
 				}
 			}
-			arrive[checkBehaviourIndex].ArriveLocation = path.First();
+			arrive[checkBehaviourIndex].ArriveLocation = path.FirstOrDefault();
 			arrive[checkBehaviourIndex].BehaviorDone = false;
 			return arrive[checkBehaviourIndex].Calculate(entity);
 		}
