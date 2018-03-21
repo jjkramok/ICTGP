@@ -55,6 +55,7 @@ namespace Assignment.World
 
 		public void GameTick(object sender = null, EventArgs e = null)
 		{
+            PathManager.Instance.UpdateSearches();
 			UpdateEntites();
 			Screen.Render();
 
