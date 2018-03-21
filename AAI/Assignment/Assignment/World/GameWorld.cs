@@ -1,4 +1,5 @@
 ﻿using Assignment.Entity;
+using Assignment.Fuzzy;
 using Assignment.Movement;
 using Assignment.Obstacle;
 using Assignment.Renderer;
@@ -72,7 +73,6 @@ namespace Assignment.World
 		private void PostInitialize()
 		{
 			Settings.LoadSettings();
-
 			ImageManager.Delete();
 
 			TickDelay = Settings.Instance.GameTickTime;
@@ -80,7 +80,7 @@ namespace Assignment.World
 			Width = Settings.Instance.Width;
 			Height = Settings.Instance.Height;
 
-
+			FuzzyMachine.Initialize();
 			StateMachine.Initialize();
 
 			if(Settings.Instance.RandomSeed != 0)

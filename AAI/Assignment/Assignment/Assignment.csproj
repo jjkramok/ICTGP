@@ -60,6 +60,11 @@
     <Compile Include="Entity\EntityType.cs" />
     <Compile Include="Entity\Herbivore.cs" />
     <Compile Include="Entity\Omnivore.cs" />
+    <Compile Include="Fuzzy\FileManager.cs" />
+    <Compile Include="Fuzzy\Graph.cs" />
+    <Compile Include="Fuzzy\GraphSection.cs" />
+    <Compile Include="Fuzzy\FuzzyMachine.cs" />
+    <Compile Include="Fuzzy\RuleSet.cs" />
     <Compile Include="Movement\Arrive.cs" />
     <Compile Include="Movement\BaseSteering.cs" />
     <Compile Include="Movement\Flocking.cs" />
@@ -114,6 +119,9 @@
     <EmbeddedResource Include="Renderer\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
+    <Content Include="fuzzyrules\graphs.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -162,6 +170,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="fuzzyrules\rules.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\grass-background.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

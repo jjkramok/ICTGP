@@ -63,7 +63,8 @@
    \caption{State class diagram}
    \label{fig:stateClassDiagram}
    \end{figure}
-   When the simulation is started the Initialize method in StateMachine is called, this will preload all the scripts.
+   When the simulation is started the Initialize method in StateMachine is called, this will preload all the scripts. All scripts are located in the scripts folder. The scripts are seperated into folders, each folder is linked, based on the name, to an entity type.
+   The default states for every entity type are set in the settings.ini file.
    \subsection {Scripting}
    States are scripted in Lua. Each state for every entity type has its own script file. Each file has to have atleast three functions: 
    \begin{itemize}
@@ -72,6 +73,8 @@
    \item exit(entity, world). This function is called when the entity leaves this state. In here, if necessary, the steeringbehaviours should be removed.
    \end{itemize}
    The first parameter is the current entity, the second parameter is the gameworld instance. C\# namespaces can be imported in the scripts. This can be done by adding an import statement to the top of the script file, eg: import('System').
+   
+   When the simulation is running the BaseEntity Update method will call the StateMachine Execute method. The stateMachine execute method will call the necessary methods in the scripts using the RunFunctionScript method. If the state changes the exit function of the previous state and the enter function of the new state are executed.
    
    \newpage
    %------------------------------------------------------------------------------------------------------------------------------------------------------- Partitioning

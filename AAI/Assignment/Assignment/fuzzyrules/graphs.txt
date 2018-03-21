@@ -1,0 +1,27 @@
+﻿
+# comment
+
+Distance
+MIN = 0
+MAX = 700
+SECTIONS = Close, Medium, Far
+SPACING = 100, 150, 300, 400
+
+FoodEntity
+MIN = 0
+MAX = 200
+SECTIONS = VeryLow, Low, Okay, Good
+SPACING = 10, 20, 50, 75, 125, 150
+
+EntitiesNearTree
+MIN = 0
+MAX = 100
+SECTIONS = Minimal, Normal, Loads
+SPACING = 2, 4, 10, 20
+
+Tree
+MIN = 0
+MAX = 100
+SECTIONS = Undesirable, Desirable, VeryDesirable
+SPACING = 10, 35, 65, 90
+	

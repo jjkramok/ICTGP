@@ -1,0 +1,47 @@
+﻿
+
+# always use the following order: INPUTS, OUTPUT, IF.
+
+
+INPUTS = Distance, FoodEntity, EntitiesNearTree
+OUTPUT = Tree
+
+IF Distance.Far		AND FoodEntity.VeryLow  AND EntitiesNearTree.Minimal	THEN Tree.Undesirable 
+IF Distance.Far		AND FoodEntity.VeryLow	AND EntitiesNearTree.Normal		THEN Tree.Undesirable 
+IF Distance.Far		AND FoodEntity.VeryLow	AND EntitiesNearTree.Loads		THEN Tree.Undesirable 
+IF Distance.Far		AND FoodEntity.Low		AND EntitiesNearTree.Minimal	THEN Tree.Undesirable 
+IF Distance.Far		AND FoodEntity.Low		AND EntitiesNearTree.Normal		THEN Tree.Undesirable 
+IF Distance.Far		AND FoodEntity.Low		AND EntitiesNearTree.Loads		THEN Tree.Undesirable 
+IF Distance.Far		AND FoodEntity.Okay		AND EntitiesNearTree.Minimal	THEN Tree.Undesirable 
+IF Distance.Far		AND FoodEntity.Okay		AND EntitiesNearTree.Normal		THEN Tree.Undesirable 
+IF Distance.Far		AND FoodEntity.Okay		AND EntitiesNearTree.Loads		THEN Tree.Undesirable 
+IF Distance.Far		AND FoodEntity.Good		AND EntitiesNearTree.Minimal	THEN Tree.Desirable 
+IF Distance.Far		AND FoodEntity.Good		AND EntitiesNearTree.Normal		THEN Tree.Undesirable 
+IF Distance.Far		AND FoodEntity.Good		AND EntitiesNearTree.Loads		THEN Tree.Undesirable 
+
+IF Distance.Medium	AND FoodEntity.VeryLow  AND EntitiesNearTree.Minimal	THEN Tree.Undesirable  
+IF Distance.Medium	AND FoodEntity.VeryLow	AND EntitiesNearTree.Normal		THEN Tree.Undesirable 
+IF Distance.Medium	AND FoodEntity.VeryLow	AND EntitiesNearTree.Loads		THEN Tree.Undesirable 
+IF Distance.Medium	AND FoodEntity.Low		AND EntitiesNearTree.Minimal	THEN Tree.Desirable 
+IF Distance.Medium	AND FoodEntity.Low		AND EntitiesNearTree.Normal		THEN Tree.Undesirable 
+IF Distance.Medium	AND FoodEntity.Low		AND EntitiesNearTree.Loads		THEN Tree.Undesirable 
+IF Distance.Medium	AND FoodEntity.Okay		AND EntitiesNearTree.Minimal	THEN Tree.Desirable 
+IF Distance.Medium	AND FoodEntity.Okay		AND EntitiesNearTree.Normal		THEN Tree.Desirable 
+IF Distance.Medium	AND FoodEntity.Okay		AND EntitiesNearTree.Loads		THEN Tree.Undesirable 
+IF Distance.Medium	AND FoodEntity.Good		AND EntitiesNearTree.Minimal	THEN Tree.VeryDesirable 
+IF Distance.Medium	AND FoodEntity.Good		AND EntitiesNearTree.Normal		THEN Tree.Desirable 
+IF Distance.Medium	AND FoodEntity.Good		AND EntitiesNearTree.Loads		THEN Tree.Undesirable 
+
+IF Distance.Close	AND FoodEntity.VeryLow  AND EntitiesNearTree.Minimal	THEN Tree.VeryDesirable 
+IF Distance.Close	AND FoodEntity.VeryLow	AND EntitiesNearTree.Normal		THEN Tree.VeryDesirable
+IF Distance.Close	AND FoodEntity.VeryLow	AND EntitiesNearTree.Loads		THEN Tree.Undesirable
+IF Distance.Close	AND FoodEntity.Low		AND EntitiesNearTree.Minimal	THEN Tree.VeryDesirable
+IF Distance.Close	AND FoodEntity.Low		AND EntitiesNearTree.Normal		THEN Tree.Desirable 
+IF Distance.Close	AND FoodEntity.Low		AND EntitiesNearTree.Loads		THEN Tree.Undesirable
+IF Distance.Close	AND FoodEntity.Okay		AND EntitiesNearTree.Minimal	THEN Tree.VeryDesirable
+IF Distance.Close	AND FoodEntity.Okay		AND EntitiesNearTree.Normal		THEN Tree.Desirable
+IF Distance.Close	AND FoodEntity.Okay		AND EntitiesNearTree.Loads		THEN Tree.Undesirable
+IF Distance.Close	AND FoodEntity.Good		AND EntitiesNearTree.Minimal	THEN Tree.VeryDesirable
+IF Distance.Close	AND FoodEntity.Good		AND EntitiesNearTree.Normal		THEN Tree.VeryDesirable
+IF Distance.Close	AND FoodEntity.Good		AND EntitiesNearTree.Loads		THEN Tree.Desirable
+
