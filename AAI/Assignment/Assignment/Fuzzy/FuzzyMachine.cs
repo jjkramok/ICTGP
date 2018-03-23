@@ -12,8 +12,8 @@ namespace Assignment.Fuzzy
 {
 	public static class FuzzyMachine
 	{
-		private static Dictionary<string, Graph> graphs;
-		private static List<RuleSet> ruleSets;
+		public static Dictionary<string, Graph> graphs;
+		public static List<RuleSet> ruleSets;
 
 		public static void Initialize()
 		{
@@ -34,7 +34,7 @@ namespace Assignment.Fuzzy
 				values.Add("Distance", Utility.Distance(entity.Location, tree.Location));
 				values.Add("FoodEntity", entity.Food);
 				values.Add("EntitiesNearTree", GameWorld.Instance.EntitiesInArea(tree.Location, 50).Count);
-				var value = rules.Calculate(values);
+				var value = rules.Calculate(values, RuleSet.CalculationType.MeanOfMaximum);
 
 				if(value > bestValue)
 				{

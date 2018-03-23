@@ -33,7 +33,11 @@ namespace Assignment
 
         public int RandomSeed = 0;
 
-        private const string settingsFile = "settings.ini";
+		public int FuzzyCentroidSteps = 100;
+		public string FuzzyCalculationType = "Centroid";
+
+
+		private const string settingsFile = "settings.ini";
 
 		// settings is singleton
 		private static Settings _instance;
