@@ -33,7 +33,6 @@ namespace Assignment
 
         public int RandomSeed = 0;
 
-		public int FuzzyCentroidSteps = 100;
 		public string FuzzyCalculationType = "Centroid";
 
 

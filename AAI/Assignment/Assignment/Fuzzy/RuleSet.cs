@@ -54,17 +54,30 @@ namespace Assignment.Fuzzy
 			var result = new Dictionary<string, double>();
 			foreach (var matrix in matrices)
 			{
+				double top = 0;
+				double bottom = 0;
 				var graph = FuzzyMachine.graphs[matrix.Key];
-				var total = 0;
-				for (int i = 0; i < Settings.Instance.FuzzyCentroidSteps; i++)
+				foreach (var section in graph.Sections)
 				{
-					foreach (var section in matrix.Value.MaxValues)
+					var min = graph.MinValue;
+					var max = graph.MaxValue;
+					var sectionValue = matrix.Value.MaxValues[section.Name];
+					var total = 0d;
+
+					if (section.Type != GraphSection.GraphSectionType.RightShoulder)
 					{
-						// todo : add the stuff
-						//total += Math.Min(graph.Sections[])
+						max = section.MaxHigh;
+						total += (section.MaxLow - section.MaxHigh) * (1 - sectionValue);
+						total += (section.MaxLow - section.MaxHigh) * sectionValue / 2;
 					}
+					if (section.Type != GraphSection.GraphSectionType.LeftShoulder)
+					{
+						min = section.MinHigh;
+					}
+					total += ((min + max) / 2) * sectionValue;
+
+					top += ((min + max) / 2) * matrix.Value.MaxValues[section.Name];
 				}
-				result.Add(matrix.Key, total / Settings.Instance.FuzzyCentroidSteps);
 			}
 			return result;
 		}

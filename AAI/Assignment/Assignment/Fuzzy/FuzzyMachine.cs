@@ -15,10 +15,28 @@ namespace Assignment.Fuzzy
 		public static Dictionary<string, Graph> graphs;
 		public static List<RuleSet> ruleSets;
 
+		private static RuleSet.CalculationType calculationType;
+
 		public static void Initialize()
 		{
 			graphs = FileManager.ReadGraphs();
 			ruleSets = FileManager.ReadRules(graphs);
+
+			switch (Settings.Instance.FuzzyCalculationType)
+			{
+				case "AvarageOfMaximum":
+					calculationType = RuleSet.CalculationType.AvarageOfMaximum;
+					break;
+				case "Centroid":
+					calculationType = RuleSet.CalculationType.Centroid;
+					break;
+				case "MeanOfMaximum":
+					calculationType = RuleSet.CalculationType.MeanOfMaximum;
+					break;
+				default:
+					calculationType = RuleSet.CalculationType.AvarageOfMaximum;
+					break;
+			}
 		}
 
 		public static Tree BestTree(BaseEntity entity)
@@ -36,9 +54,9 @@ namespace Assignment.Fuzzy
 				values.Add("EntitiesNearTree", GameWorld.Instance.EntitiesInArea(tree.Location, 50).Count);
 				var value = rules.Calculate(values, RuleSet.CalculationType.MeanOfMaximum);
 
-				if(value > bestValue)
+				if(value["Tree"] > bestValue)
 				{
-					bestValue = value;
+					bestValue = value["Tree"];
 					bestIndex = i;
 				}
 			}
