@@ -9,56 +9,53 @@ namespace Assignment.Movement.Planning
     {
         private Graph.Vertex Start, Goal;
         private Graph NavigationGraph;
-        private PriorityQueue<Graph.Vertex> PriorityQueue;
         private bool GoalAlreadyReached = false;
-        private AStarTSNode[,] NodesInfo;
+        private PriorityQueue<Graph.Vertex> OpenSet; // Set of all discovered nodes.
+        private HashSet<Graph.Vertex> ClosedSet; // Set of all known nodes.
+        private Dictionary<Graph.Vertex, Graph.Vertex> CameFrom; // Previous vertex of key node.
+        private Dictionary<Graph.Vertex, double> Costs; // Cost to visit key node.
+        private Dictionary<Graph.Vertex, double> HCosts; // Heuristic cost to visit key node.
 
         public AStarTimeSliced(Graph.Vertex start, Graph.Vertex goal)
         {
-            NavigationGraph = GameWorld.Instance.NavGraph; //new Graph();
-            // TODO rework to use the prime NavGraph (remove NearestVertex calls etc.)
-            Start = NavigationGraph.NearestVertexFromLocation(start.Location);
-            Goal = NavigationGraph.NearestVertexFromLocation(goal.Location);
-            PriorityQueue = new PriorityQueue<World.Graph.Vertex>();
-            int nodesInARow = GameWorld.Instance.NavGraph.AmountOfNodesInRow;
-            int nodesInACol = GameWorld.Instance.NavGraph.AmountOfNodesInCol;
+            NavigationGraph = GameWorld.Instance.NavGraph;
+            OpenSet = new PriorityQueue<World.Graph.Vertex>();
+            OpenSet.Add(Start);
+            ClosedSet = new HashSet<Graph.Vertex>();
+            CameFrom = new Dictionary<Graph.Vertex, Graph.Vertex>();
+            Costs = new Dictionary<Graph.Vertex, double>();
+            HCosts = new Dictionary<Graph.Vertex, double>();
 
             // Initialize graph
-            // TODO use Sjoerds approach (See keep)
-            for (int x = 0; x < nodesInARow; x++)
+            foreach (Graph.Vertex vertex in NavigationGraph.vertices)
             {
-                for (int y = 0; y < nodesInACol; y++)
-                {
-                    AStarTSNode nodeInfo = new AStarTSNode();
-                    nodeInfo.IsNullInNavGraph = NavigationGraph.vertices[x, y] == null;
-                    NodesInfo[x, y] = nodeInfo;
-                }
+                Costs.Add(vertex, Double.MaxValue);
+                HCosts.Add(vertex, Double.MaxValue);
             }
 
             // Add start node to queue
-            Start.Distance = 0;
-            Start.HeuristicDistance = Heuristic(Start, Goal);
-            Start.Previous = null;
-            PriorityQueue.Add(Start);
+            Costs[Start] = 0;
+            HCosts[Start] = Heuristic(Start, Goal);
         }
 
         public SearchStatus CycleOnce()
         {
-            if (!PriorityQueue.IsEmpty)
+            if (!OpenSet.IsEmpty)
             {
-                Graph.Vertex vertex = PriorityQueue.Get();
+                Graph.Vertex vertex = OpenSet.Get();
 
-                if (vertex.Known)
+                if (ClosedSet.Contains(vertex))
                 {
                     return SearchStatus.TARGET_NOT_FOUND; // Node already evaluated. TODO Maybe call function again since we didn't really do anything this cycle?
                 }
 
-                if (vertex.Distance == -1 || vertex.HeuristicDistance == -1)
+                if (Costs[vertex] == -1 || HCosts[vertex] == -1)
                 {
+                    // TODO remove this if clause
                     Console.WriteLine("Vertex {0} has negative distance!", vertex);
                 }
 
-                vertex.Known = true;
+                ClosedSet.Add(vertex);
 
                 // End-case : goal found, tell our handler that the goal has been reached.
                 if (vertex == Goal)
@@ -70,21 +67,21 @@ namespace Assignment.Movement.Planning
                 foreach (Graph.Edge edge in vertex.Adjacent)
                 {
                     Graph.Vertex w = edge.Dest;
-                    if (w.Known)
+                    if (ClosedSet.Contains(w))
                     {
                         continue; // Already evaluated
                     }
-                    w.HeuristicDistance = vertex.Distance + edge.Cost + Heuristic(w, Goal);
-                    PriorityQueue.Add(w); // Newly discovered node
+                    HCosts[w] = Costs[vertex] + edge.Cost + Heuristic(w, Goal);
+                    OpenSet.Add(w); // Newly discovered node
 
                     // Calculate distance from start till current vertex
-                    double tentative_dist = vertex.Distance + edge.Cost;
+                    double tentative_dist = Costs[vertex] + edge.Cost;
 
-                    if (w.Distance > tentative_dist)
+                    if (Costs[w] > tentative_dist)
                     {
                         // Current best path
-                        w.Previous = vertex;
-                        w.Distance = tentative_dist;
+                        CameFrom[w] = vertex;
+                        Costs[w] = tentative_dist;
                     }
                 }
             }
@@ -111,39 +108,37 @@ namespace Assignment.Movement.Planning
 
         public double CostToTarget()
         {
-            return Goal.Distance;
+            return Costs[Goal];
         }
 
         public double HeuristicCostToTarget()
         {
-            return Goal.HeuristicDistance;
+            return HCosts[Goal];
         }
 
         public List<Location> GetPath()
         {
-            return Pathfinding.reconstructPath(Goal);
+            return reconstructPath(Goal);
+        }
+
+        // Reconstructs a path from graph explored by Time-Sliced A*
+        private List<Location> reconstructPath(Graph.Vertex goal)
+        {
+            List<Location> path = new List<Location>();
+            Graph nav = GameWorld.Instance.NavGraph;
+
+            Graph.Vertex curr = goal;
+            path.Insert(0, curr.Location);
+            while ((curr = CameFrom[curr]) != null)
+            {
+                path.Insert(0, curr.Location);
+            }
+            return path;
         }
 
         public List<Graph.Edge> GetSPT()
         {
             throw new NotImplementedException();
-        }
-
-        class AStarTSNode
-        {
-            internal bool Known;
-            internal double Distance;
-            internal double HDistance;
-            internal bool IsNullInNavGraph;
-            internal AStarTSNode Prev;
-
-            public AStarTSNode()
-            {
-                Known = false;
-                Distance = Double.MaxValue;
-                HDistance = Double.MaxValue;
-                Prev = null;
-            }
         }
     }
 }
