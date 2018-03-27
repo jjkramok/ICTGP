@@ -155,17 +155,30 @@ namespace Assignment.World
             return res;
         }
 
-		public class Vertex : IComparable<Vertex>
+        
+
+        public class Vertex : IComparable<Vertex>
 		{
-			public string Label;
+            // Used for Time-Sliced PathPlanning, each algorithm has it's own info for a vertex.
+            public class VertexInfo
+            {
+                public Vertex Previous;
+                public double Distance;
+                public double HeuristicDistance;
+                public bool Known;
+
+                public VertexInfo() { }
+            }
+            public string Label;
 			public List<Edge> Adjacent;
 			public Vertex Previous;
 			public double Distance;
 			public double HeuristicDistance;
 			public bool Known;
 			public Location Location { get; set; }
+            public Dictionary<ISearchTimeSliced, VertexInfo> PathPlanningInfo;
 
-			public Vertex(Location location, string label)
+            public Vertex(Location location, string label)
 			{
 				Label = label;
 				Adjacent = new List<Edge>();
@@ -173,6 +186,7 @@ namespace Assignment.World
 				Location = location;
 				Distance = -1;
 				Known = false;
+                PathPlanningInfo = new Dictionary<ISearchTimeSliced, VertexInfo>();
 			}
 
 			public Vertex(double x, double y, string label)
@@ -183,7 +197,8 @@ namespace Assignment.World
 				Location = new Location(x, y);
 				Distance = -1;
 				Known = false;
-			}
+                PathPlanningInfo = new Dictionary<ISearchTimeSliced, VertexInfo>();
+            }
 
 			public bool Add(Edge edge)
 			{
@@ -196,7 +211,34 @@ namespace Assignment.World
 				return true;
 			}
 
-			public int CompareTo(Vertex v)
+            /// <summary>
+            /// Find the previous vertex based on the given algorithm instance.
+            /// </summary>
+            /// <param name="key"></param>
+            /// <param name="v"></param>
+            /// <returns></returns>
+            public Vertex GetPreviousTS(ISearchTimeSliced key)
+            {
+                VertexInfo vi;
+                this.PathPlanningInfo.TryGetValue(key, out vi);
+                return vi.Previous;
+            }
+
+            public VertexInfo GetInfo(ISearchTimeSliced key)
+            {
+                VertexInfo vi;
+                this.PathPlanningInfo.TryGetValue(key, out vi);
+                return vi;
+            }
+
+            public bool HasExtraInfoFor(ISearchTimeSliced key)
+            {
+                VertexInfo vi;
+                this.PathPlanningInfo.TryGetValue(key, out vi);
+                return vi == null ? false : true;
+            }
+
+            public int CompareTo(Vertex v)
 			{
 				return (int) (HeuristicDistance - v.HeuristicDistance);
 			}

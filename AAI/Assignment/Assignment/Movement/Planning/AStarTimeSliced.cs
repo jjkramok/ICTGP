@@ -111,17 +111,36 @@ namespace Assignment.Movement.Planning
 
         public double CostToTarget()
         {
-            return Goal.Distance;
+            return Goal.GetInfo(this).Distance;
         }
 
         public double HeuristicCostToTarget()
         {
-            return Goal.HeuristicDistance;
+            return Goal.GetInfo(this).HeuristicDistance;
         }
 
         public List<Location> GetPath()
         {
-            return Pathfinding.reconstructPath(Goal);
+            return reconstructPath(Goal);
+        }
+
+        // Reconstructs a path from graph explored by a Time-Sliced A* algorithm
+        private List<Location> reconstructPath(Graph.Vertex goal)
+        {
+            List<Location> path = new List<Location>();
+            Graph nav = GameWorld.Instance.NavGraph;
+
+            Graph.Vertex curr = goal;
+            path.Insert(0, curr.Location);
+            if (!curr.HasExtraInfoFor(this))
+            {
+                throw new Exception(String.Format("Time Sliced Algorithm does not have extra info for this vertex: <{0}>", curr));
+            }
+            while ((curr = curr.GetPreviousTS(this)) != null)
+            {
+                path.Insert(0, curr.Location);
+            }
+            return path;
         }
 
         public List<Graph.Edge> GetSPT()

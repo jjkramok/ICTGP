@@ -2,7 +2,7 @@
 
 namespace Assignment.Movement.Planning
 {
-    interface ISearchTimeSliced
+    public interface ISearchTimeSliced
     {
         /// <summary>
         /// Executes one cycle of the used pathfinding algorithm
