@@ -68,12 +68,13 @@ namespace Assignment.Fuzzy
 					{
 						max = section.MaxHigh;
 						total += (section.MaxLow - section.MaxHigh) * (1 - sectionValue);
+						total += (section.MaxLow - section.MaxHigh) * sectionValue / 2;
 					}
 					if (section.Type != GraphSection.GraphSectionType.LeftShoulder)
 					{
 						min = section.MinHigh;
 					}
-					sectionValue += matrix.Value.MaxValues[section.Name];
+					total += ((min + max) / 2) * sectionValue;
 
 					top += ((min + max) / 2) * matrix.Value.MaxValues[section.Name];
 				}
