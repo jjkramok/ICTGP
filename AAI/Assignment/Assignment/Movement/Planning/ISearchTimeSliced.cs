@@ -24,5 +24,6 @@ namespace Assignment.Movement.Planning
         /// </summary>
         /// <returns></returns>
         List<World.Location> GetPath();
+        List<World.Location> GetPath(bool UseFineSmoothing, bool UseRoughSmoothing = false);
     }
 }

@@ -10,46 +10,68 @@ namespace Assignment.Movement.Planning
         private Graph.Vertex Start, Goal;
         private Graph NavigationGraph;
         private bool GoalAlreadyReached = false;
-        private PriorityQueue<Graph.Vertex> OpenSet; // Set of all discovered nodes.
+        private PriorityQueue<PriorityVertex> OpenSet; // Set of all discovered nodes.
         private HashSet<Graph.Vertex> ClosedSet; // Set of all known nodes.
         private Dictionary<Graph.Vertex, Graph.Vertex> CameFrom; // Previous vertex of key node.
         private Dictionary<Graph.Vertex, double> Costs; // Cost to visit key node.
         private Dictionary<Graph.Vertex, double> HCosts; // Heuristic cost to visit key node.
 
+        // Class used for the OpenSet
+        private class PriorityVertex : IComparable<PriorityVertex>
+        {
+            internal Graph.Vertex Vertex;
+            internal double Priority;
+
+            internal PriorityVertex(Graph.Vertex v, double prio)
+            {
+                Vertex = v;
+                Priority = prio;
+            }
+
+            public int CompareTo(PriorityVertex other)
+            {
+                return (int)(this.Priority - other.Priority);
+            }
+        }
+
         public AStarTimeSliced(Graph.Vertex start, Graph.Vertex goal)
         {
+            Start = start;
+            Goal = goal;
             NavigationGraph = GameWorld.Instance.NavGraph;
-            OpenSet = new PriorityQueue<World.Graph.Vertex>();
-            OpenSet.Add(Start);
+            OpenSet = new PriorityQueue<PriorityVertex>();
             ClosedSet = new HashSet<Graph.Vertex>();
             CameFrom = new Dictionary<Graph.Vertex, Graph.Vertex>();
             Costs = new Dictionary<Graph.Vertex, double>();
             HCosts = new Dictionary<Graph.Vertex, double>();
 
             // Initialize graph
-            foreach (Graph.Vertex vertex in NavigationGraph.vertices)
-            {
-                Costs.Add(vertex, Double.MaxValue);
-                HCosts.Add(vertex, Double.MaxValue);
-            }
+            //foreach (Graph.Vertex vertex in NavigationGraph.vertices)
+            //{
+            //    if (vertex != null) {
+            //        Costs.Add(vertex, Double.MaxValue);
+            //        HCosts.Add(vertex, Double.MaxValue);
+            //    }
+            //}
 
             // Add start node to queue
             Costs[Start] = 0;
             HCosts[Start] = Heuristic(Start, Goal);
+            OpenSet.Add(new PriorityVertex(Start, Costs[Start]));
         }
 
         public SearchStatus CycleOnce()
         {
             if (!OpenSet.IsEmpty)
             {
-                Graph.Vertex vertex = OpenSet.Get();
+                Graph.Vertex vertex = OpenSet.Get().Vertex;
 
                 if (ClosedSet.Contains(vertex))
                 {
                     return SearchStatus.TARGET_NOT_FOUND; // Node already evaluated. TODO Maybe call function again since we didn't really do anything this cycle?
                 }
 
-                if (Costs[vertex] == -1 || HCosts[vertex] == -1)
+                if (CostToReach(vertex) == -1 || HCostToReach(vertex) == -1)
                 {
                     // TODO remove this if clause
                     Console.WriteLine("Vertex {0} has negative distance!", vertex);
@@ -71,13 +93,14 @@ namespace Assignment.Movement.Planning
                     {
                         continue; // Already evaluated
                     }
-                    HCosts[w] = Costs[vertex] + edge.Cost + Heuristic(w, Goal);
-                    OpenSet.Add(w); // Newly discovered node
+                    HCosts[w] = CostToReach(vertex) + edge.Cost + Heuristic(w, Goal);
+                    OpenSet.Add(new PriorityVertex(w, HCosts[w])); // Newly discovered node
 
                     // Calculate distance from start till current vertex
-                    double tentative_dist = Costs[vertex] + edge.Cost;
+                    double tentative_dist = CostToReach(vertex) + edge.Cost;
 
-                    if (Costs[w] > tentative_dist)
+                    // Cost to reach never set, assumed infinite
+                    if (CostToReach(w) > tentative_dist)
                     {
                         // Current best path
                         CameFrom[w] = vertex;
@@ -121,6 +144,16 @@ namespace Assignment.Movement.Planning
             return reconstructPath(Goal);
         }
 
+        public List<Location> GetPath(bool UseFineSmoothing, bool UseRoughSmoothing = false)
+        {
+            if (UseFineSmoothing)
+                return Pathfinding.FinePathSmoothing(reconstructPath(Goal));
+            else if (UseRoughSmoothing)
+                return Pathfinding.RoughPathSmoothing(reconstructPath(Goal));
+            else
+                return reconstructPath(Goal);
+        }
+
         // Reconstructs a path from graph explored by Time-Sliced A*
         private List<Location> reconstructPath(Graph.Vertex goal)
         {
@@ -129,9 +162,14 @@ namespace Assignment.Movement.Planning
 
             Graph.Vertex curr = goal;
             path.Insert(0, curr.Location);
-            while ((curr = CameFrom[curr]) != null)
+            while (curr != null)
             {
                 path.Insert(0, curr.Location);
+                if (curr == Start)
+                {
+                    break;
+                }
+                curr = CameFrom[curr];
             }
             return path;
         }
@@ -139,6 +177,43 @@ namespace Assignment.Movement.Planning
         public List<Graph.Edge> GetSPT()
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Efficiency Warpper for the Dictionary access operator.
+        /// This method assumes that invalid keys weren't initialized and should have a cost of Infinity.
+        /// This makes it so that during initialization the algorithm doesn't need to initialize the costs of all vertices.
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        private double CostToReach(Graph.Vertex v)
+        {
+            try
+            {
+                return Costs[v];
+            } catch (KeyNotFoundException e)
+            {
+                return Double.MaxValue;
+            }
+        }
+
+        /// <summary>
+        /// Efficiency Warpper for the Dictionary access operator.
+        /// This method assumes that invalid keys weren't initialized and should have a cost of Infinity.
+        /// This makes it so that during initialization the algorithm doesn't need to initialize the costs of all vertices.
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        private double HCostToReach(Graph.Vertex v)
+        {
+            try
+            {
+                return HCosts[v];
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Double.MaxValue;
+            }
         }
     }
 }
