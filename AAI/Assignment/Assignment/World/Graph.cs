@@ -11,8 +11,8 @@ namespace Assignment.World
 
         private readonly double NodeSpreadDistance;
         private readonly double AgentCollisionSpacing; // Used as a collision circle for all pathfinding agents
-        private readonly int AmountOfNodesInRow;
-        private readonly int AmountOfNodesInCol;
+        public readonly int AmountOfNodesInRow;
+        public readonly int AmountOfNodesInCol;
         private long nextVertexLabel = 0; // Used to generate vertex label.
         private const int XOffset = 1; // Should at least be one.
         private const int YOffset = 1; // Should at leats be one.

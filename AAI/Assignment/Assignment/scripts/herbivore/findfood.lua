@@ -6,8 +6,6 @@ import ('Assignment.World')
 import ('Assignment.Utilities')
 
 function enter(entity, world)
-	local pathFollowing = PathFollowing()
-
 	local size = 50
 	local trees = world:FoodInArea(entity.Location, size)
 	while trees.Count == 0 and size < 5000 do
@@ -16,7 +14,8 @@ function enter(entity, world)
 	end
 
 	if trees.Count > 0 then
-		entity:AddBehaviour(pathFollowing)
+		local Location goal = trees[0]
+		entity:AddBehaviour(PathFollowing(Goal))
 	else
 		entity:AddBehaviour(Wander())
 	end
@@ -35,7 +34,7 @@ function execute(entity, world)
 		end
 	end
 
-	local behaviour = entity:GetBehaviourByType(PathFollowing())
+	local behaviour = entity:GetBehaviourByType("PathFollowing")
 	if behaviour == NULL then
 		return "eating"
 	end

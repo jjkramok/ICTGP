@@ -6,29 +6,53 @@ namespace Assignment.Movement.Planning
 {
     class PathPlanner
     {
-        private readonly BaseEntity Entity;
         private ISearchTimeSliced currentSearch;
+        private Location Goal;
+        private PathFollowingTimeSliced Reference;
 
-        public void RequestPath()
+        /// <summary>
+        /// Enlists this PathPlanner to the PathManager that distributes resources for pathplanning.
+        /// </summary>
+        private void RequestSearch()
         {
             PathManager.Instance.RegisterSearch(this);
         }
 
-        public bool RequestPathToLocation(Location goal)
+        /// <summary>
+        /// Initiates path planning for an agent.
+        /// </summary>
+        /// <param name="goal">The goal location the agent is trying to reach.</param>
+        /// <returns>Succes</returns>
+        public bool RequestPathToLocation(Location start, Location goal)
         {
-            return false; // TODO
+            Goal = goal;
+            Graph.Vertex startVertex = GameWorld.Instance.NavGraph.NearestVertexFromLocation(start);
+            Graph.Vertex goalVertex = GameWorld.Instance.NavGraph.NearestVertexFromLocation(goal);
+            currentSearch = new AStarTimeSliced(startVertex, goalVertex);
+            RequestSearch();
+            return true;
         }
 
+        /// <summary>
+        /// Performs one cycle, one iteration of the used ISearchTimeSliced Pathfinding algorithm.
+        /// </summary>
+        /// <returns>Status of the search</returns>
         public SearchStatus CycleOnce()
         {
             SearchStatus status = currentSearch.CycleOnce();
+
+            // TODO by default return value will be ignored by the Manager, we have to inform the agent ourselves.
             switch (status)
             {
                 case SearchStatus.TARGET_FOUND:
-                    // TODO notify entity that the path has been found
+                    // Notify the behaviour that a path was found and ready to retrieve.
+                    Reference.NotifyOfSearchStatus(status);
                     break;
                 case SearchStatus.TARGET_NOT_FOUND:
-                    // TODO What would we like to do with this? Pass it to the entity?
+                    break;
+                case SearchStatus.SEARCH_INCOMPLETED:
+                    // Notify the behaviour that no path was found and the search is discontinued.
+                    Reference.NotifyOfSearchStatus(status);
                     break;
             }
             return status;
@@ -36,13 +60,14 @@ namespace Assignment.Movement.Planning
 
         public List<Location> GetPath()
         {
-            // TODO add goal to the path?
-            return currentSearch.GetPath();
+            List<Location> pathWithoutEndLocation = currentSearch.GetPath();
+            pathWithoutEndLocation.Add(Goal);
+            return pathWithoutEndLocation;
         }
 
-        public PathPlanner(BaseEntity entity)
+        public PathPlanner(PathFollowingTimeSliced reference)
         {
-            Entity = entity;
+            Reference = reference;
         }
     }
 }

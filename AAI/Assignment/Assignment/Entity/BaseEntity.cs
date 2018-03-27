@@ -81,11 +81,11 @@ namespace Assignment.Entity
 			SteeringBehaviours.Clear();
 		}
 
-		public BaseSteering GetBehaviourByType(BaseSteering behaviour)
+		public BaseSteering GetBehaviourByType(string behaviour)
 		{
 			foreach (var item in SteeringBehaviours)
 			{
-				if (item.GetType().Name == behaviour.GetType().Name)
+				if (item.GetType().Name == behaviour)
 				{
 					return item;
 				}

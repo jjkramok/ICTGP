@@ -11,30 +11,35 @@ namespace Assignment.Movement.Planning
         private Graph NavigationGraph;
         private PriorityQueue<Graph.Vertex> PriorityQueue;
         private bool GoalAlreadyReached = false;
+        private AStarTSNode[,] NodesInfo;
 
         public AStarTimeSliced(Graph.Vertex start, Graph.Vertex goal)
         {
-            Start = start;
-            Goal = goal;
-            NavigationGraph = GameWorld.Instance.NavGraph;
+            NavigationGraph = GameWorld.Instance.NavGraph; //new Graph();
+            // TODO rework to use the prime NavGraph (remove NearestVertex calls etc.)
+            Start = NavigationGraph.NearestVertexFromLocation(start.Location);
+            Goal = NavigationGraph.NearestVertexFromLocation(goal.Location);
             PriorityQueue = new PriorityQueue<World.Graph.Vertex>();
+            int nodesInARow = GameWorld.Instance.NavGraph.AmountOfNodesInRow;
+            int nodesInACol = GameWorld.Instance.NavGraph.AmountOfNodesInCol;
 
             // Initialize graph
-            foreach (Graph.Vertex vertex in NavigationGraph.vertices)
+            // TODO use Sjoerds approach (See keep)
+            for (int x = 0; x < nodesInARow; x++)
             {
-                if (vertex != null)
+                for (int y = 0; y < nodesInACol; y++)
                 {
-                    vertex.Distance = Double.MaxValue;
-                    vertex.HeuristicDistance = Double.MaxValue;
-                    vertex.Known = false;
+                    AStarTSNode nodeInfo = new AStarTSNode();
+                    nodeInfo.IsNullInNavGraph = NavigationGraph.vertices[x, y] == null;
+                    NodesInfo[x, y] = nodeInfo;
                 }
             }
 
             // Add start node to queue
-            PriorityQueue.Add(start);
-            start.Distance = 0;
-            start.HeuristicDistance = Heuristic(start, goal);
-            start.Previous = null;
+            Start.Distance = 0;
+            Start.HeuristicDistance = Heuristic(Start, Goal);
+            Start.Previous = null;
+            PriorityQueue.Add(Start);
         }
 
         public SearchStatus CycleOnce()
@@ -46,6 +51,11 @@ namespace Assignment.Movement.Planning
                 if (vertex.Known)
                 {
                     return SearchStatus.TARGET_NOT_FOUND; // Node already evaluated. TODO Maybe call function again since we didn't really do anything this cycle?
+                }
+
+                if (vertex.Distance == -1 || vertex.HeuristicDistance == -1)
+                {
+                    Console.WriteLine("Vertex {0} has negative distance!", vertex);
                 }
 
                 vertex.Known = true;
@@ -81,7 +91,7 @@ namespace Assignment.Movement.Planning
             if (GoalAlreadyReached) {
                 return SearchStatus.TARGET_FOUND;
             } else {
-                return SearchStatus.SEARCH_INCOMPLETED; // Could not reach goal.
+                return SearchStatus.TARGET_NOT_FOUND;
             }
         }
 
@@ -117,6 +127,23 @@ namespace Assignment.Movement.Planning
         public List<Graph.Edge> GetSPT()
         {
             throw new NotImplementedException();
+        }
+
+        class AStarTSNode
+        {
+            internal bool Known;
+            internal double Distance;
+            internal double HDistance;
+            internal bool IsNullInNavGraph;
+            internal AStarTSNode Prev;
+
+            public AStarTSNode()
+            {
+                Known = false;
+                Distance = Double.MaxValue;
+                HDistance = Double.MaxValue;
+                Prev = null;
+            }
         }
     }
 }
