@@ -60,8 +60,10 @@ namespace Assignment.Movement.Planning
 
         public List<Location> GetPath()
         {
-            List<Location> pathWithoutEndLocation = currentSearch.GetPath();
+            // TODO Optimlization: this method is called multiple times per pathplanner. Maybe call once and safe path? Otherwise it is smoothed multiple times.
+            List<Location> pathWithoutEndLocation = currentSearch.GetPath(Settings.Instance.UseFinePathSmoothing);
             pathWithoutEndLocation.Add(Goal);
+            if (pathWithoutEndLocation.Count != 3) { }
             return pathWithoutEndLocation;
         }
 

@@ -27,6 +27,7 @@ namespace Assignment
 
 		public int SpatialPartitioningGridSize = 40;
         public bool UseTimeSlicedNavigation = false;
+        public bool UseFinePathSmoothing = true;
 
         public int GameTickTime = 50;
         public int MaxPathfindingCyclesPerTick = 100;
