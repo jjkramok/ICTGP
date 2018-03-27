@@ -15,7 +15,7 @@ function execute(entity, world)
 	end
 
 	local food = tree:EatFood(10)
-	if food < 1 then
+	if food < 0.1 then
 		return "wander"
 	end 
 

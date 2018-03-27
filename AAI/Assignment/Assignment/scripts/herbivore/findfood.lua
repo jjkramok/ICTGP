@@ -4,20 +4,17 @@ import ('Assignment.Movement')
 import ('Assignment.Entity')
 import ('Assignment.World')
 import ('Assignment.Utilities')
+import ('Assignment.Fuzzy')
 
 function enter(entity, world)
-	local size = 50
-	local trees = world:FoodInArea(entity.Location, size)
-	while trees.Count == 0 and size < 5000 do
-		size = size + 50
-		trees = world:FoodInArea(entity.Location, size)
-	end
+	local tree = FuzzyMachine.BestTree(entity)
 
-	if trees.Count > 0 then
-		local Location goal = trees[0]
-		entity:AddBehaviour(PathFollowing(Goal))
-	else
+	if tree == NULL then
 		entity:AddBehaviour(Wander())
+	else
+		local path = PathFollowing(tree.Location)
+		path.SuccessDistance = 40
+		entity:AddBehaviour(path)
 	end
 	entity:AddBehaviour(ObstacleAvoidance())
 end

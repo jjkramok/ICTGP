@@ -23,5 +23,5 @@ Tree
 MIN = 0
 MAX = 100
 SECTIONS = Undesirable, Desirable, VeryDesirable
-SPACING = 10, 35, 65, 90
+SPACING = 5, 45, 55, 95
 	

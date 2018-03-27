@@ -52,16 +52,21 @@ namespace Assignment.Fuzzy
 				values.Add("Distance", Utility.Distance(entity.Location, tree.Location));
 				values.Add("FoodEntity", entity.Food);
 				values.Add("EntitiesNearTree", GameWorld.Instance.EntitiesInArea(tree.Location, 50).Count);
-				var value = rules.Calculate(values, RuleSet.CalculationType.MeanOfMaximum);
-
-				if(value["Tree"] > bestValue)
+				var value = rules.Calculate(values, calculationType);
+				Console.Write(Math.Round(value["Tree"], 1) + " , ");
+				if (value["Tree"] > bestValue)
 				{
 					bestValue = value["Tree"];
 					bestIndex = i;
 				}
 			}
-
+			Console.Write(" : " + Math.Round(bestValue, 1) + ", I:" + bestIndex + "\n");
 			return trees[bestIndex];
+		}
+
+		public static Tree BestTree(object entity)
+		{
+			return null;
 		}
 
 	}

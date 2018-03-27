@@ -8,7 +8,7 @@ namespace Assignment.Movement
 {
 	class PathFollowing : BaseSteering
 	{
-		private Arrive[] arrive = new Arrive[] { new Arrive { Force = 25 }, new Arrive { MaxSpeed = 50, DistanceDone = 15, StopDistance = 0 } };
+		private Arrive[] arrive = new Arrive[] { new Arrive { Force = 25, MaxSpeed = 4 }, new Arrive { MaxSpeed = 50, DistanceDone = 15, StopDistance = 0 } };
 
 		private List<Location> path = null;
 		private Location _goal;
@@ -17,10 +17,22 @@ namespace Assignment.Movement
 			get { return _goal; }
 			set { _goal = value; path = null; }
 		}
+		public double SuccessDistance
+		{
+			get
+			{
+				return arrive[0].DistanceDone;
+			}
+			set
+			{
+				arrive[0].DistanceDone = value;
+				arrive[0].StopDistance = value + 15;
+			}
+		}
 
 		public PathFollowing(Location goal) : base()
 		{
-            Goal = goal;
+			Goal = goal;
 			Priority = 0.8;
 		}
 
@@ -34,22 +46,23 @@ namespace Assignment.Movement
 
 			if (path == null)
 			{
-                if (Planning.Pathfinding.Walkable(entity.Location, Goal))
-                {
-                    path = new List<Location> { Goal };
-                } else
-                {
-                    path = Planning.Pathfinding.AStar(GameWorld.Instance.NavGraph.NearestVertexFromLocation(entity.Location), GameWorld.Instance.NavGraph.NearestVertexFromLocation(Goal));
-                    if (path == null)
-                    {
-                        path = new List<Location> { Goal };
-                    }
-                    else
-                    {
-                        path.Add(Goal);
-                        path = Planning.Pathfinding.FinePathSmoothing(path);
-                    }
-                }
+				if (Planning.Pathfinding.Walkable(entity.Location, Goal))
+				{
+					path = new List<Location> { Goal };
+				}
+				else
+				{
+					path = Planning.Pathfinding.AStar(GameWorld.Instance.NavGraph.NearestVertexFromLocation(entity.Location), GameWorld.Instance.NavGraph.NearestVertexFromLocation(Goal));
+					if (path == null)
+					{
+						path = new List<Location> { Goal };
+					}
+					else
+					{
+						path.Add(Goal);
+						path = Planning.Pathfinding.FinePathSmoothing(path);
+					}
+				}
 				arrive[0].BehaviorDone = false;
 				arrive[1].BehaviorDone = false;
 			}

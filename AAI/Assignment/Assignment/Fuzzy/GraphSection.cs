@@ -46,15 +46,15 @@ namespace Assignment.Fuzzy
 						return 0;
 					if (value >= MinHigh)
 						return 1;
-					return (value - MaxHigh) / (MinLow - MinHigh);
+					return (value - MinLow) / (MinHigh - MinLow);
 				case GraphSectionType.Center:
 					if (value > MaxLow || value < MinLow)
 						return 0;
 					if (value >= MinHigh && value <= MaxHigh)
 						return 1;
-					if(value < MinHigh)
-						return (value - MaxHigh) / (MinLow - MinHigh);
-					if(value > MaxHigh)
+					if (value < MinHigh)
+						return (value - MinLow) / (MinHigh - MinLow);
+					if (value > MaxHigh)
 						return (value - MaxHigh) / (MaxLow - MaxHigh);
 					break;
 			}

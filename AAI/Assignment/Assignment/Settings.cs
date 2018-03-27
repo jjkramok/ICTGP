@@ -33,8 +33,8 @@ namespace Assignment
 
         public int RandomSeed = 0;
 
+		public int FuzzyCentroidStepCount = 20;
 		public string FuzzyCalculationType = "Centroid";
-
 
 		private const string settingsFile = "settings.ini";
 
