@@ -75,6 +75,7 @@ namespace Assignment.World
 		{
 			Settings.LoadSettings();
 			ImageManager.Delete();
+            PathManager.Delete();
 
 			TickDelay = Settings.Instance.GameTickTime;
 

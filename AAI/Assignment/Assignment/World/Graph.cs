@@ -27,7 +27,7 @@ namespace Assignment.World
             NodeSpreadDistance = Settings.Instance.NavigationCoarseness;
             AmountOfNodesInRow = (int) (GameWorld.Instance.Width / NodeSpreadDistance);
             AmountOfNodesInCol = (int) (GameWorld.Instance.Height / NodeSpreadDistance);
-            AgentCollisionSpacing = Settings.Instance.EntitySize;
+            AgentCollisionSpacing = 2 * Settings.Instance.EntitySize;
             CardinalEdgesCost = NodeSpreadDistance;
             DiagonalEdgesCost = Math.Sqrt(Math.Pow(CardinalEdgesCost, 2) * 2);
 

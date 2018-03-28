@@ -1,6 +1,7 @@
 ﻿using Assignment.Movement.Planning;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace Assignment.World
 {
@@ -8,7 +9,9 @@ namespace Assignment.World
     {
         private static PathManager _instance = null;
         private HashSet<PathPlanner> SearchRequests;
+        private HashSet<PathPlanner> CompletedRequests = new HashSet<PathPlanner>();
         private int NumSearchCyclesPerUpdate;
+        private int MaxRequestsHandledPerUpdate = 5;
 
         public static PathManager Instance
         {
@@ -20,6 +23,11 @@ namespace Assignment.World
                 }
                 return _instance;
             }
+        }
+
+        public static void Delete()
+        {
+            _instance = null;
         }
 
         public PathManager()
@@ -40,13 +48,9 @@ namespace Assignment.World
                 return;
             }
 
-            if (SearchRequests.Count == 1) {
-                Math.Sin(0);
-            }
+            int NoOfCyclesPerRequest = (int) Math.Max(Math.Floor((double) (NumSearchCyclesPerUpdate / Math.Min(SearchRequests.Count, MaxRequestsHandledPerUpdate))), 1d);
 
-            int NoOfCyclesPerRequest = (int) Math.Max(Math.Floor((double) (NumSearchCyclesPerUpdate / SearchRequests.Count)), 1d);
-
-            HashSet<PathPlanner> CompletedRequests = new HashSet<PathPlanner>();
+            int requestsHandled = 0;
             foreach (var searchRequest in SearchRequests)
             {
                 SearchStatus status = SearchStatus.NO_STATUS;
@@ -58,6 +62,10 @@ namespace Assignment.World
                         CompletedRequests.Add(searchRequest);
                     }
                 }
+                if (++requestsHandled > MaxRequestsHandledPerUpdate)
+                {
+                    break;
+                }
             }
 
             // Remove all requests that are done.
@@ -65,11 +73,32 @@ namespace Assignment.World
             {
                 SearchRequests.Remove(completedRequest);
             }
+            CompletedRequests.Clear();
         }
 
-        public void Unregister(PathPlanner planner)
+        private void Unregister(PathPlanner planner)
         {
             SearchRequests.Remove(planner);
+        }
+
+        public void RequestUnregister(PathPlanner planner)
+        {
+            CompletedRequests.Add(planner);
+        }
+
+        public void Render(Graphics g)
+        {
+            string reqInfo = "";
+            if (SearchRequests.Count > 0)
+            {
+                reqInfo += String.Format("amount of requests / max handled: {0} : {1}\n", SearchRequests.Count, MaxRequestsHandledPerUpdate);
+                reqInfo += String.Format("cycles per request: {0}\n", (int)Math.Max(Math.Floor((double)(NumSearchCyclesPerUpdate / Math.Min(SearchRequests.Count, MaxRequestsHandledPerUpdate))), 1d));
+            }
+            foreach (var request in SearchRequests)
+            {
+                reqInfo += String.Format("{0}\n", request.ToString());
+            }
+            g.DrawString(reqInfo, new Font(FontFamily.GenericSansSerif, 10), Brushes.Black, 50, 50);
         }
     }
 }

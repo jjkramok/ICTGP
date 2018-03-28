@@ -66,19 +66,6 @@ namespace Assignment.Movement.Planning
             {
                 Graph.Vertex vertex = OpenSet.Get().Vertex;
 
-                if (ClosedSet.Contains(vertex))
-                {
-                    return SearchStatus.TARGET_NOT_FOUND; // Node already evaluated. TODO Maybe call function again since we didn't really do anything this cycle?
-                }
-
-                if (CostToReach(vertex) == -1 || HCostToReach(vertex) == -1)
-                {
-                    // TODO remove this if clause
-                    Console.WriteLine("Vertex {0} has negative distance!", vertex);
-                }
-
-                ClosedSet.Add(vertex);
-
                 // End-case : goal found, tell our handler that the goal has been reached.
                 if (vertex == Goal)
                 {
@@ -86,26 +73,33 @@ namespace Assignment.Movement.Planning
                     return SearchStatus.TARGET_FOUND;
                 }
 
+                ClosedSet.Add(vertex);
+
                 foreach (Graph.Edge edge in vertex.Adjacent)
                 {
-                    Graph.Vertex w = edge.Dest;
-                    if (ClosedSet.Contains(w))
+                    Graph.Vertex neighbour = edge.Dest;
+                    if (ClosedSet.Contains(neighbour))
                     {
                         continue; // Already evaluated
                     }
-                    HCosts[w] = CostToReach(vertex) + edge.Cost + Heuristic(w, Goal);
-                    OpenSet.Add(new PriorityVertex(w, HCosts[w])); // Newly discovered node
 
-                    // Calculate distance from start till current vertex
+                    HCosts[neighbour] = CostToReach(vertex) + edge.Cost + Heuristic(neighbour, Goal);
+                    OpenSet.Add(new PriorityVertex(neighbour, HCosts[neighbour])); // Newly discovered node
+
+                    // Calculate distance from start till neighbour vertex
                     double tentative_dist = CostToReach(vertex) + edge.Cost;
 
+                    // First time for each vertex this should be a check against inifinity, but we already set the score above.
                     // Cost to reach never set, assumed infinite
-                    if (CostToReach(w) > tentative_dist)
+                    if (tentative_dist >= CostToReach(neighbour))
                     {
-                        // Current best path
-                        CameFrom[w] = vertex;
-                        Costs[w] = tentative_dist;
+                        continue;
                     }
+                    // Current best path
+                    CameFrom[neighbour] = vertex;
+                    Costs[neighbour] = tentative_dist;
+                    HCosts[neighbour] = CostToReach(neighbour) + Heuristic(neighbour, Goal);
+
                 }
             }
             if (GoalAlreadyReached) {
@@ -161,7 +155,6 @@ namespace Assignment.Movement.Planning
             Graph nav = GameWorld.Instance.NavGraph;
 
             Graph.Vertex curr = goal;
-            path.Insert(0, curr.Location);
             while (curr != null)
             {
                 path.Insert(0, curr.Location);

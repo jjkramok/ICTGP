@@ -52,6 +52,7 @@ namespace Assignment.Renderer
 					RenderShortestPath();
 
 				RenderFPS();
+                PathManager.Instance.Render(graphics);
 			}
 
 			graphicsPanel.DrawImage(screen, 0, 0, panel.Width, panel.Height);
