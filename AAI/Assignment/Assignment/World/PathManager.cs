@@ -11,7 +11,7 @@ namespace Assignment.World
         private HashSet<PathPlanner> SearchRequests;
         private HashSet<PathPlanner> CompletedRequests = new HashSet<PathPlanner>();
         private int NumSearchCyclesPerUpdate;
-        private int MaxRequestsHandledPerUpdate = 5;
+        private int MaxRequestsHandledPerUpdate;
 
         public static PathManager Instance
         {
@@ -34,6 +34,7 @@ namespace Assignment.World
         {
             SearchRequests = new HashSet<PathPlanner>();
             NumSearchCyclesPerUpdate = Settings.Instance.MaxPathfindingCyclesPerTick;
+            MaxRequestsHandledPerUpdate = Settings.Instance.MaxPathfindingRequestsPerUpdate;
         }
 
         public void RegisterSearch(PathPlanner request)

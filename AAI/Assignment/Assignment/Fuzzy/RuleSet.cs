@@ -44,8 +44,21 @@ namespace Assignment.Fuzzy
 			var result = new Dictionary<string, double>();
 			foreach (var matrix in matrices)
 			{
-				var matrixValue = matrix.Value.MaxValues.Max(x => x.Value);
-				result.Add(matrix.Key, matrixValue);
+				var graph = FuzzyMachine.graphs[matrix.Key];
+				var maxvalue = -1d;
+				GraphSection maxsection = null;
+				foreach (var section in graph.Sections)
+				{
+					if (maxvalue < matrix.Value.MaxValues[section.Name])
+					{
+						maxvalue = matrix.Value.MaxValues[section.Name];
+						maxsection = section;
+					}
+				}
+				var min = MinForSection(matrix.Value.MaxValues[maxsection.Name], graph, maxsection);
+				var max = MaxForSection(matrix.Value.MaxValues[maxsection.Name], graph, maxsection);
+
+				result.Add(matrix.Key, (min + max) / 2);
 			}
 			return result;
 		}
@@ -58,9 +71,9 @@ namespace Assignment.Fuzzy
 				double total = 0d;
 				double count = 0d;
 				var graph = FuzzyMachine.graphs[matrix.Key];
-				for (int i = 0; i <= Settings.Instance.FuzzyCentroidStepCount; i++)
+				for (int i = 0; i < Settings.Instance.FuzzyCentroidStepCount; i++)
 				{
-					var location = ((double) i / Settings.Instance.FuzzyCentroidStepCount * (graph.MaxValue - graph.MinValue)) + graph.MinValue;
+					var location = ((double) i / (Settings.Instance.FuzzyCentroidStepCount - 1) * (graph.MaxValue - graph.MinValue)) + graph.MinValue;
 
 					foreach (var section in graph.Sections)
 					{
@@ -93,17 +106,8 @@ namespace Assignment.Fuzzy
 				var graph = FuzzyMachine.graphs[matrix.Key];
 				foreach (var section in graph.Sections)
 				{
-					var min = graph.MinValue;
-					var max = graph.MaxValue;
-
-					if (section.Type != GraphSection.GraphSectionType.RightShoulder)
-					{
-						max = section.MaxHigh;
-					}
-					if (section.Type != GraphSection.GraphSectionType.LeftShoulder)
-					{
-						min = section.MinHigh;
-					}
+					var min = MinForSection(matrix.Value.MaxValues[section.Name], graph, section);
+					var max = MaxForSection(matrix.Value.MaxValues[section.Name], graph, section);
 
 					top += ((min + max) / 2) * matrix.Value.MaxValues[section.Name];
 					bottom += matrix.Value.MaxValues[section.Name];
@@ -132,21 +136,21 @@ namespace Assignment.Fuzzy
 			// PopulateMatrices
 			foreach (var rule in Rules)
 			{
-				double min = 1;
+				double max = 1;
 				foreach (var input in rule.Inputs)
 				{
 					var value = FuzzyMachine.graphs[input.Item1].Sections.First(x => x.Name == input.Item2).ValueForLocation(values[input.Item1]);
 
-					if (value < min)
+					if (value < max)
 					{
-						min = value;
+						max = value;
 					}
 				}
 				foreach (var output in rule.Output)
 				{
-					if (matrices[output.Item1].MaxValues[output.Item2] < min)
+					if (matrices[output.Item1].MaxValues[output.Item2] < max)
 					{
-						matrices[output.Item1].MaxValues[output.Item2] = min;
+						matrices[output.Item1].MaxValues[output.Item2] = max;
 					}
 				}
 			}
@@ -154,6 +158,32 @@ namespace Assignment.Fuzzy
 
 			return matrices;
 		}
+
+		private double MinForSection(double matrixValue, Graph graph, GraphSection section)
+		{
+			var min = graph.MinValue;
+
+			if (section.Type != GraphSection.GraphSectionType.LeftShoulder)
+			{
+				min = (section.MinHigh - section.MinLow) * matrixValue + section.MinLow;
+			}
+
+			return min;
+		}
+
+		private double MaxForSection(double matrixValue, Graph graph, GraphSection section)
+		{
+			var max = graph.MaxValue;
+
+			if (section.Type != GraphSection.GraphSectionType.RightShoulder)
+			{
+				max = (section.MaxLow - section.MaxHigh) * (1 - matrixValue) + section.MaxHigh;
+			}
+
+			return max;
+		}
+
+
 		#endregion
 
 		#region ExtraClasses

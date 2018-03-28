@@ -5,8 +5,6 @@ using Assignment.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Assignment.Fuzzy
 {
@@ -53,21 +51,30 @@ namespace Assignment.Fuzzy
 				values.Add("FoodEntity", entity.Food);
 				values.Add("EntitiesNearTree", GameWorld.Instance.EntitiesInArea(tree.Location, 50).Count);
 				var value = rules.Calculate(values, calculationType);
-				Console.Write(Math.Round(value["Tree"], 1) + " , ");
+
 				if (value["Tree"] > bestValue)
 				{
 					bestValue = value["Tree"];
 					bestIndex = i;
 				}
 			}
-			Console.Write(" : " + Math.Round(bestValue, 1) + ", I:" + bestIndex + "\n");
 			return trees[bestIndex];
 		}
 
-		public static Tree BestTree(object entity)
+#if DEBUG
+		public static void TestFuzzy()
 		{
-			return null;
-		}
+			var rules = ruleSets.First(x => x.OutputGraphs.Contains("Weapon"));
 
+			var values = new Dictionary<string, double>();
+			values.Add("Ammo", 8);
+			values.Add("DTT", 200);
+			Console.WriteLine("Fuzzy(MOM, 83)			= " + rules.Calculate(values, RuleSet.CalculationType.MeanOfMaximum)["Weapon"]);
+
+			Console.WriteLine("Fuzzy(Centroid, 62)		= " + rules.Calculate(values, RuleSet.CalculationType.Centroid)["Weapon"]);
+
+			Console.WriteLine("Fuzzy(MaxAv, 60.416667)		= " + rules.Calculate(values, RuleSet.CalculationType.AvarageOfMaximum)["Weapon"]);
+		}
+#endif
 	}
 }

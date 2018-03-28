@@ -45,3 +45,16 @@ IF Distance.Close	AND FoodEntity.Good		AND EntitiesNearTree.Minimal	THEN Tree.Ve
 IF Distance.Close	AND FoodEntity.Good		AND EntitiesNearTree.Normal		THEN Tree.VeryDesirable
 IF Distance.Close	AND FoodEntity.Good		AND EntitiesNearTree.Loads		THEN Tree.Desirable
 
+
+
+INPUTS = DTT, Ammo
+OUTPUT = Weapon
+IF DTT.Far		AND Ammo.Loads	THEN Weapon.Desirable 
+IF DTT.Far		AND Ammo.Okay	THEN Weapon.Undesirable 
+IF DTT.Far		AND Ammo.Low	THEN Weapon.Undesirable 
+IF DTT.Medium	AND Ammo.Loads	THEN Weapon.VeryDesirable 
+IF DTT.Medium	AND Ammo.Okay	THEN Weapon.VeryDesirable 
+IF DTT.Medium	AND Ammo.Low	THEN Weapon.Desirable 
+IF DTT.Close	AND Ammo.Loads	THEN Weapon.Undesirable 
+IF DTT.Close	AND Ammo.Okay	THEN Weapon.Undesirable 
+IF DTT.Close	AND Ammo.Low	THEN Weapon.Undesirable

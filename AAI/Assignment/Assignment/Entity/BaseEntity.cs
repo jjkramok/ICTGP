@@ -48,7 +48,6 @@ namespace Assignment.Entity
 
 			MaxForce = 100;
 
-			// todo fix default state
 			PreviousState = "";
 		}
 
@@ -143,16 +142,9 @@ namespace Assignment.Entity
 
 		private void ApplySteeringForce(SteeringForce force)
 		{
-			/*
-			float x = (float) (Math.Cos(force.Direction) * force.Amount + Location.X);
-			float y = (float) (Math.Sin(force.Direction) * force.Amount + Location.Y);
-			g.DrawLine(Pens.DarkGreen, (float) Location.X, (float) Location.Y, x, y);
-			*/
-
 			force = UpdateDirection(force);
 			QuickEnergy = Utility.BoundValue(QuickEnergy, 0.05, 1);
 
-			// todo nmn
 			Speed = Utility.BoundValueMin(Speed - SlowDownSpeed, 0);
 			Speed += force.Amount * 0.1;// inertia
 			Speed = Utility.BoundValueMax(Speed, MaxSpeed * QuickEnergy);
@@ -169,6 +161,7 @@ namespace Assignment.Entity
 			{
 				if(SteeringBehaviours[i].GetType().Name == type.Name)
 				{
+                    SteeringBehaviours[i].Dispose();
 					SteeringBehaviours.RemoveAt(i);
 				}
 			}

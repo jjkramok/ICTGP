@@ -162,10 +162,10 @@ namespace Assignment.Fuzzy
 					case "INPUTS":
 						rulesets.Add(new RuleSet());
 						rulesetIndex++;
-						SetRuleSetInputs(rulesets[rulesetIndex], graphs, line.Split('=')[1], i + 1);
+						SetRuleSet(graphs, line.Split('=')[1], i + 1, rulesets[rulesetIndex].InputGraphs);
 						break;
 					case "OUTPUT":
-						SetRuleSetOutputs(rulesets[rulesetIndex], graphs, line.Split('=')[1], i + 1);
+						SetRuleSet(graphs, line.Split('=')[1], i + 1, rulesets[rulesetIndex].OutputGraphs);
 						break;
 					case "IF":
 						SetRuleSetRule(rulesets[rulesetIndex], graphs, line.Substring(2).Trim(), i + 1);
@@ -207,32 +207,19 @@ namespace Assignment.Fuzzy
 			return result;
 		}
 
-		// todo: maybe merge these SetRuleSetOutputs and SetRuleSetInputs in one function.
-		private static void SetRuleSetOutputs(RuleSet ruleSet, Dictionary<string, Graph> graphs, string value, int lineNumber)
+		private static void SetRuleSet(Dictionary<string, Graph> graphs, string value, int lineNumber, List<string> graphSet)
 		{
-			var outputs = value.Split(',');
-			for (int i = 0; i < outputs.Length; i++)
+			var parts = value.Split(',');
+			for (int i = 0; i < parts.Length; i++)
 			{
-				var output = outputs[i].Trim();
-				if (!graphs.ContainsKey(output))
-					throw new Exception($"Graph with name: \"{output}\" not found. On line {lineNumber}");
+				var part = parts[i].Trim();
+				if (!graphs.ContainsKey(part))
+					throw new Exception($"Graph with name: \"{part}\" not found. On line {lineNumber}");
 
-				ruleSet.OutputGraphs.Add(output);
+				graphSet.Add(part);
 			}
 		}
 
-		private static void SetRuleSetInputs(RuleSet ruleSet, Dictionary<string, Graph> graphs, string value, int lineNumber)
-		{
-			var inputs = value.Split(',');
-			for (int i = 0; i < inputs.Length; i++)
-			{
-				var input = inputs[i].Trim();
-				if (!graphs.ContainsKey(input))
-					throw new Exception($"Graph with name: \"{input}\" not found. On line {lineNumber}");
-
-				ruleSet.InputGraphs.Add(input);
-			}
-		}
 		#endregion
 
 	}

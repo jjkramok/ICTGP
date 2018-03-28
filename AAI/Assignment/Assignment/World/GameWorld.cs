@@ -59,6 +59,8 @@ namespace Assignment.World
 			UpdateEntites();
 			Screen.Render();
 
+			
+
 			watch.Stop();
 			TickTime = (int) watch.ElapsedMilliseconds;
 			watch.Restart();

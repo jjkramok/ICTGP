@@ -9,15 +9,15 @@ namespace Assignment.World
 	{
 		public Vertex[,] vertices;
 
-        private readonly double NodeSpreadDistance;
-        private readonly double AgentCollisionSpacing; // Used as a collision circle for all pathfinding agents
-        public readonly int AmountOfNodesInRow;
-        public readonly int AmountOfNodesInCol;
-        private long nextVertexLabel = 0; // Used to generate vertex label.
-        private const int XOffset = 1; // Should at least be one.
-        private const int YOffset = 1; // Should at leats be one.
-        private readonly double CardinalEdgesCost;
-        public readonly double DiagonalEdgesCost; // Negative value disables diagonal edges.
+		private readonly double NodeSpreadDistance;
+		private readonly double AgentCollisionSpacing; // Used as a collision circle for all pathfinding agents
+		public readonly int AmountOfNodesInRow;
+		public readonly int AmountOfNodesInCol;
+		private long nextVertexLabel = 0; // Used to generate vertex label.
+		private const int XOffset = 1; // Should at least be one.
+		private const int YOffset = 1; // Should at leats be one.
+		private readonly double CardinalEdgesCost;
+		public readonly double DiagonalEdgesCost; // Negative value disables diagonal edges.
 
 		/// <summary>
 		/// Initialize a navMap
@@ -55,29 +55,74 @@ namespace Assignment.World
 		/// <returns>The nearest vertex.</returns>
 		public Vertex NearestVertexFromLocation(Location loc)
 		{
-			// todo optimize so start searching from location
+			var topLeftCandidateX = (int) Math.Floor(loc.X / Settings.Instance.NavigationCoarseness);
+			var topLeftCandidateY = (int) Math.Floor(loc.Y / Settings.Instance.NavigationCoarseness);
 
 			Vertex nearestVertex = null;
 			double nearestDistance = double.MaxValue;
 
-			for (int x = 0; x < vertices.GetLength(0); x++)
+			for (int layer = 1; layer < 1000; layer++)
 			{
-				for (int y = 0; y < vertices.GetLength(1); y++)
+				for (int x = topLeftCandidateX; x < layer * 2 + topLeftCandidateX; x++)
 				{
-					if (vertices[x, y] == null)
-						continue;
+					var y1 = topLeftCandidateY; // top layer.
+					var y2 = topLeftCandidateY + (layer * 2) - 1; //bottom layer.
 
-					var distance = Utility.Distance(loc, vertices[x, y].Location);
-					if (distance < nearestDistance)
+					// Check for outside the navigation graph.
+					if (x < 0 || x >= vertices.GetLength(0) || y1 < 0 || y2 >= vertices.GetLength(1))
 					{
-						nearestDistance = distance;
-						nearestVertex = vertices[x, y];
+						continue;
 					}
+					// Check vertex is valid for top layer.
+					UpdateNearestVertex(loc, ref nearestVertex, ref nearestDistance, x, y1);
+					// Check vertex is valid for bottom layer.
+					UpdateNearestVertex(loc, ref nearestVertex, ref nearestDistance, x, y2);
 				}
+
+				for (int y = topLeftCandidateY + 1; y < layer * 2 + topLeftCandidateY - 1; y++)
+				{
+					var x1 = topLeftCandidateX; // left side.
+					var x2 = topLeftCandidateX + (layer * 2) - 1; //right side.
+
+					// Check for outside the navigation graph.
+					if (y < 0 || y >= vertices.GetLength(1) || x1 < 0 || x2 >= vertices.GetLength(0))
+					{
+						continue;
+					}
+					// Check vertex is valid for left side.
+					UpdateNearestVertex(loc, ref nearestVertex, ref nearestDistance, x1, y);
+					// Check vertex is valid for right side.
+					UpdateNearestVertex(loc, ref nearestVertex, ref nearestDistance, x2, y);
+				}
+
+				// ending condition.
+				if (nearestVertex != null)
+				{
+					return nearestVertex;
+				}
+
+				topLeftCandidateX--;
+				topLeftCandidateY--;
 			}
 
-			return nearestVertex;
+
+			return null;
 		}
+
+		private void UpdateNearestVertex(Location loc, ref Vertex nearestVertex, ref double nearestDistance, int x, int y)
+		{
+			if (vertices[x, y] != null)
+			{
+				var distance1 = Utility.Distance(loc, vertices[x, y].Location);
+				if (vertices[x, y] != null && nearestDistance > distance1)
+				{
+					nearestDistance = distance1;
+					nearestVertex = vertices[x, y];
+				}
+			}
+		}
+
+
 
 		/// <summary>
 		/// (Re)Builds the Navigation Graph used in a GameWorld.
@@ -85,75 +130,78 @@ namespace Assignment.World
 		/// </summary>
 		private void BuildNavGraph()
 		{
-            
-            // Declare help variables: Distance between vertices, less means more vertices in the graph.
-            double step = Settings.Instance.NavigationCoarseness;
 
-            // Clear vertices
-            GameWorld gw = GameWorld.Instance;
-            vertices = new Vertex[AmountOfNodesInRow, AmountOfNodesInCol];
+			// Declare help variables: Distance between vertices, less means more vertices in the graph.
+			double step = Settings.Instance.NavigationCoarseness;
 
-            // Place vertices every step distance in the game world
-            for (int x = 0; x < vertices.GetLength(0); x++)
-            {
-                for (int y = 0; y < vertices.GetLength(1); y++)
-                {
-                    // Only place the vertex if there is enough space for the agent to fit in.
-                    Location newVertexLoc = new Location(XOffset + x * step, YOffset + y * step);
+			// Clear vertices
+			GameWorld gw = GameWorld.Instance;
+			vertices = new Vertex[AmountOfNodesInRow, AmountOfNodesInCol];
 
-                    if (gw.ObstaclesInArea(newVertexLoc, AgentCollisionSpacing, true).Count > 0)
-                    {
-                        continue;
-                        // To save computing power: store result of amoutOfCollisions seperatly or in the Vertex class
-                    }
-                    
-                    vertices[x, y] = new Vertex(newVertexLoc, nextVertexLabel.ToString());
-                    nextVertexLabel++;
-                }
-            }
-            
-            // Stitch edges to all adjacent vertices
-            for (int x = 0; x < vertices.GetLength(0); x++)
-            {
-                for (int y = 0; y < vertices.GetLength(1); y++)
-                {
-                    for (int xx = Math.Max(x - 1, 0); xx < Math.Min(x + 2, vertices.GetLength(0)); xx++)
-                    {
-                        for (int yy = Math.Max(y - 1, 0); yy < Math.Min(y + 2, vertices.GetLength(1)); yy++)
-                        {
-                            // Only connect edges while both vertices (src and dest) are instantiated
-                            if (vertices[x, y] != null && vertices[xx, yy] != null) {
-                                if (xx == x && yy == y)
-                                {
-                                    // We wouldn't want to connect an edge to the src vertex itself now, would we?.
-                                    continue;
-                                }
+			// Place vertices every step distance in the game world
+			for (int x = 0; x < vertices.GetLength(0); x++)
+			{
+				for (int y = 0; y < vertices.GetLength(1); y++)
+				{
+					// Only place the vertex if there is enough space for the agent to fit in.
+					Location newVertexLoc = new Location(XOffset + x * step, YOffset + y * step);
 
-                                Location a = new Location(vertices[x, y].Location.X, vertices[x, y].Location.Y);
-                                Location b = new Location(vertices[xx, yy].Location.X, vertices[xx, yy].Location.Y);
-                                // Add diagonal edges when enabled (non-neg. cost) and when not on the same cardinal axis as the src vertex.
-                                if (DiagonalEdgesCost >= 0 && (xx != x && yy != y) && Pathfinding.Walkable(a, b))
-                                {
-                                    vertices[x, y].Adjacent.Add(new Edge(vertices[xx, yy], DiagonalEdgesCost));
-                                }
+					if (gw.ObstaclesInArea(newVertexLoc, AgentCollisionSpacing, true).Count > 0)
+					{
+						continue;
+						// To save computing power: store result of amoutOfCollisions seperatly or in the Vertex class
+					}
 
-                                // Add cardinal edges when dest is on the same cardinal axis as the src vertex.
-                                if ((xx == x || yy == y) && Pathfinding.Walkable(a, b)) {
-                                    vertices[x, y].Adjacent.Add(new Edge(vertices[xx, yy], CardinalEdgesCost));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    
-        public override string ToString() {
-            string res = "";
-            foreach (var entry in vertices)
-                res += entry + "\n";
-            return res;
-        }
+					vertices[x, y] = new Vertex(newVertexLoc, nextVertexLabel.ToString());
+					nextVertexLabel++;
+				}
+			}
+
+			// Stitch edges to all adjacent vertices
+			for (int x = 0; x < vertices.GetLength(0); x++)
+			{
+				for (int y = 0; y < vertices.GetLength(1); y++)
+				{
+					for (int xx = Math.Max(x - 1, 0); xx < Math.Min(x + 2, vertices.GetLength(0)); xx++)
+					{
+						for (int yy = Math.Max(y - 1, 0); yy < Math.Min(y + 2, vertices.GetLength(1)); yy++)
+						{
+							// Only connect edges while both vertices (src and dest) are instantiated
+							if (vertices[x, y] != null && vertices[xx, yy] != null)
+							{
+								if (xx == x && yy == y)
+								{
+									// We wouldn't want to connect an edge to the src vertex itself now, would we?.
+									continue;
+								}
+
+								Location a = new Location(vertices[x, y].Location.X, vertices[x, y].Location.Y);
+								Location b = new Location(vertices[xx, yy].Location.X, vertices[xx, yy].Location.Y);
+								// Add diagonal edges when enabled (non-neg. cost) and when not on the same cardinal axis as the src vertex.
+								if (DiagonalEdgesCost >= 0 && (xx != x && yy != y) && Pathfinding.Walkable(a, b))
+								{
+									vertices[x, y].Adjacent.Add(new Edge(vertices[xx, yy], DiagonalEdgesCost));
+								}
+
+								// Add cardinal edges when dest is on the same cardinal axis as the src vertex.
+								if ((xx == x || yy == y) && Pathfinding.Walkable(a, b))
+								{
+									vertices[x, y].Adjacent.Add(new Edge(vertices[xx, yy], CardinalEdgesCost));
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		public override string ToString()
+		{
+			string res = "";
+			foreach (var entry in vertices)
+				res += entry + "\n";
+			return res;
+		}
 
 		public class Vertex : IComparable<Vertex>
 		{

@@ -14,6 +14,7 @@ namespace Assignment.Movement
 	{
 		public BaseEntity ChaseEntity;
 		public double MaxDistance;
+		public double Force = 5;
 
 		public Seek() : base()
 		{
@@ -37,8 +38,7 @@ namespace Assignment.Movement
 
 			var direction = Utility.Direction(entity.Location, ChaseEntity.Location);
 
-			// todo nmn
-			return new SteeringForce(direction, 5);
+			return new SteeringForce(direction, Force);
 		}
 
 		public override void Render(Graphics g, BaseEntity entity)

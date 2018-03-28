@@ -88,6 +88,12 @@ namespace Assignment.Movement
             }
         }
 
+        public override void Dispose()
+        {
+            base.Dispose();
+            PathManager.Instance.RequestUnregister(planner);
+        }
+
         public override void Render(Graphics g, BaseEntity entity)
         {
             if (path != null && path.Count > 0)
