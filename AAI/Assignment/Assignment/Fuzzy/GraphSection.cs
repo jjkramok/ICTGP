@@ -40,7 +40,7 @@ namespace Assignment.Fuzzy
 						return 0;
 					if (value <= MaxHigh)
 						return 1;
-					return (value - MaxHigh) / (MaxLow - MaxHigh);
+					return (MaxLow - value) / (MaxLow - MaxHigh);
 				case GraphSectionType.RightShoulder:
 					if (value < MinLow)
 						return 0;
@@ -55,7 +55,7 @@ namespace Assignment.Fuzzy
 					if (value < MinHigh)
 						return (value - MinLow) / (MinHigh - MinLow);
 					if (value > MaxHigh)
-						return (value - MaxHigh) / (MaxLow - MaxHigh);
+						return (MaxLow - value) / (MaxLow - MaxHigh);
 					break;
 			}
 			Console.WriteLine($"GraphSection could not return value {Name}, should not happen");

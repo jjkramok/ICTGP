@@ -24,4 +24,23 @@ MIN = 0
 MAX = 100
 SECTIONS = Undesirable, Desirable, VeryDesirable
 SPACING = 5, 45, 55, 95
-	
+
+# test cases, should be same as slides on elo.
+
+DTT
+MIN = 0
+MAX = 400
+SECTIONS = Close, Medium, Far
+SPACING = 50, 150, 150, 300  
+
+Ammo
+MIN = 0
+MAX = 40
+SECTIONS = Low, Okay, Loads
+SPACING = 0, 10, 10, 30  
+
+Weapon
+MIN = 0
+MAX = 100
+SECTIONS = Undesirable, Desirable, VeryDesirable
+SPACING = 25, 50, 50, 75

@@ -55,7 +55,7 @@ namespace Assignment.World
                 {
                     // No image found, add a debug image
                     Console.WriteLine("Image {0}.png not found", flatName);
-                    images.Add(flatName, null); // TODO use debug / no-texture-available img instead?
+                    images.Add(flatName, null);
                 }
             }
             return image?.GetClosestRotation(rotation);
