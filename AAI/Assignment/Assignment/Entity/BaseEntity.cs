@@ -161,6 +161,7 @@ namespace Assignment.Entity
 			{
 				if(SteeringBehaviours[i].GetType().Name == type.Name)
 				{
+                    SteeringBehaviours[i].Dispose();
 					SteeringBehaviours.RemoveAt(i);
 				}
 			}

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assignment.Movement.Planning
 {
-    enum SearchStatus
+    public enum SearchStatus
     {
         NO_STATUS,
         TARGET_FOUND,

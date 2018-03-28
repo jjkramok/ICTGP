@@ -22,6 +22,7 @@ namespace Assignment.Renderer
 		public static bool RenderGridOption = false;
 		public static bool RenderEntitiesInfoOption = false;
 		public static bool RenderEntitiesForcesOption = false;
+        public static bool RenderPathManagerOption = false;
 
 		public static void Render(Graphics g, Panel p)
 		{
@@ -52,6 +53,9 @@ namespace Assignment.Renderer
 					RenderShortestPath();
 
 				RenderFPS();
+
+                if (RenderPathManagerOption)
+                    PathManager.Instance.Render(graphics);
 			}
 
 			graphicsPanel.DrawImage(screen, 0, 0, panel.Width, panel.Height);

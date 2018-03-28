@@ -70,7 +70,12 @@ namespace Assignment.Renderer
 			Rendering.RenderGridOption = spatialPartitioningGridToolStripMenuItem.Checked;
 		}
 
-		private void enableStatesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void pathPlanningManagerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Rendering.RenderPathManagerOption = pathPlanningManagerToolStripMenuItem.Checked;
+        }
+
+        private void enableStatesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			// Enable or Disable all behaviour buttons.
 			arriveToolStripMenuItem.Enabled = !enableStatesToolStripMenuItem.Checked;
@@ -314,5 +319,5 @@ namespace Assignment.Renderer
                 }
 			}
 		}
-	}
+    }
 }

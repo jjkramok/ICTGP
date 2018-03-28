@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Assignment.Movement
 {
-	public abstract class BaseSteering
+	public abstract class BaseSteering : IDisposable
 	{
 		public double Priority;
 		public bool BehaviorDone = false;
@@ -21,5 +21,7 @@ namespace Assignment.Movement
 		public abstract SteeringForce Calculate(BaseEntity entity);
 
 		public abstract void Render(Graphics g, BaseEntity entity);
-	}
+
+        public virtual void Dispose() { }
+    }
 }

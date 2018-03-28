@@ -47,6 +47,7 @@ namespace Assignment.Movement.Planning
                 case SearchStatus.TARGET_FOUND:
                     // Notify the behaviour that a path was found and ready to retrieve.
                     Reference.NotifyOfSearchStatus(status);
+                    PathManager.Instance.RequestUnregister(this);
                     break;
                 case SearchStatus.TARGET_NOT_FOUND:
                     break;

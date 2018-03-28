@@ -24,14 +24,14 @@ namespace Assignment.World
 		/// </summary>
 		public Graph()
 		{
-			NodeSpreadDistance = Settings.Instance.NavigationCoarseness;
-			AmountOfNodesInRow = (int) (GameWorld.Instance.Width / NodeSpreadDistance);
-			AmountOfNodesInCol = (int) (GameWorld.Instance.Height / NodeSpreadDistance);
-			AgentCollisionSpacing = Settings.Instance.EntitySize;
-			CardinalEdgesCost = NodeSpreadDistance;
-			DiagonalEdgesCost = Math.Sqrt(Math.Pow(CardinalEdgesCost, 2) * 2);
+            NodeSpreadDistance = Settings.Instance.NavigationCoarseness;
+            AmountOfNodesInRow = (int) (GameWorld.Instance.Width / NodeSpreadDistance);
+            AmountOfNodesInCol = (int) (GameWorld.Instance.Height / NodeSpreadDistance);
+            AgentCollisionSpacing = 2 * Settings.Instance.EntitySize;
+            CardinalEdgesCost = NodeSpreadDistance;
+            DiagonalEdgesCost = Math.Sqrt(Math.Pow(CardinalEdgesCost, 2) * 2);
 
-			BuildNavGraph();
+            BuildNavGraph();
 		}
 
 		private Vertex VertexAtLocation(double x, double y)
