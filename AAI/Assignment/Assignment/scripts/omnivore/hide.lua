@@ -5,17 +5,14 @@ import ('Assignment.Entity')
 import ('Assignment.World')
 
 function enter(entity, world)
-	local flee = Flee()
-	flee.FleeFrom = EntityType.Omnivore
-
-	entity.SteeringBehaviours:Add(flee)
-	entity.SteeringBehaviours:Add(Wander())
+	entity:AddBehaviour(ObstacleAvoidance())
+	entity:AddBehaviour(Wander())
 end
 
 function execute(entity, world)
-	entity.Strength = entity.Strength + 1
+	entity.SlowEnergy = entity.SlowEnergy + 1
 
-	if entity.Strength > 100 then
+	if entity.SlowEnergy > 100 then
 		return "patrol"
 	end
 
@@ -23,5 +20,5 @@ function execute(entity, world)
 end 
 
 function exit(entity, world)
-	entity.SteeringBehaviours:Clear()
+	entity:RemoveAllBehaviours()
 end

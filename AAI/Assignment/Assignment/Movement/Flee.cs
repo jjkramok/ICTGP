@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using Assignment.Utilities;
 
 namespace Assignment.Movement
 {
@@ -29,8 +30,8 @@ namespace Assignment.Movement
 			{
 				if (fleeFromEntity.Type == FleeFrom)
 				{
-					var direction = Utilities.Utilities.Direction(entity.Location, fleeFromEntity.Location) - Math.PI;
-					var distance = Utilities.Utilities.Distance(entity.Location, fleeFromEntity.Location);
+					var direction = Utility.Direction(entity.Location, fleeFromEntity.Location) - Math.PI;
+					var distance = Utility.Distance(entity.Location, fleeFromEntity.Location);
 					force += new SteeringForce(direction, (1 / distance) * Multiplier);
 
 					forcesCount++;

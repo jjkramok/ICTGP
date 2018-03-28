@@ -1,0 +1,20 @@
+﻿  objloader.cpp
+d:\dev\c\gamesprogramming2\ictgp\cg\sjoerd\cpp\lecture 6 - 3 - lambert\program1\objloader.cpp(33): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\stdio.h(207): note: see declaration of 'fopen'
+d:\dev\c\gamesprogramming2\ictgp\cg\sjoerd\cpp\lecture 6 - 3 - lambert\program1\objloader.cpp(44): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\stdio.h(1195): note: see declaration of 'fscanf'
+d:\dev\c\gamesprogramming2\ictgp\cg\sjoerd\cpp\lecture 6 - 3 - lambert\program1\objloader.cpp(52): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\stdio.h(1195): note: see declaration of 'fscanf'
+d:\dev\c\gamesprogramming2\ictgp\cg\sjoerd\cpp\lecture 6 - 3 - lambert\program1\objloader.cpp(56): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\stdio.h(1195): note: see declaration of 'fscanf'
+d:\dev\c\gamesprogramming2\ictgp\cg\sjoerd\cpp\lecture 6 - 3 - lambert\program1\objloader.cpp(61): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\stdio.h(1195): note: see declaration of 'fscanf'
+d:\dev\c\gamesprogramming2\ictgp\cg\sjoerd\cpp\lecture 6 - 3 - lambert\program1\objloader.cpp(66): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\stdio.h(1195): note: see declaration of 'fscanf'
+  main.cpp
+  glsl.cpp
+d:\dev\c\gamesprogramming2\ictgp\cg\sjoerd\cpp\lecture 6 - 3 - lambert\program1\glsl.cpp(8): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\stdio.h(207): note: see declaration of 'fopen'
+  Generating Code...
+  Program1.vcxproj -> D:\Dev\C\GamesProgramming2\ICTGP\CG\Sjoerd\CPP\Lecture 6 - 3 - Lambert\Debug\Program1.exe
+  Program1.vcxproj -> D:\Dev\C\GamesProgramming2\ICTGP\CG\Sjoerd\CPP\Lecture 6 - 3 - Lambert\Debug\Program1.pdb (Partial PDB)

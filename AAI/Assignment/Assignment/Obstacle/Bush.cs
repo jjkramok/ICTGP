@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Assignment.World;
+﻿using Assignment.World;
 using System.Drawing;
 
 namespace Assignment.Obstacle
@@ -14,8 +9,9 @@ namespace Assignment.Obstacle
 		{
 		}
 
-		public override void Render(Graphics g)
+		public override bool Render(Graphics g)
 		{
+            return base.Render(g);
 		}
 	}
 }

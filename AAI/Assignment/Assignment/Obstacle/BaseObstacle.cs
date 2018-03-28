@@ -8,20 +8,28 @@ using System.Threading.Tasks;
 
 namespace Assignment.Obstacle
 {
-	public abstract class BaseObstacle
+	public abstract class BaseObstacle : BaseObject
 	{
-		public Location Location;
-		public double Rotation;
 		public List<ObstacleCircle> CollisionCircles;
 
 		public BaseObstacle(Location location, double rotation)
 		{
 			Location = location;
-			Rotation = rotation;
+			Direction = rotation;
 
 			CollisionCircles = new List<ObstacleCircle>();
 		}
+		public virtual bool Render(Graphics g)
+        {
+            int size = 10;
 
-		public abstract void Render(Graphics g);
+            Image sprite = ImageManager.Instance.GetImage(GetType().Name, Direction);
+            if (sprite == null)
+            {
+                return false;
+            }
+            g.DrawImage(sprite, (int)Location.X - (size / 2), (int)Location.Y - (size / 2), size, size);
+            return true;
+        }
 	}
 }

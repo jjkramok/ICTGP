@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace Assignment.Obstacle
 {
-	public class ObstacleCircle
+	public class ObstacleCircle : BaseObject
 	{
-		public Location Location;
 		public double Radius;
 
 		public ObstacleCircle(Location location, double radius)

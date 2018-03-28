@@ -42,6 +42,7 @@ AAI/AAI/Release/*
 AAI/AAI/lib/*.hpp
 CG/Sjoerd/CS/CG/.vs/*
 
+AAI/Assignment/Assignment/.vs/*
 AAI/Assignment/.vs/*
 AAI/Assignment/Assignment/Debug/*
 AAI/Assignment/Assignment/x64/*
@@ -64,3 +65,7 @@ cpp/sjoerd/cpp/.vs/*
 /CG/Sjoerd/CS/CG/_CG.csproj
 /CG/Sjoerd/CS/CG/_CG.sln
 /.gitattributes
+
+# latex
+/AAI/Assignment/Report/report.pdf
+*.synctex.gz

@@ -8,15 +8,13 @@ using System.Threading.Tasks;
 
 namespace Assignment.World
 {
-	public class GridCell
+	public class GridCell<T> where T : BaseObject
 	{
-		public List<BaseEntity> Entities { get; private set; }
-		public List<ObstacleCircle> Obstacles{ get; private set; }
+		public List<T> Objects { get; private set; }
 
 		public GridCell()
 		{
-			Entities = new List<BaseEntity>();
-			Obstacles = new List<ObstacleCircle>();
+			Objects = new List<T>();
 		}	
 	}
 }

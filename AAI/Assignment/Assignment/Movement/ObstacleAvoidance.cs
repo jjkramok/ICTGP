@@ -7,6 +7,7 @@ using Assignment.Entity;
 using Assignment.World;
 using Assignment.Obstacle;
 using System.Drawing;
+using Assignment.Utilities;
 
 namespace Assignment.Movement
 {
@@ -14,7 +15,7 @@ namespace Assignment.Movement
 	{
 		public double offsetMargin = 10;
 		public double avoidanceFactor = 100;
-		public double searchArea = 50;
+		public double searchArea = 60;
 
 		private List<ObstacleCircle> avoidedObstacles;
 
@@ -38,8 +39,8 @@ namespace Assignment.Movement
 
 			foreach (var obstacle in obstacles)
 			{
-				var distance = Utilities.Utilities.Distance(obstacle.Location, entity.Location);
-				var angle = Utilities.Utilities.Direction(entity.Location, obstacle.Location);
+				var distance = Utility.Distance(obstacle.Location, entity.Location);
+				var angle = Utility.Direction(entity.Location, obstacle.Location);
 
 				var angleDiff = angle - entity.Direction;
 
@@ -86,6 +87,8 @@ namespace Assignment.Movement
 
 		public override void Render(Graphics g, BaseEntity entity)
 		{
+			if (avoidedObstacles == null) return;
+
 			foreach(var obstacle in avoidedObstacles)
 			{
 				g.DrawLine(Pens.DarkRed, (int) entity.Location.X, (int) entity.Location.Y, (int) obstacle.Location.X, (int) obstacle.Location.Y);

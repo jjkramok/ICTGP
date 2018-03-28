@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Assignment.Entity;
 using Assignment.World;
 using System.Drawing;
+using Assignment.Utilities;
 
 namespace Assignment.Movement
 {
@@ -13,7 +14,7 @@ namespace Assignment.Movement
 	{
 		private double wanderDirection = Math.PI * 2;
 		public double DirectionChangeMax = 0.8;
-		public double CircleSize = 5;
+		public double CircleSize = 20;
 		public double CircleOffset = 10;
 
 		public Wander() : base()
@@ -31,7 +32,7 @@ namespace Assignment.Movement
 			double circleDotX = Math.Cos(wanderDirection) * CircleSize + circleX;
 			double circleDotY = Math.Sin(wanderDirection) * CircleSize + circleY;
 
-			double force = Utilities.Utilities.Distance(new Location(circleDotX, circleDotY), entity.Location);
+			double force = Utility.Distance(new Location(circleDotX, circleDotY), entity.Location);
 
 			double direction = Math.Atan((circleDotY - entity.Location.Y) / (circleDotX - entity.Location.X));
 			direction = circleDotX < entity.Location.X ? direction + Math.PI : direction;
@@ -49,9 +50,9 @@ namespace Assignment.Movement
 
 			g.DrawEllipse(Pens.Brown, (float) circleX - (float) CircleSize / 2, (float) circleY - (float) CircleSize / 2, (float) CircleSize, (float) CircleSize);
 
-			g.FillEllipse(Brushes.BlueViolet, (float) circleDotX - 4, (float) circleDotY - 4, 8, 8);
+			g.FillEllipse(Brushes.BlueViolet, (float) circleDotX - 10, (float) circleDotY - 10, 20, 20);
 
-			g.DrawLine(Pens.Black, (float) circleX, (float) circleY, (float) circleDotX, (float) circleDotY);
+			g.DrawLine(Pens.Red, (float) circleX, (float) circleY, (float) circleDotX, (float) circleDotY);
 		}
 	}
 }

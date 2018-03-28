@@ -8,143 +8,110 @@ using System.Threading.Tasks;
 
 namespace Assignment.World
 {
-	public class Grid
+	public class Grid<T> where T : BaseObject
 	{
-		public const int CellHeight = 20;
-		public const int CellWidth = 20;
+		public readonly int CellSize;
 
 		public readonly int GridWidth;
 		public readonly int GridHeight;
 
-		public readonly GridCell[,] GridCells;
+		public readonly GridCell<T>[,] GridCells;
 
-		public Grid()
+		public Grid(int cellSize = 20)
 		{
-			GridWidth = (int) Math.Ceiling((double) GameWorld.Instance.Width / CellWidth);
-			GridHeight = (int) Math.Ceiling((double) GameWorld.Instance.Height / CellHeight);
+			CellSize = cellSize;
 
-			GridCells = new GridCell[GridWidth, GridHeight];
+			GridWidth = (int) Math.Ceiling((double) GameWorld.Instance.Width / CellSize);
+			GridHeight = (int) Math.Ceiling((double) GameWorld.Instance.Height / CellSize);
+
+			GridCells = new GridCell<T>[GridWidth, GridHeight];
 			for (var x = 0; x < GridWidth; x++)
 			{
 				for (var y = 0; y < GridHeight; y++)
 				{
-					GridCells[x, y] = new GridCell();
+					GridCells[x, y] = new GridCell<T>();
 				}
 			}
 
-			MapEntities();
-			MapObstacles();
 		}
 
-		private void MapEntities()
+		public void MapObjects(List<T> baseobjects)
 		{
-			foreach (var entity in GameWorld.Instance.Entities)
+			foreach (var baseobject in baseobjects)
 			{
-				var cellLocation = GetGridCellForLocation(entity.Location);
-				GridCells[cellLocation.Item1, cellLocation.Item2].Entities.Add(entity);
+				var cellLocation = GetGridCellForLocation(baseobject.Location);
+				GridCells[cellLocation.Item1, cellLocation.Item2].Objects.Add(baseobject);
 			}
 		}
 
-		private void MapObstacles()
-		{
-			foreach (var obstacle in GameWorld.Instance.Obstacles)
-			{
-				foreach (var circle in obstacle.CollisionCircles)
-				{
-					var cellLocation = GetGridCellForLocation(circle.Location);
-					GridCells[cellLocation.Item1, cellLocation.Item2].Obstacles.Add(circle);
-				}
-			}
-		}
-
-		public List<BaseEntity> EntitiesNearLocation(Location location, double distance)
+		public List<T> ObjectsNearLocation(Location location, double distance)
 		{
 			var centerCell = GetGridCellForLocation(location);
-			var cellDistanceX = (int) Math.Floor(distance / CellWidth) + 1;
-			var cellDistanceY = (int) Math.Floor(distance / CellHeight) + 1;
+			var cellDistanceX = (int) Math.Floor(distance / CellSize) + 1;
+			var cellDistanceY = (int) Math.Floor(distance / CellSize) + 1;
 
-			List<BaseEntity> entities = new List<BaseEntity>();
+			List<T> objects = new List<T>();
 
 			for (int x = Math.Max(centerCell.Item1 - cellDistanceX, 0); x < Math.Min(centerCell.Item1 + cellDistanceX + 1, GridWidth); x++)
 			{
 				for (int y = Math.Max(centerCell.Item2 - cellDistanceY, 0); y < Math.Min(centerCell.Item2 + cellDistanceY + 1, GridHeight); y++)
 				{
-					entities.AddRange(GridCells[x, y].Entities);
+					objects.AddRange(GridCells[x, y].Objects);
 				}
 			}
 
-			return entities;
+			return objects;
 		}
 
-		public void UpdateEntity(BaseEntity entity, Location oldLocation)
+		public void UpdateObject(T baseobject, Location oldLocation)
 		{
-			var newCell = GetGridCellForLocation(entity.Location);
+			var newCell = GetGridCellForLocation(baseobject.Location);
 			var oldCell = GetGridCellForLocation(oldLocation);
 
 			if (newCell.Equals(oldCell))
 				return;
 
-			GridCells[oldCell.Item1, oldCell.Item2].Entities.Remove(entity);
-			GridCells[newCell.Item1, newCell.Item2].Entities.Add(entity);
+			GridCells[oldCell.Item1, oldCell.Item2].Objects.Remove(baseobject);
+			GridCells[newCell.Item1, newCell.Item2].Objects.Add(baseobject);
 		}
 
 		private Tuple<int, int> GetGridCellForLocation(Location location)
 		{
-			int cellX = (int) (location.X / CellWidth);
-			int cellY = (int) (location.Y / CellHeight);
+			int cellX = (int) (location.X / CellSize);
+			int cellY = (int) (location.Y / CellSize);
 
 			return new Tuple<int, int>(cellX, cellY);
 		}
-
-		public List<ObstacleCircle> ObstacleCirclesNearLocation(Location location, double distance)
+		/*
+		private Tuple<int, int> GetGridCellsAlongLine(Location l1, Location l2)
 		{
-            var centerCell = GetGridCellForLocation(location);
-			var cellDistanceX = (int) Math.Floor(distance / CellWidth) + 1;
-			var cellDistanceY = (int) Math.Floor(distance / CellHeight) + 1;
+			// TODO implement
+			//int cellX = (int)(location.X / CellWidth);
+			//int cellY = (int)(location.Y / CellHeight);
 
-			List<ObstacleCircle> circles = new List<ObstacleCircle>();
-
-			for (int x = Math.Max(centerCell.Item1 - cellDistanceX, 0); x < Math.Min(centerCell.Item1 + cellDistanceX + 1, GridWidth); x++)
-			{
-				for (int y = Math.Max(centerCell.Item2 - cellDistanceY, 0); y < Math.Min(centerCell.Item2 + cellDistanceY + 1, GridHeight); y++)
-				{
-                    circles.AddRange(GridCells[x, y].Obstacles);
-				}
-			}
-
-			return circles;
+			//return new Tuple<int, int>(cellX, cellY);
+			return null;
 		}
 
-        private Tuple<int, int> GetGridCellsAlongLine(Location l1, Location l2)
-        {
-            // TODO implement
-            //int cellX = (int)(location.X / CellWidth);
-            //int cellY = (int)(location.Y / CellHeight);
-            
-            //return new Tuple<int, int>(cellX, cellY);
-            return null;
-        }
+		public List<ObstacleCircle> ObstacleCirclesAlongLine(Location l1, Location l2, double distance)
+		{
+			//var centercell = getgridcellforlocation(location);
+			//var celldistancex = (int)math.floor(distance / cellwidth) + 1;
+			//var celldistancey = (int)math.floor(distance / cellheight) + 1;
 
-        public List<ObstacleCircle> ObstacleCirclesAlongLine(Location l1, Location l2, double distance)
-        {
-            //var centercell = getgridcellforlocation(location);
-            //var celldistancex = (int)math.floor(distance / cellwidth) + 1;
-            //var celldistancey = (int)math.floor(distance / cellheight) + 1;
+			//list<obstaclecircle> circles = new list<obstaclecircle>();
 
-            //list<obstaclecircle> circles = new list<obstaclecircle>();
+			//for (int x = math.max(centercell.item1 - celldistancex, 0); x < math.min(centercell.item1 + celldistancex + 1, gridwidth); x++)
+			//{
+			//    for (int y = math.max(centercell.item2 - celldistancey, 0); y < math.min(centercell.item2 + celldistancey + 1, gridheight); y++)
+			//    {
+			//        circles.addrange(gridcells[x, y].obstacles);
+			//    }
+			//}
 
-            //for (int x = math.max(centercell.item1 - celldistancex, 0); x < math.min(centercell.item1 + celldistancex + 1, gridwidth); x++)
-            //{
-            //    for (int y = math.max(centercell.item2 - celldistancey, 0); y < math.min(centercell.item2 + celldistancey + 1, gridheight); y++)
-            //    {
-            //        circles.addrange(gridcells[x, y].obstacles);
-            //    }
-            //}
-
-            //return circles;
-            return null;
-        }
-
-
-    }
+			//return circles;
+			return null;
+		}
+		*/
+	}
 }

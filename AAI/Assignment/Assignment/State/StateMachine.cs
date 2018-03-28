@@ -14,22 +14,6 @@ namespace Assignment.State
 	{
 		private static Dictionary<string, Lua> scripts;
 
-		/*
-		public StateMachine(BaseEntity entity)
-		{
-			var objectsToParse = new Dictionary<string, object>();
-			objectsToParse.Add("entity", entity);
-			objectsToParse.Add("world", GameWorld.Instance);
-
-			script = ScriptManager.LoadScript(ScriptManager.SCRIPTPATH + entity.Type.ToString() + ScriptManager.SCRIPTEXTENSION, objectsToParse);
-
-			if(script == null)
-			{
-				Console.WriteLine("Failed to open script");
-				Console.WriteLine(ScriptManager.SCRIPTPATH + entity.Type.ToString() + ScriptManager.SCRIPTEXTENSION);
-			}
-		}
-		*/
 
 		public static void Initialize()
 		{
@@ -45,26 +29,28 @@ namespace Assignment.State
 		{
 			string scriptPath = Path.Combine(ScriptManager.SCRIPTPATH, entity.Type.ToString(), entity.State + ScriptManager.SCRIPTEXTENSION).ToLower();
 
-			try
+			if (string.IsNullOrEmpty(entity.State))
 			{
-				if (entity.State != entity.PreviousState)
-				{
-					Console.WriteLine(entity.PreviousState + " => " + entity.State);
-					ScriptManager.RunFunctionScript(scripts[scriptPath], "enter", entity);
-					entity.PreviousState = entity.State;
-				}
-
-				var newState = ScriptManager.RunFunctionScript(scripts[scriptPath], "execute", entity);
-
-				if(newState != entity.State)
-				{
-					ScriptManager.RunFunctionScript(scripts[scriptPath], "exit", entity);
-					entity.State = newState;
-				}
+				Console.WriteLine($"No state set for {entity.Type}");
+				return;
 			}
-			catch (Exception e)
+			if(entity.State == "DEBUGSTATE")
 			{
-				Console.WriteLine($"Script could not be executed\n{e.Message}");
+				return;
+			}
+
+			if (entity.State != entity.PreviousState)
+			{
+				ScriptManager.RunFunctionScript(scripts[scriptPath], "enter", entity);
+				entity.PreviousState = entity.State;
+			}
+
+			var newState = ScriptManager.RunFunctionScript(scripts[scriptPath], "execute", entity);
+
+			if (newState != entity.State)
+			{
+				ScriptManager.RunFunctionScript(scripts[scriptPath], "exit", entity);
+				entity.State = newState;
 			}
 		}
 	}
