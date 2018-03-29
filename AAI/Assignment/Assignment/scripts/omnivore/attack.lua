@@ -6,7 +6,12 @@ import ('Assignment.World')
 
 function enter(entity, world)
 	local Goal = Location(400, 500)
-	local path = PathFollowing(Goal)
+	local path
+	if (Settings.Instance.UseTimeSlicedNavigation)
+		path = PathFollowingTimeSliced(Goal)
+	else
+		path = PathFollowing(Goal)
+	end
 
 	entity:AddBehaviour(ObstacleAvoidance())
 	entity:AddBehaviour(path)
