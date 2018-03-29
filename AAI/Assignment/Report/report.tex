@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[10pt]{extarticle} % article doctype, possible font size range from 8pt to 20pt with not all being avaiable.
 \title{Game AAI Assignment}
 \author{Tim Hintzbergen and Sjoerd Dekker}
 \date{March 2018}
@@ -6,21 +6,31 @@
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{mathabx}
+\usepackage[margin=1.0in]{geometry} % Sets page margin, 2.0in is default.
 \DeclareCaptionFormat{cancaption}{#1#2#3\par} % Normal format actually
 \DeclareCaptionLabelFormat{cancaptionlabel}{#1}
 \captionsetup[figure][number]{format=cancaption,labelformat=cancaptionlabel}
 \graphicspath { {images/} }
 \begin{document}
    \maketitle
+   \thispagestyle{empty}
    \newpage
-   
-   \tableofcontents{}
-   %------------------------------------------------------------------------------------------------------------------------------------------------------- Introduction
+      %------------------------------------------------------------------------------------------------------------------------------------------------------- Introduction
    \newpage
+   \setcounter{page}{1}
    \section {Introduction}
-   Something about animals and stuff
+   This paper contains the documentation of the final assignment of the course Algorithms and Artificial Intelligence for Games. The task of this assignment was to build a game or simulation containing certain aspected that were taught during the course, namely:
+   \begin{itemize}
+      \item Steering behaviours
+      \item Pathfinding
+      \item States and scripting
+      \item Fuzzy logic
+   \end{itemize}
+   The premises of the application was a simulation of different animals and evolution. But soon due to time constraints the project turned out more as a toolbox styled with the natural world. The original idea was to contain evolving herbivores that had a certain fitness. Carnivores would then hunt the herbivores. Depending on the fitness certain herbivores could survive, and produce offspring, thereby passing on part of their fitness to their young.
    \newpage
-   
+
+   \tableofcontents{}
+   \newpage
    %------------------------------------------------------------------------------------------------------------------------------------------------------- Steering behaviours
    \section{Steering behaviours}
    The following steering behaviours are implemented. 
@@ -28,33 +38,33 @@
    \subsubsection {Arrive}
    The entity will try to go in a straight line to a specified goal. When the entity gets close to the goal the entity will slow down. This behaviour will stop when the entity is on or very near its goal and the current speed of the entity is very low. 
    \subsubsection {Flee}
-   The entity will try to run away from entities that are the same type as specified. The closer another entity is the more the current entity will try to run away from the other entity. This algoritm will only search in an area, if there are no entities in the area the entity will not try to run away.
+   The entity will try to run away from entities that are the of the type specified. The closer another entity is the more the current entity will try to run away from the other entity. This algorithm will only search in a certain area, if there are no entities in the area the entity will not try to run away.
    \subsubsection {Seek}
-   This algoritm has the opposite behaviour from flee. However in this algoritm there is only one entity set to seek. If the specified entity to seek is to far away this behaviour will stop working.
+   This algorithm has the opposite behaviour from flee. However in this algorithm there is only one entity set to seek. If the specified entity to seek is to far away, then this behaviour will terminate itself.
    \subsubsection {Wander}
-  This algoritm will create a circle in front of the entity, on this circle there is a dot. This dot will move randomly along the circle. The entity will go towards the dot, the farther away the dot is from the entity the more force is applied. 
+  This algorithm will create a circle in front of the entity, on this circle there is a dot. This dot will move randomly along the circle. The entity will go towards the dot, the farther away the dot is from the entity the more force is applied. 
   \subsection{Advanced steering behaviours}
   \subsubsection {Flocking}
   First all entities of the same type are searched in a radius around the current entity, exluding itself. The current entity will do the following three behaviours: 
   \begin{itemize}
   \item Alignment: the entity will calculate the average direction off all the entities in the area. After this the entity will try to have the same direction as the average.
-  \item Cohesion: the entity will try to go towards the average location of all the entities in the area.
+  \item Cohesion: the entity will try gravitate towards the average location of all the entities in the area.
   \item Separation: the entity  will try to go away from all the entities in the area. 
   \end{itemize}
   \subsubsection {Obstacle avoidance}
   First all abstacles are searched whithin a radius (default 60) around the entity. For every object the angle from the entity to the object and the direction of the entity are compared. If the difference is more than 90$^{\circ}$ then the object is ignored. For the remaining obstacles the distance at the closest point (if the entity keeps moving in a straight line) between the entity and the obstacle is calculated. If this distance is less then \(radius of obstacle + radius of entity\), then this behaviour will add a force to the entity to try to avoid the obstacle.
   \subsubsection {Path following}
-   This algoritm will create a path to a specified location using the A* algoritm. But only if the goal is not in plain view. After the A* algoritm has found a path then this path will be smoothed. When the smoothing is done the agent will follow the path. This is done using the arrive algoritm. 
+   This algorithm will create a path to a specified location using the A* algorithm. But only if the goal is not in plain view. After the A* algorithm has found a path then this path will be smoothed. When the smoothing is done the agent will follow the path. This is done using the arrive algorithm. 
    \newpage
    
    %------------------------------------------------------------------------------------------------------------------------------------------------------- Pathfinding
    \section {Pathfinding}
 This section will explain all techniques used in regard to pathfinding.
    \subsection {Graph}
-  A graph is used as underlying structure to allow pathfinding. Graph is a singleton and is its vertices are build along a grid of with a fixed cardinal distance between each vertex. Every time a vertex is placed the instantiation algorithm will determine if an agent will fit on that vertex without colliding with nearby obstancles. This is once again performed when all vertices are chained together with edges, the algorithm checks if the new edge if walkable for an entity before stitching vertices together using that edge.
+  A graph is used as underlying structure to allow pathfinding. Graph is a singleton and is its vertices are build along a grid of with a fixed cardinal distance between each vertex. Every time a vertex is placed the instantiation algorithm will determine if an agent will fit on that vertex without colliding with nearby obstancles. This is once again performed when all vertices are chained together with edges. The algorithm checks if the new edge is walkable for an entity before stitching vertices together using that edge.
    \subsection {A*}
   Our application only uses A* since pathfinding is only used to travel to single locations. In fact there are two different A* implementation, the first one will be explained here, the second one will be discussed in the section below. \\
-  A* uses a heuristic based on the type of graph created. If there are only cardinal edges (edges following a horizontal or verticle line) then the manhattan distance, or cardinal distance will be used. Otherwise the heuristic will use the euclidian approach, using the Pythagorean theorem. A* will prioritize its search through the use of a priority queue based on an array that sorts every new entry based on the heuristic used. 
+  A* uses a heuristic based on the type of graph created. If there are only cardinal edges then the manhattan distance will be used. Otherwise the heuristic will use the euclidian distance. A* will prioritize its search through the use of a priority queue based on an array that sorts every new entry based on the heuristic cost. 
    \subsection {Path smoothing}
 A modified approach to the precise path smoothing algorithm of Mat Buckland \cite{pgaie} is used. This modified approach was suggested by a fellow student during the course. In our case there are few obstacles that an pathplanning agent needs to avoid, and therefore path smoothing from the first vertex to the goal vertex is always an \(O(n)\) best-case operation. To make path smoothing slightly more efficient path smoothing is performed backwards, evaluating from the goal vertex back to the agent its location. This results in the same worst-case operation, but a better average and best-case operation.
    \subsection {Time slicing}
