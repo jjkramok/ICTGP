@@ -79,20 +79,20 @@ A modified approach to the precise path smoothing algorithm of Mat Buckland \cit
    \item execute(entity, world). This function is called on every tick that the state is active. This function should update relevant values for the entity. This function has to return the new state as a string, if the state should not change then it has to return the name of the current state.
    \item exit(entity, world). This function is called when the entity leaves this state. In here, if necessary, the steeringbehaviours should be removed.
    \end{itemize}
-   The first parameter is the current entity, the second parameter is the gameworld instance. C\# namespaces can be imported in the scripts. This can be done by adding an import statement to the top of the script file, eg: import('System').
+   The first parameter is the current entity, the second parameter is the gameworld instance. C\# namespaces can be imported in the scripts. This can be done by adding an import statement to the top of the script file, eg: \emph{import('System')}.
    
    When the simulation is running the BaseEntity Update method will call the StateMachine Execute method. The stateMachine execute method will call the necessary methods in the scripts using the RunFunctionScript method. If the state changes the exit function of the previous state and the enter function of the new state are executed.
    
    \newpage
    %------------------------------------------------------------------------------------------------------------------------------------------------------- Partitioning
    \section {Partitioning}
-   The world is split into multiple cells. These cells are layed out in a grid pattern. The size of the cells can be set in the settings.ini file. An entity is always in one of these cells. When an entity moves the corrresponding cell in which the entity is located is recalculated. Searching for entities in an area works in the following manner (the area to search in is always round):
+   The world is split into multiple cells. These cells are layed out in a grid pattern. The size of the cells can be set in the settings.ini file. An entity is always in one of these cells. When an entity moves the corrresponding cell in which the entity is located is recalculated. Searching for entities in an area works in the following manner (the area to search in is always a circle):
    \begin{enumerate}
-   \item Calculate which cells contain some of the area of the search circle.
+   \item Calculate which cells, in a square, contain (some of) the area of the search circle.
    \item Get all the entities from the cells in step 1.
    \item for every entity calculate the distance from the center of the circle, if this is more than the radius of the circle then remove this entity.
    \end{enumerate}
-   The cells can be rendered to the screen by clicking the "spatialPartitioning Grid" option under the "view" button. 
+   The cells can be rendered to the screen by clicking the \emph{spatialPartitioning Grid} option under the \emph{view} button. 
    
     \newpage
    %------------------------------------------------------------------------------------------------------------------------------------------------------- Fuzzy logic
@@ -114,6 +114,7 @@ A modified approach to the precise path smoothing algorithm of Mat Buckland \cit
   	 	OUTPUT = Weapon\\
    		IF Distance.Far AND Ammo.Loads THEN Weapon.Desirable \\
    		IF Distance.Far	AND Ammo.Okay THEN Weapon.Undesirable \\
+   		IF Distance.Close AND Ammo.Okay THEN Weapon.Desirable \\
    		...
    }
    \caption{Example ruleset}
