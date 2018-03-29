@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace Assignment.Movement.Planning
 {
@@ -25,5 +26,7 @@ namespace Assignment.Movement.Planning
         /// <returns></returns>
         List<World.Location> GetPath();
         List<World.Location> GetPath(bool UseFineSmoothing, bool UseRoughSmoothing = false);
+
+        void Render(Graphics g);
     }
 }

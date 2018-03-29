@@ -89,6 +89,7 @@ namespace Assignment.World
 
         public void Render(Graphics g)
         {
+            // draw requests
             string reqInfo = "";
             if (SearchRequests.Count > 0)
             {
@@ -100,6 +101,15 @@ namespace Assignment.World
                 reqInfo += String.Format("{0}\n", request.ToString());
             }
             g.DrawString(reqInfo, new Font(FontFamily.GenericSansSerif, 10), Brushes.Black, 50, 50);
+
+            // draw A*
+            if (Settings.Instance.RenderAStar)
+            {
+                foreach (var request in SearchRequests)
+                {
+                    request.Render(g);
+                }
+            }
         }
     }
 }

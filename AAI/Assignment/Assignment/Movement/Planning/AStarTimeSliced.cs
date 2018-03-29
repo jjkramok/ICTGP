@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using Assignment.Utilities;
 using Assignment.World;
 
@@ -181,10 +182,11 @@ namespace Assignment.Movement.Planning
         /// <returns></returns>
         private double CostToReach(Graph.Vertex v)
         {
-            try
+            if (Costs.ContainsKey(v))
             {
                 return Costs[v];
-            } catch (KeyNotFoundException e)
+            }
+            else
             {
                 return Double.MaxValue;
             }
@@ -199,13 +201,34 @@ namespace Assignment.Movement.Planning
         /// <returns></returns>
         private double HCostToReach(Graph.Vertex v)
         {
-            try
+            if (HCosts.ContainsKey(v))
             {
                 return HCosts[v];
             }
-            catch (KeyNotFoundException e)
+            else
             {
                 return Double.MaxValue;
+            }
+        }
+
+        public void Render(Graphics g)
+        {
+            foreach (var inPQ in OpenSet.queue)
+            {
+                if (inPQ != null)
+                {
+                    Pen p = new Pen(Color.Orange);
+                    g.DrawEllipse(p, (float)inPQ.Vertex.Location.X - 5, (float)inPQ.Vertex.Location.Y - 5,
+                        10, 10);
+                }
+            }
+            foreach (var evaluatedVertex in ClosedSet)
+            {
+                Pen p = new Pen(Color.Red);
+                //g.DrawLine(p, (float) evaluatedVertex.Location.X, (float)evaluatedVertex.Location.Y,
+                //    (float)CameFrom[evaluatedVertex].Location.X, (float)CameFrom[evaluatedVertex].Location.Y);
+                g.DrawEllipse(p, (float) evaluatedVertex.Location.X - 4, (float)evaluatedVertex.Location.Y - 4, 
+                    8, 8);
             }
         }
     }
