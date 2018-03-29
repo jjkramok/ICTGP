@@ -40,7 +40,7 @@
    \subsubsection {Flee}
    The entity will try to run away from entities that are the of the type specified. The closer another entity is the more the current entity will try to run away from the other entity. This algorithm will only search in a certain area, if there are no entities in the area the entity will not try to run away.
    \subsubsection {Seek}
-   This algorithm has the opposite behaviour from flee. However in this algoritm there is only one entity set to seek. If the specified entity to seek is to far away, then this behaviour will terminate itself.
+   This algorithm has the opposite behaviour from flee. However in this algorithm there is only one entity set to seek. If the specified entity to seek is to far away, then this behaviour will terminate itself.
    \subsubsection {Wander}
   This algorithm will create a circle in front of the entity, on this circle there is a dot. This dot will move randomly along the circle. The entity will go towards the dot, the farther away the dot is from the entity the more force is applied. 
   \subsection{Advanced steering behaviours}
@@ -54,7 +54,7 @@
   \subsubsection {Obstacle avoidance}
   First all abstacles are searched whithin a radius (default 60) around the entity. For every object the angle from the entity to the object and the direction of the entity are compared. If the difference is more than 90$^{\circ}$ then the object is ignored. For the remaining obstacles the distance at the closest point (if the entity keeps moving in a straight line) between the entity and the obstacle is calculated. If this distance is less then \(radius of obstacle + radius of entity\), then this behaviour will add a force to the entity to try to avoid the obstacle.
   \subsubsection {Path following}
-   This algoritm will create a path to a specified location using the A* algorithm. But only if the goal is not in plain view. After the A* algorithm has found a path then this path will be smoothed. When the smoothing is done the agent will follow the path. This is done using the arrive algorithm. 
+   This algorithm will create a path to a specified location using the A* algorithm. But only if the goal is not in plain view. After the A* algorithm has found a path then this path will be smoothed. When the smoothing is done the agent will follow the path. This is done using the arrive algorithm. 
    \newpage
    
    %------------------------------------------------------------------------------------------------------------------------------------------------------- Pathfinding
