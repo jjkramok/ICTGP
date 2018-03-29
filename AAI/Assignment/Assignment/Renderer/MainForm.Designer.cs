@@ -250,21 +250,21 @@
             // 
             this.ditheringToolStripMenuItem.Name = "ditheringToolStripMenuItem";
             this.ditheringToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
-            this.ditheringToolStripMenuItem.Text = "Dithering";
+            this.ditheringToolStripMenuItem.Text = "Prioritized dithering";
             this.ditheringToolStripMenuItem.Click += new System.EventHandler(this.ditheringToolStripMenuItem_Click);
             // 
             // truncatedSumToolStripMenuItem
             // 
             this.truncatedSumToolStripMenuItem.Name = "truncatedSumToolStripMenuItem";
             this.truncatedSumToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
-            this.truncatedSumToolStripMenuItem.Text = "Truncated sum";
+            this.truncatedSumToolStripMenuItem.Text = "Weighted truncated sum";
             this.truncatedSumToolStripMenuItem.Click += new System.EventHandler(this.truncatedSumToolStripMenuItem_Click);
             // 
             // prioToolStripMenuItem
             // 
             this.prioToolStripMenuItem.Name = "prioToolStripMenuItem";
             this.prioToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
-            this.prioToolStripMenuItem.Text = "Priorization";
+            this.prioToolStripMenuItem.Text = "Prioritization";
             this.prioToolStripMenuItem.Click += new System.EventHandler(this.prioToolStripMenuItem_Click);
             // 
             // miscToolStripMenuItem
