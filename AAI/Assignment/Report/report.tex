@@ -38,23 +38,23 @@
    \subsubsection {Arrive}
    The entity will try to go in a straight line to a specified goal. When the entity gets close to the goal the entity will slow down. This behaviour will stop when the entity is on or very near its goal and the current speed of the entity is very low. 
    \subsubsection {Flee}
-   The entity will try to run away from entities that are the same type as specified. The closer another entity is the more the current entity will try to run away from the other entity. This algoritm will only search in an area, if there are no entities in the area the entity will not try to run away.
+   The entity will try to run away from entities that are the of the type specified. The closer another entity is the more the current entity will try to run away from the other entity. This algorithm will only search in a certain area, if there are no entities in the area the entity will not try to run away.
    \subsubsection {Seek}
-   This algoritm has the opposite behaviour from flee. However in this algoritm there is only one entity set to seek. If the specified entity to seek is to far away this behaviour will stop working.
+   This algorithm has the opposite behaviour from flee. However in this algoritm there is only one entity set to seek. If the specified entity to seek is to far away, then this behaviour will terminate itself.
    \subsubsection {Wander}
-  This algoritm will create a circle in front of the entity, on this circle there is a dot. This dot will move randomly along the circle. The entity will go towards the dot, the farther away the dot is from the entity the more force is applied. 
+  This algorithm will create a circle in front of the entity, on this circle there is a dot. This dot will move randomly along the circle. The entity will go towards the dot, the farther away the dot is from the entity the more force is applied. 
   \subsection{Advanced steering behaviours}
   \subsubsection {Flocking}
   First all entities of the same type are searched in a radius around the current entity, exluding itself. The current entity will do the following three behaviours: 
   \begin{itemize}
   \item Alignment: the entity will calculate the average direction off all the entities in the area. After this the entity will try to have the same direction as the average.
-  \item Cohesion: the entity will try to go towards the average location of all the entities in the area.
+  \item Cohesion: the entity will try gravitate towards the average location of all the entities in the area.
   \item Separation: the entity  will try to go away from all the entities in the area. 
   \end{itemize}
   \subsubsection {Obstacle avoidance}
   
   \subsubsection {Path following}
-   This algoritm will create a path to a specified location using the A* algoritm. But only if the goal is not in plain view. After the A* algoritm has found a path then this path will be smoothed. When the smoothing is done the agent will follow the path. This is done using the arrive algoritm. 
+   This algoritm will create a path to a specified location using the A* algorithm. But only if the goal is not in plain view. After the A* algorithm has found a path then this path will be smoothed. When the smoothing is done the agent will follow the path. This is done using the arrive algorithm. 
    \newpage
    
    %------------------------------------------------------------------------------------------------------------------------------------------------------- Pathfinding
