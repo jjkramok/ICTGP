@@ -20,7 +20,7 @@ namespace Assignment.Movement
 		public double SuccessDistance
 		{
 			get
-			{
+			{	
 				return arrive[0].DistanceDone;
 			}
 			set
