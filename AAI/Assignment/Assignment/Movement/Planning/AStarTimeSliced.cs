@@ -102,7 +102,7 @@ namespace Assignment.Movement.Planning
 
                 }
             }
-            if (GoalAlreadyReached) {
+			if (GoalAlreadyReached) {
                 return SearchStatus.TARGET_FOUND;
             } else {
                 return SearchStatus.TARGET_NOT_FOUND;

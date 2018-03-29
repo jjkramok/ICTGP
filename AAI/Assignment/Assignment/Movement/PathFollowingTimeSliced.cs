@@ -47,6 +47,11 @@ namespace Assignment.Movement
 
         public override SteeringForce Calculate(BaseEntity entity)
         {
+			if(path == null && RequestOpen)
+			{
+				return new SteeringForce();
+			}
+
             // Check if the goal is immediatly reachable and for any open pathplanning requests.
             if (!RequestOpen && !Planning.Pathfinding.Walkable(entity.Location, Goal))
             {
