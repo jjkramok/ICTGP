@@ -42,7 +42,7 @@
   \item Separation: the entity  will try to go away from all the entities in the area. 
   \end{itemize}
   \subsubsection {Obstacle avoidance}
-  
+  First all abstacles are searched whithin a radius (default 60) around the entity. For every object the angle from the entity to the object and the direction of the entity are compared. If the difference is more than 90$^{\circ}$ then the object is ignored. For the remaining obstacles the distance at the closest point (if the entity keeps moving in a straight line) between the entity and the obstacle is calculated. If this distance is less then \(radius of obstacle + radius of entity\), then this behaviour will add a force to the entity to try to avoid the obstacle.
   \subsubsection {Path following}
    This algoritm will create a path to a specified location using the A* algoritm. But only if the goal is not in plain view. After the A* algoritm has found a path then this path will be smoothed. When the smoothing is done the agent will follow the path. This is done using the arrive algoritm. 
    \newpage
@@ -97,19 +97,37 @@ A modified approach to the precise path smoothing algorithm of Mat Buckland \cit
     \newpage
    %------------------------------------------------------------------------------------------------------------------------------------------------------- Fuzzy logic
    \section {Fuzzy logic}
-   Fuzzy logic works in three steps. The values that go in and go out of the algoritms are crisp values. All the graphs have a left and right shoulder and zero or more trapezoidal shaped sets. All the lines in the graph are either diagonal or horizontal.
+   Fuzzy logic works in three steps. The values that go in and go out of the alghoritms are crisp values. All the graphs have a left and right shoulder and zero or more trapezoidal shaped sets. All the lines in the graph are either diagonal or horizontal.
    \subsection{Fuzzyfication}
-   In this step the graphs are loaded from a text file (fuzzyrules/graphs.txt). For every graph these values need to be set: 
+   In this step the graphs are loaded from a text file (fuzzyrules/graphs.txt), this file is read on startup. For every graph these values need to be set: 
    \begin{itemize}
    \item MIN: the minimal value in the graph.
    \item MAX: the maximum value in the graph.
    \item SECTIONS: the names of the sets in the graph.
-   \item SPACING: the values where the sets should stop and begin (there should be \( (section count) \times 2 - 2\) values in spacing).
+   \item SPACING: the values where the sets should stop and begin (there should be \( (section count) \times 2 - 2\) values in spacing). These values have to be in ascending order.
    \end{itemize}
    \subsection{Fuzzy rules}
-   
+   All rules are specified in a text file (fuzzyrules/graphs.txt), this file is read on startup. For the ruleset the input graphs and output graph have to be specified. Only the \emph{and} statement is available in a rule, other statements like \emph{or} and \emph{not} are not available. An example ruleset is given in figure~\ref{fig:ruleset}.
+   \begin{figure}[h!]
+   {\ttfamily 
+   		INPUTS = Ammo, Distance\\
+  	 	OUTPUT = Weapon\\
+   		IF Distance.Far AND Ammo.Loads THEN Weapon.Desirable \\
+   		IF Distance.Far	AND Ammo.Okay THEN Weapon.Undesirable \\
+   		...
+   }
+   \caption{Example ruleset}
+   \label{fig:ruleset}
+   \end{figure}\\
+   The execution for one rule works with these steps:
+   \begin{enumerate}
+   \item Get the value for every defined input set in the corresponding graph.
+   \item Find the smallest value from step 1.
+   \item Get the value for the defined set in the output graph.
+   \item If the value from step 3 is smaller than the value from step 2 then update the value for the difened set in the output graph to the value from step 2.
+   \end{enumerate}
    \subsection{Defuzzification}
-   In the project there are three methods for defuzzification. The method can be set in the Settings.ini file.
+   In the project there are three methods for defuzzification. The active method can be set in the Settings.ini file.
    
    \subsubsection {Mean of maximum}  
    This method will calculate the average value for the set with the highest degree of membership. In figure~\ref{fig:MOM} the result would be \(\frac{73}{100}=86.5\). 
@@ -122,10 +140,10 @@ A modified approach to the precise path smoothing algorithm of Mat Buckland \cit
    \end{figure}
    \subsubsection {Centroid}  
    This method will calculate the weighted average of the degree of membership (DOM) for an amount of locations. The amount of locations can be set in the Settings.ini file. The following calculations are executed at every location:
-   \[ \alpha += DOM \times location \]
-   \[ \beta += DOM \]
-   Both \(\alpha\) and \(\beta\) have a starting value of zero.
-   The result is calculated using the following formula:
+   \[ \alpha_{new} = \alpha_{old} + (DOM \times location) \]
+   \[ \beta_{new} = \beta_{old} + DOM \]
+   Both \(\alpha\) and \(\beta\) have a starting value of zero. If \(\beta = 0\) then the result will be \(0\). 
+   Otherwisen the result is calculated using the following formula:
    \[ result = \frac{\alpha}{\beta} \]
    
    \subsubsection {Average of maxima}  
