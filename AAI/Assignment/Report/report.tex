@@ -61,16 +61,17 @@
    \section {Pathfinding}
 This section will explain all techniques used in regard to pathfinding.
    \subsection {Graph}
-  A graph is used as underlying structure to allow pathfinding. Graph is a singleton and is its vertices are build along a grid of with a fixed cardinal distance between each vertex. Every time a vertex is placed the instantiation algorithm will determine if an agent will fit on that vertex without colliding with nearby obstancles. This is once again performed when all vertices are chained together with edges. The algorithm checks if the new edge is walkable for an entity before stitching vertices together using that edge.
+  A graph is used as underlying structure to allow pathfinding. Graph is a singleton and is its vertices are build along a grid of with a fixed cardinal distance between each vertex. Every time a vertex is placed the instantiation algorithm will determine if an agent will fit on that vertex without colliding with nearby obstancles. This is once again performed when all vertices are chained together with edges. The algorithm checks if the new edge is walkable for an entity before stitching vertices together using that edge.\\
+   Various settings like spacing between vertices can be set in the settings.ini file. Furthermore graph can be rendered to the screen by clicking the \emph{navigation} option under the \emph{view} button.
    \subsection {A*}
-  Our application only uses A* since pathfinding is only used to travel to single locations. In fact there are two different A* implementation, the first one will be explained here, the second one will be discussed in the section below. \\
+  Our application only uses A* since pathfinding is only used to travel to single locations. In fact there are two different A* implementation, the first one will be explained here, the second one will be discussed in the section \ref{tsastar}.\\
   A* uses a heuristic based on the type of graph created. If there are only cardinal edges then the manhattan distance will be used. Otherwise the heuristic will use the euclidian distance. A* will prioritize its search through the use of a priority queue based on an array that sorts every new entry based on the heuristic cost. 
    \subsection {Path smoothing}
-A modified approach to the precise path smoothing algorithm of Mat Buckland \cite{pgaie} is used. This modified approach was suggested by a fellow student during the course. In our case there are few obstacles that an pathplanning agent needs to avoid, and therefore path smoothing from the first vertex to the goal vertex is always an \(O(n)\) best-case operation. To make path smoothing slightly more efficient path smoothing is performed backwards, evaluating from the goal vertex back to the agent its location. This results in the same worst-case operation, but a better average and best-case operation.
-   \subsection {Time slicing}
+A modified approach to the precise path smoothing algorithm of Mat Buckland \cite{pgaie} is used. This modified approach was suggested by a fellow student during the course. In our case there are few obstacles that an pathplanning agent needs to avoid, and therefore path smoothing from the first vertex to the goal vertex is always an \(O(n)\) best-case operation. To make path smoothing slightly more efficient path smoothing is performed backwards, evaluating from the goal vertex back to the agent its location. This results in the same worst-case operation, but a better average and best-case operation.\\
+   Path smoothing can be disabled in the settings.ini files.
+   \subsection {Time slicing} \label{tsastar}
   When multiple agents need to calculate a path in the game world the whole application would lock until they all received their path. To avoid this a new pathfollowing behaviour is created to communicate with a global pathplanning manager. The manager manages all pathfinding requests and distributes its resources equally among all requests. A observer pattern is used to register and unregister seperate path planners to the path planning manager.
-   
- 
+   The path planning manager can be rendered to the screen by clicking the \emph{Path Planning Manager} option under the \emph{view} button.
    \newpage   
    %------------------------------------------------------------------------------------------------------------------------------------------------------- States
    \section {States}
