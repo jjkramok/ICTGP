@@ -1,4 +1,4 @@
-\documentclass[10pt]{article}
+\documentclass[10pt]{extarticle} % article doctype, possible font size range from 8pt to 20pt with not all being avaiable.
 \title{Game AAI Assignment}
 \author{Tim Hintzbergen and Sjoerd Dekker}
 \date{March 2018}
@@ -6,7 +6,7 @@
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{mathabx}
-\usepackage[margin=1.0in]{geometry}
+\usepackage[margin=1.0in]{geometry} % Sets page margin, 2.0in is default.
 \DeclareCaptionFormat{cancaption}{#1#2#3\par} % Normal format actually
 \DeclareCaptionLabelFormat{cancaptionlabel}{#1}
 \captionsetup[figure][number]{format=cancaption,labelformat=cancaptionlabel}
@@ -17,9 +17,16 @@
    \newpage
       %------------------------------------------------------------------------------------------------------------------------------------------------------- Introduction
    \newpage
-	\setcounter{page}{1}
+   \setcounter{page}{1}
    \section {Introduction}
-   Something about animals and stuff
+   This paper contains the documentation of the final assignment of the course Algorithms and Artificial Intelligence for Games. The task of this assignment was to build a game or simulation containing certain aspected that were taught during the course, namely:
+   \begin{itemize}
+      \item Steering behaviours
+      \item Pathfinding
+      \item States and scripting
+      \item Fuzzy logic
+   \end{itemize}
+   The premises of the application was a simulation of different animals and evolution. But soon due to time constraints the project turned out more as a toolbox styled with the natural world. The original idea was to contain evolving herbivores that had a certain fitness. Carnivores would then hunt the herbivores. Depending on the fitness certain herbivores could survive, and produce offspring, thereby passing on part of their fitness to their young.
    \newpage
 
    \tableofcontents{}
@@ -54,10 +61,10 @@
    \section {Pathfinding}
 This section will explain all techniques used in regard to pathfinding.
    \subsection {Graph}
-  A graph is used as underlying structure to allow pathfinding. Graph is a singleton and is its vertices are build along a grid of with a fixed cardinal distance between each vertex. Every time a vertex is placed the instantiation algorithm will determine if an agent will fit on that vertex without colliding with nearby obstancles. This is once again performed when all vertices are chained together with edges, the algorithm checks if the new edge if walkable for an entity before stitching vertices together using that edge.
+  A graph is used as underlying structure to allow pathfinding. Graph is a singleton and is its vertices are build along a grid of with a fixed cardinal distance between each vertex. Every time a vertex is placed the instantiation algorithm will determine if an agent will fit on that vertex without colliding with nearby obstancles. This is once again performed when all vertices are chained together with edges. The algorithm checks if the new edge is walkable for an entity before stitching vertices together using that edge.
    \subsection {A*}
   Our application only uses A* since pathfinding is only used to travel to single locations. In fact there are two different A* implementation, the first one will be explained here, the second one will be discussed in the section below. \\
-  A* uses a heuristic based on the type of graph created. If there are only cardinal edges (edges following a horizontal or verticle line) then the manhattan distance, or cardinal distance will be used. Otherwise the heuristic will use the euclidian approach, using the Pythagorean theorem. A* will prioritize its search through the use of a priority queue based on an array that sorts every new entry based on the heuristic used. 
+  A* uses a heuristic based on the type of graph created. If there are only cardinal edges then the manhattan distance will be used. Otherwise the heuristic will use the euclidian distance. A* will prioritize its search through the use of a priority queue based on an array that sorts every new entry based on the heuristic cost. 
    \subsection {Path smoothing}
 A modified approach to the precise path smoothing algorithm of Mat Buckland \cite{pgaie} is used. This modified approach was suggested by a fellow student during the course. In our case there are few obstacles that an pathplanning agent needs to avoid, and therefore path smoothing from the first vertex to the goal vertex is always an \(O(n)\) best-case operation. To make path smoothing slightly more efficient path smoothing is performed backwards, evaluating from the goal vertex back to the agent its location. This results in the same worst-case operation, but a better average and best-case operation.
    \subsection {Time slicing}
