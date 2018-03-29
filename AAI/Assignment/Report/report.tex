@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[10pt]{article}
 \title{Game AAI Assignment}
 \author{Tim Hintzbergen and Sjoerd Dekker}
 \date{March 2018}
@@ -6,21 +6,24 @@
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{mathabx}
+\usepackage[margin=1.0in]{geometry}
 \DeclareCaptionFormat{cancaption}{#1#2#3\par} % Normal format actually
 \DeclareCaptionLabelFormat{cancaptionlabel}{#1}
 \captionsetup[figure][number]{format=cancaption,labelformat=cancaptionlabel}
 \graphicspath { {images/} }
 \begin{document}
    \maketitle
+   \thispagestyle{empty}
    \newpage
-   
-   \tableofcontents{}
-   %------------------------------------------------------------------------------------------------------------------------------------------------------- Introduction
+      %------------------------------------------------------------------------------------------------------------------------------------------------------- Introduction
    \newpage
+	\setcounter{page}{1}
    \section {Introduction}
    Something about animals and stuff
    \newpage
-   
+
+   \tableofcontents{}
+   \newpage
    %------------------------------------------------------------------------------------------------------------------------------------------------------- Steering behaviours
    \section{Steering behaviours}
    The following steering behaviours are implemented. 
