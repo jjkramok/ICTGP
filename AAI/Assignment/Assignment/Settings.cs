@@ -32,6 +32,7 @@ namespace Assignment
         public int GameTickTime = 50;
         public int MaxPathfindingCyclesPerTick = 100;
         public int MaxPathfindingRequestsPerUpdate = 100;
+        public bool RenderAStar = false;
 
         public int RandomSeed = 0;
 

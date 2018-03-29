@@ -1,6 +1,7 @@
 ﻿using Assignment.Entity;
 using Assignment.World;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace Assignment.Movement.Planning
 {
@@ -9,6 +10,11 @@ namespace Assignment.Movement.Planning
         private ISearchTimeSliced currentSearch;
         private Location Goal;
         private PathFollowingTimeSliced Reference;
+
+        public void Render(Graphics g)
+        {
+            currentSearch.Render(g);
+        }
 
         /// <summary>
         /// Enlists this PathPlanner to the PathManager that distributes resources for pathplanning.
