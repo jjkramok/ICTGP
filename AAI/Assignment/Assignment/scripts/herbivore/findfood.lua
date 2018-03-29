@@ -12,7 +12,12 @@ function enter(entity, world)
 	if tree == NULL then
 		entity:AddBehaviour(Wander())
 	else
-		local path = PathFollowing(tree.Location)
+		local path
+		if (Settings.Instance.UseTimeSlicedNavigation)
+			path = PathFollowingTimeSliced(tree.Location)
+		else
+			path = PathFollowing(tree.Location)
+		end
 		path.SuccessDistance = 40
 		entity:AddBehaviour(path)
 	end
