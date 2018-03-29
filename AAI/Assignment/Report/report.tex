@@ -52,7 +52,7 @@
   \item Separation: the entity  will try to go away from all the entities in the area. 
   \end{itemize}
   \subsubsection {Obstacle avoidance}
-  First all abstacles are searched whithin a radius (default 60) around the entity. For every object the angle from the entity to the object and the direction of the entity are compared. If the difference is more than 90$^{\circ}$ then the object is ignored. For the remaining obstacles the distance at the closest point (if the entity keeps moving in a straight line) between the entity and the obstacle is calculated. If this distance is less then \(radius of obstacle + radius of entity\), then this behaviour will add a force to the entity to try to avoid the obstacle.
+  First all obstacles are searched within a radius (default 60 units) around the entity. For every object the angle from the entity to the object and the direction of the entity are compared. If the difference is more than 90$^{\circ}$ then the object is ignored. For the remaining obstacles the distance at the closest point (if the entity keeps moving in a straight line) between the entity and the obstacle is calculated. If this distance is less then \(radius of obstacle + radius of entity\), then this behaviour will add a force to the entity to try to avoid the obstacle.
   \subsubsection {Path following}
    This algorithm will create a path to a specified location using the A* algorithm. But only if the goal is not in plain view. After the A* algorithm has found a path then this path will be smoothed. When the smoothing is done the agent will follow the path. This is done using the arrive algorithm. 
    \newpage
@@ -74,20 +74,20 @@ A modified approach to the precise path smoothing algorithm of Mat Buckland \cit
    \newpage   
    %------------------------------------------------------------------------------------------------------------------------------------------------------- States
    \section {States}
-   The simulation uses states to determine what the entities should be doing. Each entity keeps track of its own state and the previous state. In figure~\ref{fig:stateClassDiagram} the relavent classes properties and methods are shown. 
+   The simulation uses states to determine what the entities should be doing. Each entity keeps track of its own state and the previous state. In figure~\ref{fig:stateClassDiagram} the relevant classes' properties and methods are shown.
    \begin{figure}[h!]
    \includegraphics[width=\textwidth]{stateuml.png}
    \caption{State class diagram}
    \label{fig:stateClassDiagram}
    \end{figure}
-   When the simulation is started the Initialize method in StateMachine is called, this will preload all the scripts. All scripts are located in the scripts folder. The scripts are seperated into folders, each folder is linked, based on the name, to an entity type.
+   \\When the simulation is started the Initialize method in StateMachine is called, this will preload all the scripts. All scripts are located in the scripts folder. The scripts are seperated into folders, each folder is linked, based on the name, to an entity type.
    The default states for every entity type are set in the settings.ini file.
    \subsection {Scripting}
-   States are scripted in Lua. Each state for every entity type has its own script file. Each file has to have atleast three functions: 
+   States are scripted in Lua. Each state for every entity type has its own script file. Each file has to have at least three functions: 
    \begin{itemize}
    \item enter(entity, world). This function is called when the entity switches to this state. In this function the necessary steeringbehaviours are added to the entity.
    \item execute(entity, world). This function is called on every tick that the state is active. This function should update relevant values for the entity. This function has to return the new state as a string, if the state should not change then it has to return the name of the current state.
-   \item exit(entity, world). This function is called when the entity leaves this state. In here, if necessary, the steeringbehaviours should be removed.
+   \item exit(entity, world). This function is called when the entity leaves this state. In here, if necessary, the steering behaviours should be removed.
    \end{itemize}
    The first parameter is the current entity, the second parameter is the gameworld instance. C\# namespaces can be imported in the scripts. This can be done by adding an import statement to the top of the script file, eg: import('System').
    
@@ -117,7 +117,7 @@ A modified approach to the precise path smoothing algorithm of Mat Buckland \cit
    \item SPACING: the values where the sets should stop and begin (there should be \( (section count) \times 2 - 2\) values in spacing). These values have to be in ascending order.
    \end{itemize}
    \subsection{Fuzzy rules}
-   All rules are specified in a text file (fuzzyrules/graphs.txt), this file is read on startup. For the ruleset the input graphs and output graph have to be specified. Only the \emph{and} statement is available in a rule, other statements like \emph{or} and \emph{not} are not available. An example ruleset is given in figure~\ref{fig:ruleset}.
+   All rules are specified in a text file (fuzzyrules/rules.txt), this file is read on startup. For the ruleset the input graphs and output graph have to be specified. Only the \emph{and} statement is available in a rule, other statements like \emph{or} and \emph{not} are not available. An example ruleset is given in figure~\ref{fig:ruleset}.
    \begin{figure}[h!]
    {\ttfamily 
    		INPUTS = Ammo, Distance\\
@@ -134,10 +134,10 @@ A modified approach to the precise path smoothing algorithm of Mat Buckland \cit
    \item Get the value for every defined input set in the corresponding graph.
    \item Find the smallest value from step 1.
    \item Get the value for the defined set in the output graph.
-   \item If the value from step 3 is smaller than the value from step 2 then update the value for the difened set in the output graph to the value from step 2.
+   \item If the value from step 3 is smaller than the value from step 2 then update the value for the defined set in the output graph to the value from step 2.
    \end{enumerate}
    \subsection{Defuzzification}
-   In the project there are three methods for defuzzification. The active method can be set in the Settings.ini file.
+   In the project there are three methods for defuzzification. The active method can be set in the settings.ini file.
    
    \subsubsection {Mean of maximum}  
    This method will calculate the average value for the set with the highest degree of membership. In figure~\ref{fig:MOM} the result would be \(\frac{73}{100}=86.5\). 
@@ -149,12 +149,9 @@ A modified approach to the precise path smoothing algorithm of Mat Buckland \cit
    \label{fig:MOM}
    \end{figure}
    \subsubsection {Centroid}  
-   This method will calculate the weighted average of the degree of membership (DOM) for an amount of locations. The amount of locations can be set in the Settings.ini file. The following calculations are executed at every location:
-   \[ \alpha_{new} = \alpha_{old} + (DOM \times location) \]
-   \[ \beta_{new} = \beta_{old} + DOM \]
-   Both \(\alpha\) and \(\beta\) have a starting value of zero. If \(\beta = 0\) then the result will be \(0\). 
-   Otherwisen the result is calculated using the following formula:
-   \[ result = \frac{\alpha}{\beta} \]
+   This method will calculate the weighted average of the degree of membership (DOM) for an amount of locations. The amount of locations can be set in the settings.ini file.
+   The result is calculated using the following formula:
+   \[ result = \frac{\sum (DOM \times location)}{\sum DOM} \]
    
    \subsubsection {Average of maxima}  
    This method will calculate the average of the degree of membership for every set. An example is shown in figure~\ref{fig:maxAv}.
