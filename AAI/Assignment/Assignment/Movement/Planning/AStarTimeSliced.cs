@@ -182,10 +182,11 @@ namespace Assignment.Movement.Planning
         /// <returns></returns>
         private double CostToReach(Graph.Vertex v)
         {
-            try
+            if (Costs.ContainsKey(v))
             {
                 return Costs[v];
-            } catch (KeyNotFoundException e)
+            }
+            else
             {
                 return Double.MaxValue;
             }
@@ -200,11 +201,11 @@ namespace Assignment.Movement.Planning
         /// <returns></returns>
         private double HCostToReach(Graph.Vertex v)
         {
-            try
+            if (HCosts.ContainsKey(v))
             {
                 return HCosts[v];
             }
-            catch (KeyNotFoundException e)
+            else
             {
                 return Double.MaxValue;
             }
