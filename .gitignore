@@ -66,6 +66,9 @@ cpp/sjoerd/cpp/.vs/*
 /CG/Sjoerd/CS/CG/_CG.sln
 /.gitattributes
 
+# CMake
+**/cmake-build-debug/
+
 # latex
 /AAI/Assignment/Report/report.pdf
 *.synctex.gz
