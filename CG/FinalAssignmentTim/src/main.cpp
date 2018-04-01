@@ -6,6 +6,8 @@
 
 #include "MyMacros.h"
 #include "Renderer.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
 
 using namespace std;
 
@@ -41,9 +43,57 @@ int main() {
     printf("OpenGL version supported by this platform (%s): \n",
            glGetString(GL_VERSION));
 
-    while (!glfwWindowShouldClose(window)) {
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+    /*
+     *  Scope that ends just before destroying the GL rendering context.
+     *  This way any stack allocated objects will be destroyed before the context will be.
+     **/
+    {
+        float pos[8] = {
+                -0.5f, -0.5f,
+                0.5f, -0.5f,
+                0.5f, 0.5f,
+                -0.5f, 0.5f,
+        };
+        unsigned int is[6] = {
+                0, 1, 2,
+                2, 3, 0,
+        };
+
+        unsigned int vao;
+        GLCall(glGenVertexArrays(1, &vao));
+        GLCall(glBindVertexArray(vao));
+
+        VertexBuffer vb(pos, 4 * 2 * sizeof(float));
+
+        GLCall(glEnableVertexAttribArray(0));
+        GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0));
+
+        IndexBuffer ib(is, 6);
+
+        float r = 1.0f;
+        float increment = 0.05f;
+
+        while (!glfwWindowShouldClose(window)) {
+            GLCall(glClear(GL_COLOR_BUFFER_BIT));
+
+            //GLCall(glUseProgram());
+            //GLCall(glUniform4f(locations, r, 0.3f, 0.8f, 1.0f);
+
+            GLCall(glBindVertexArray(vao));
+            ib.Bind();
+
+            GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+
+            if (r > 1.0f) {
+                increment = -increment;
+            } else if (r < 0.0f) {
+                increment = -increment;
+            }
+            r += increment;
+
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+        }
     }
 
     glfwTerminate();
