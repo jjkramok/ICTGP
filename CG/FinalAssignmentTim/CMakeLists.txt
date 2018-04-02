@@ -35,7 +35,7 @@ find_package(GLEW REQUIRED)
 find_package(PkgConfig)
 find_package(OpenGL REQUIRED)
 
-add_executable(${PROJECT_NAME} src/main.cpp src/Renderer.cpp src/Renderer.h src/MyMacros.h src/VertexBuffer.cpp src/VertexBuffer.h src/IndexBuffer.cpp src/IndexBuffer.h)
+add_executable(${PROJECT_NAME} src/main.cpp src/Renderer.cpp src/Renderer.h src/MyMacros.h src/VertexBuffer.cpp src/VertexBuffer.h src/IndexBuffer.cpp src/IndexBuffer.h src/VertexArray.cpp src/VertexArray.h src/VertexBufferLayout.cpp src/VertexBufferLayout.h)
 
 # Very important to ensure GLEW links staticly.
 target_compile_definitions(${PROJECT_NAME} PRIVATE GLEW_STATIC)
