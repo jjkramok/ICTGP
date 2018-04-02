@@ -1,14 +1,12 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <iostream>
-#include <fstream>
-#include <sstream>
 
 #include "MyMacros.h"
 #include "Renderer.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "VertexArray.h"
+#include "Shader.h"
 
 using namespace std;
 
@@ -60,30 +58,38 @@ int main() {
                 2, 3, 0,
         };
 
-        unsigned int vao;
-        GLCall(glGenVertexArrays(1, &vao));
-        GLCall(glBindVertexArray(vao));
+        //unsigned int vao;
+        //GLCall(glGenVertexArrays(1, &vao));
+        //GLCall(glBindVertexArray(vao));
 
-        VertexArray va;
-        VertexBuffer vb(pos, 4 * 2 * sizeof(float));
+        VertexArray vao;
+        VertexBuffer vbo(pos, 4 * 2 * sizeof(float));
         VertexBufferLayout layout;
         layout.PushFloat(2);
-        va.AddBuffer(vb, layout);
+        vao.AddBuffer(vbo, layout);
 
-        IndexBuffer ib(is, 6);
+        IndexBuffer ibo(is, 6);
 
+        Shader shader("res/shaders/Basic.glsl");
+        shader.Bind();
+        shader.SetUniform4f("u_Color", glm::vec4(0.8f, 0.3f, 0.8f, 1.0f));
+        shader.Unbind();
+        vbo.Unbind();
+        ibo.Unbind();
+
+        // Animation variables
         float r = 1.0f;
         float increment = 0.05f;
 
+        // Loop until window is closed by the user.
         while (!glfwWindowShouldClose(window)) {
             GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
-            //GLCall(glUseProgram());
-            //GLCall(glUniform4f(locations, r, 0.3f, 0.8f, 1.0f);
+            shader.Bind();
+            shader.SetUniform4f("u_Color", glm::vec4(r, 0.3f, 0.8f, 1.0f));
 
-            GLCall(glBindVertexArray(vao));
-            ib.Bind();
-            va.Bind();
+            ibo.Bind();
+            vao.Bind();
 
             GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
