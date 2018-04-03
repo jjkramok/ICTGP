@@ -66,6 +66,8 @@
   First all obstacles are searched within a radius (default 60 units) around the entity. For every object the angle from the entity to the object and the direction of the entity are compared. If the difference is more than 90$^{\circ}$ then the object is ignored. For the remaining obstacles the distance at the closest point (if the entity keeps moving in a straight line) between the entity and the obstacle is calculated. If this distance is less then \(radius of obstacle + radius of entity\), then this behaviour will add a force to the entity to try to avoid the obstacle.
   \subsubsection {Path following}
    This algorithm will create a path to a specified location using the A* algorithm. But only if the goal is not in plain view. After the A* algorithm has found a path then this path will be smoothed. When the smoothing is done the agent will follow the path. This is done using the arrive algorithm. 
+   \subsection {Explore}
+   The explore behaviour is implemented using a state, see section~\ref{state_explore}.
    \newpage
    
    %------------------------------------------------------------------------------------------------------------------------------------------------------- Pathfinding
@@ -74,7 +76,7 @@ This section will explain all techniques used in regard to pathfinding.
    \subsection {Graph}
   A graph is used as underlying structure to allow pathfinding. Graph is a singleton and is its vertices are build along a grid of with a fixed cardinal distance between each vertex. Every time a vertex is placed the instantiation algorithm will determine if an agent will fit on that vertex without colliding with nearby obstancles. This is once again performed when all vertices are chained together with edges. Since no vectors were used in the underlying structure of this project other solutions needed to be introduced for aspects like collision detection or path viability. These previous two steps make heavy use of a helper function call Walkable(), which samples points along a line or edge, to determine if an agent will fit on that line\cite{tmrp}. The algorithm checks if the new edge is walkable for an entity before stitching vertices together using that edge.\\
    Various settings like spacing between vertices can be set in the settings.ini file. Furthermore graph can be rendered to the screen by clicking the \emph{navigation} option under the \emph{view} button.
-   \subsection {A*}
+   \subsection {A*}\label{astar}
   Our application only uses A* since pathfinding is only used to travel to single locations. In fact there are two different A* implementation, the first one will be explained here, the second one will be discussed in section \ref{tsastar}.\\
   A* uses a heuristic based on the type of graph created. If there are only cardinal edges then the manhattan distance will be used. Otherwise the heuristic will use the euclidian distance. A* will prioritize its search through the use of a priority queue based on an array that sorts every new entry based on the heuristic cost \cite{shpq}. 
    \subsection {Path smoothing}
@@ -103,6 +105,8 @@ A modified approach to the precise path smoothing algorithm of Mat Buckland \cit
    The first parameter is the current entity, the second parameter is the gameworld instance. C\# namespaces can be imported in the scripts. This can be done by adding an import statement to the top of the script file, eg: \emph{import('System')}.   
    When the simulation is running the BaseEntity Update method will call the StateMachine Execute method. The stateMachine execute method will call the necessary methods in the scripts using the RunFunctionScript method. If the state changes the exit function of the previous state and the enter function of the new state are executed.
    
+   \subsection{Explore State} \label{state_explore}
+   The explore state is implemented for herbivores in the findfood script. When a herbivore want to eat it will try to find the best tree using fuzzy logic. After it has found the best tree it will use A*, see section~\ref{astar}, to find the optimal path towards the best tree. Lastly the herbivore will follow the path towards the tree. 
    \newpage
    %------------------------------------------------------------------------------------------------------------------------------------------------------- Partitioning
    \section {Spatial partitioning}
@@ -201,8 +205,11 @@ Figure~\ref{fig:fuzzygraph} contains an example graph from the text file \emph{f
 	Planning and design were difficult for this assignment as we had to implement new ideas as they took form, so it was nearly impossible to plan for them in advance.
 	For improvements I would suggest interfacing most classes of the codebase. This would make the application more extendable, and would have made it easier to apply design patterns, which in turn would greatly improve readability.
 	Although not related to the assignment, I did learn more about writing a report, especially using the \LaTeX\ language \cite{bibmisc}\cite{textut}.
-   \item Sjoerd
-   
+   \item Sjoerd\\
+   I think that the assignment went really good. Although a few things could have gone a bit better. At the start we didn't know how the different parts should work together. This let to the fact that we had to bodge in parts of the assignment, resulting in somewhat messy code. In future projects I would like to plan better in advance and try to reduce the amount of messy code.\\
+When I designed and implemented the script states I ran into some problems. I found it hard to find what I did wrong in the script files. This resulted in some frustations during the implementation.\\
+I have learned a lot from this assignment and the lectures. Most noteable how NPC's would make dicisions and how this effects the resulting behaviours. \LaTeX\ was new for me and I learned how it works during the making of this report. \\
+
    \end{itemize}
 
 \newpage

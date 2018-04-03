@@ -10,7 +10,6 @@ function enter(entity, world)
 	local tree = FuzzyMachine.BestTree(entity)
 
 	if tree == null then
-		Wander("")
 		entity:AddBehaviour(Wander())
 	else
 		local path
