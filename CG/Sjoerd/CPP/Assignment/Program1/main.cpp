@@ -45,7 +45,7 @@ struct Material
 	float power;
 };
 
-struct SingleObject 
+struct SingleObject
 {
 	GLuint vao;
 	GLuint textureID;
@@ -82,7 +82,8 @@ GLuint uniform_material_power;
 LightSource light;
 
 glm::vec3 eye = glm::vec3(0.0, 2.0, 6.0);
-glm::vec3 center = glm::vec3(1.5, 0.5, 0.0);
+glm::vec2 lookdirection = glm::vec2(0, 0);
+//glm::vec3 center = glm::vec3(1.5, 0.5, 0.0);
 
 // w: for walking, o for overview.
 unsigned char mode = 'o';
@@ -93,73 +94,76 @@ unsigned char mode = 'o';
 
 void keyboardHandler(unsigned char key, int a, int b)
 {
-	const float speed = 0.1;
+	if (key == 27)
+		glutExit();
 
-	float angle = 0;
-	if (eye.x > center.x)
-		angle = atan((eye.y - center.y) / (eye.x - center.x));
-	else
-		angle = atan((eye.y - center.y) / (eye.x - center.x)) + glm::radians(180.0);
+	//switch (key)
+	//{
+	//case 27:
+	//	glutExit();
+	//	break;
+	//case 'w':
+	//	eye.x -= tan(angle) * speed;
+	//	eye.z -= sin(angle) * speed;
 
-	switch (key)
-	{
-		case 27:
-			glutExit();
-			break;
-		case 'w':
-			eye.x ;
-			eye.z ;
+	//	center.x -= tan(angle) * speed;
+	//	center.z -= sin(angle) * speed;
+	//	cout << eye.x << "-" << eye.z << endl;
+	//	break;
+	//case 'a':
+	//	eye.z -= (eye.x - center.x) * speed;
+	//	eye.x -= (eye.z - center.z) * speed;
 
-			center.x -= (eye.x - center.x) * speed;
-			center.z -= (eye.z - center.z) * speed;
-			break;
-		case 'a':
-			eye.z -= (eye.x - center.x) * speed;
-			eye.x -= (eye.z - center.z) * speed;
+	//	center.z -= (eye.x - center.x) * speed;
+	//	center.x -= (eye.z - center.z) * speed;
+	//	break;
+	//case 's':
+	//	eye.x += tan(angle) * speed;
+	//	eye.z += sin(angle) * speed;
 
-			center.z -= (eye.x - center.x) * speed;
-			center.x -= (eye.z - center.z) * speed;
-			break;
-		case 's':
-			eye.x += (eye.x - center.x) * speed;
-			eye.z += (eye.z - center.z) * speed;
+	//	center.x += tan(angle) * speed;
+	//	center.z += sin(angle) * speed;
+	//	break;
+	//case 'd':
+	//	eye.z += (eye.x - center.x) * speed;
+	//	eye.x += (eye.z - center.z) * speed;
 
-			center.x += (eye.x - center.x) * speed;
-			center.z += (eye.z - center.z) * speed;
-			break;
-		case 'd':
-			eye.z += (eye.x - center.x) * speed;
-			eye.x += (eye.z - center.z) * speed;
+	//	center.z += (eye.x - center.x) * speed;
+	//	center.x += (eye.z - center.z) * speed;
+	//	break;
+	//case 'c':
+	//	if (mode == 'w') {
+	//		eye = glm::vec3(0.0, 2.0, 6.0);
+	//		center = glm::vec3(1.5, 0.5, 0.0);
+	//		mode = 'o';
+	//	}
+	//	else { // mode == 'o'
+	//		eye = glm::vec3(10, 1.75, 0);
+	//		center = glm::vec3(0, 1.75, 0);
+	//		mode = 'w';
+	//	}
+	//	break;
+	//default:
+	//	break;
+	//}
 
-			center.z += (eye.x - center.x) * speed;
-			center.x += (eye.z - center.z) * speed;
-			break;
-		case 'c':
-			if (mode == 'w') {
-				eye = glm::vec3(0.0, 2.0, 6.0);
-				center = glm::vec3(1.5, 0.5, 0.0);
-				mode = 'o';
-			}
-			else { // mode == 'o'
-				eye = glm::vec3(10, 1.75, 0);
-				center = glm::vec3(0, 1.75, 0);
-				mode = 'w';
-			}
-			break;
-		default:
-			break;
-	}
-	view = glm::lookAt(
-		eye,	
-		center,
-		glm::vec3(0.0, 1.0, 0.0));
-
-	for (int i = 0; i < objectCount; i++) {
-		objects[i].mv = view * objects[i].model;
-	}
 }
 
 #pragma region Render
+
+// center
+glm::vec3 getCenter()
+{
+	glm::vec3 center = glm::vec3(0, 1, 0);
+
+	center.x = cos(lookdirection.x) * (glm::radians(90.0) - abs(lookdirection.y)) + eye.x;
+	center.z = sin(lookdirection.x) * (glm::radians(90.0) - abs(lookdirection.y)) + eye.z;
+	float hd = sqrt(((center.x - eye.x) * (center.x - eye.x)) + ((center.z - eye.z) * (center.z - eye.z)));
+	center.y = tan(lookdirection.y) * hd + eye.y;
+
+	return center;
+}
+
 //--------------------------------------------------------------------------------
 // Rendering
 //--------------------------------------------------------------------------------
@@ -169,8 +173,8 @@ void Render()
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	objects[0].model = glm::rotate(objects[0].model, 0.01f, glm::vec3(0.0f, 1.0f, 0.0f));
-	objects[1].model = glm::rotate(objects[1].model, 0.05f, glm::vec3(1.0f, 0.0f, 0.5f));
+	objects[0].model = glm::rotate(objects[0].model, 0.01f, glm::vec3(0.0f, 0.0f, 0.0f));
+	objects[1].model = glm::rotate(objects[1].model, 0.05f, glm::vec3(0.0f, 0.0f, 0.5f));
 
 	glUseProgram(shaderID);
 
@@ -206,11 +210,41 @@ void Render()
 // void Render(int n)
 // Render method that is called by the timer function
 //------------------------------------------------------------
-
+void UpdateCamera();
 void Render(int n)
 {
+	UpdateCamera();
 	Render();
 	glutTimerFunc(DELTA, Render, 0);
+}
+
+void mouseUpdate(int x, int y) {
+	const float mouseSpeed = 0.01;
+	lookdirection.x += (x - WIDTH / 2) * mouseSpeed;
+	lookdirection.y -= (y - HEIGHT / 2) * mouseSpeed;
+
+	if (lookdirection.y > glm::radians(89.9)) {
+		lookdirection.y = glm::radians(89.9);
+	}
+	if (lookdirection.y < -glm::radians(89.9)) {
+		lookdirection.y = -glm::radians(89.9);
+	}
+}
+
+void UpdateCamera() {
+	// mouse
+	glutSetCursor(GLUT_CURSOR_NONE);
+	glutPassiveMotionFunc(mouseUpdate);
+	glutWarpPointer(WIDTH / 2, HEIGHT / 2);
+
+	view = glm::lookAt(
+		eye,
+		getCenter(),
+		glm::vec3(0.0, 1.0, 0.0));
+
+	for (int i = 0; i < objectCount; i++) {
+		objects[i].mv = view * objects[i].model;
+	}
 }
 
 #pragma endregion
@@ -266,12 +300,12 @@ void InitShaders()
 
 void InitMatrices()
 {
-	objects[0].model = glm::translate(glm::mat4(), glm::vec3(5.0, 2.0, 0.0));
+	objects[0].model = glm::translate(glm::mat4(), glm::vec3(0.0, 1.0, 0.0));
 	objects[1].model = glm::translate(glm::mat4(), glm::vec3(3.0, 0.5, 0.0));
 
 	view = glm::lookAt(
 		eye,
-		center,
+		getCenter(),
 		glm::vec3(0.0, 1.0, 0.0));
 	projection = glm::perspective(
 		glm::radians(45.0f),
