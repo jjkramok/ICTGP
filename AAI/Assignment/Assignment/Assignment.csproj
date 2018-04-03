@@ -83,7 +83,6 @@
     <Compile Include="Movement\SteeringForceCalculationType.cs" />
     <Compile Include="Movement\Wander.cs" />
     <Compile Include="Obstacle\BaseObstacle.cs" />
-    <Compile Include="Obstacle\Bush.cs" />
     <Compile Include="Obstacle\ObstacleCircle.cs" />
     <Compile Include="Obstacle\Rock.cs" />
     <Compile Include="Obstacle\Tree.cs" />
