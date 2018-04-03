@@ -69,3 +69,6 @@ cpp/sjoerd/cpp/.vs/*
 # latex
 /AAI/Assignment/Report/report.pdf
 *.synctex.gz
+/CG/Sjoerd/CPP/Assignment/Program1/Debug
+
+/CG/Sjoerd/CPP/Assignment/Debug
