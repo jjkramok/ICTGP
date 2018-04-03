@@ -55,7 +55,7 @@ unsigned int Shader::CreateShader(const std::string& vs, const std::string& fs) 
     GLCall(glDeleteShader(vsp));
     GLCall(glDeleteShader(fsp));
 
-    return program;;
+    return program;
 }
 
 /**
