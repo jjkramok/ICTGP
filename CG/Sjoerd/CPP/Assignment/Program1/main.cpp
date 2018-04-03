@@ -25,6 +25,8 @@ const int WIDTH = 800, HEIGHT = 600;
 const int DELTA = 10;
 int objectCount = 2;
 
+#pragma region TypeDef
+
 //--------------------------------------------------------------------------------
 // Typedefs
 //--------------------------------------------------------------------------------
@@ -56,6 +58,8 @@ struct SingleObject
 
 };
 
+#pragma endregion
+
 //--------------------------------------------------------------------------------
 // Variables
 //--------------------------------------------------------------------------------
@@ -85,7 +89,7 @@ void keyboardHandler(unsigned char key, int a, int b)
 		glutExit();
 }
 
-
+#pragma region Render
 //--------------------------------------------------------------------------------
 // Rendering
 //--------------------------------------------------------------------------------
@@ -138,6 +142,10 @@ void Render(int n)
 	Render();
 	glutTimerFunc(DELTA, Render, 0);
 }
+
+#pragma endregion
+
+#pragma region Init
 
 
 //------------------------------------------------------------
@@ -317,6 +325,7 @@ void InitBuffers()
 	}
 }
 
+#pragma endregion
 
 int main(int argc, char ** argv)
 {
