@@ -39,7 +39,6 @@ namespace Assignment.Movement
             switch (status)
             {
                 case SearchStatus.TARGET_FOUND:
-                    Console.WriteLine("Retreiving path from PathPlanner.");
                     if (path == null)
                     {
                         path = planner.GetPath();

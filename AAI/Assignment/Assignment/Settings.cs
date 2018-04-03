@@ -16,6 +16,7 @@ namespace Assignment
 
 		public int OmnivoreCount = 10;
 		public int HerbivoreCount = 10;
+        public int MaxPrerenderedRotatedImages = 8;
 
         public double EntitySize = 5f;
 

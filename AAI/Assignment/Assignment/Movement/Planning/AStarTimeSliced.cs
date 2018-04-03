@@ -168,9 +168,9 @@ namespace Assignment.Movement.Planning
             return path;
         }
 
-        public List<Graph.Edge> GetSPT()
+        public ICollection<Graph.Vertex> GetSPT()
         {
-            throw new NotImplementedException();
+            return ClosedSet;
         }
 
         /// <summary>

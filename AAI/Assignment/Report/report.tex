@@ -1,12 +1,17 @@
 \documentclass[10pt]{extarticle} % article doctype, possible font size range from 8pt to 20pt with not all being avaiable.
-\title{Game AAI Assignment}
-\author{Tim Hintzbergen and Sjoerd Dekker}
-\date{March 2018}
+\title{\huge AAI Final Assignment Report}
+\author{Tim Hintzbergen and Sjoerd Dekker	\\s1097561 and s1089406
+								\\ICTGPb
+								\\Gido Hakvoort}
+\date{April 3rd, 2018}
+
 % include packages
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{mathabx}
 \usepackage[margin=1.0in]{geometry} % Sets page margin, 2.0in is default.
+\usepackage{url}
+
 \DeclareCaptionFormat{cancaption}{#1#2#3\par} % Normal format actually
 \DeclareCaptionLabelFormat{cancaptionlabel}{#1}
 \captionsetup[figure][number]{format=cancaption,labelformat=cancaptionlabel}
@@ -65,13 +70,13 @@
    
    %------------------------------------------------------------------------------------------------------------------------------------------------------- Pathfinding
    \section {Pathfinding}
-This section will explain all techniques used in regard to pathfinding. 
+This section will explain all techniques used in regard to pathfinding.
    \subsection {Graph}
-  A graph is used as underlying structure to allow pathfinding. Graph is a singleton and is its vertices are build along a grid of with a fixed cardinal distance between each vertex. Every time a vertex is placed the instantiation algorithm will determine if an agent will fit on that vertex without colliding with nearby obstancles. This is once again performed when all vertices are chained together with edges. The algorithm checks if the new edge is walkable for an entity before stitching vertices together using that edge.\\
+  A graph is used as underlying structure to allow pathfinding. Graph is a singleton and is its vertices are build along a grid of with a fixed cardinal distance between each vertex. Every time a vertex is placed the instantiation algorithm will determine if an agent will fit on that vertex without colliding with nearby obstancles. This is once again performed when all vertices are chained together with edges. Since no vectors were used in the underlying structure of this project other solutions needed to be introduced for aspects like collision detection or path viability. These previous two steps make heavy use of a helper function call Walkable(), which samples points along a line or edge, to determine if an agent will fit on that line\cite{tmrp}. The algorithm checks if the new edge is walkable for an entity before stitching vertices together using that edge.\\
    Various settings like spacing between vertices can be set in the settings.ini file. Furthermore graph can be rendered to the screen by clicking the \emph{navigation} option under the \emph{view} button.
    \subsection {A*}
   Our application only uses A* since pathfinding is only used to travel to single locations. In fact there are two different A* implementation, the first one will be explained here, the second one will be discussed in section \ref{tsastar}.\\
-  A* uses a heuristic based on the type of graph created. If there are only cardinal edges then the manhattan distance will be used. Otherwise the heuristic will use the euclidian distance. A* will prioritize its search through the use of a priority queue based on an array that sorts every new entry based on the heuristic cost. 
+  A* uses a heuristic based on the type of graph created. If there are only cardinal edges then the manhattan distance will be used. Otherwise the heuristic will use the euclidian distance. A* will prioritize its search through the use of a priority queue based on an array that sorts every new entry based on the heuristic cost \cite{shpq}. 
    \subsection {Path smoothing}
 A modified approach to the precise path smoothing algorithm of Mat Buckland \cite{pgaie} is used. This modified approach was suggested by a fellow student during the course. In our case there are few obstacles that an pathplanning agent needs to avoid, and therefore path smoothing from the first vertex to the goal vertex is always an \(O(n)\) best-case operation. To make path smoothing slightly more efficient path smoothing is performed backwards, evaluating from the goal vertex back location of the agent. This results in the same worst-case operation, but a better average and best-case operation.
    \subsection {Time slicing} \label{tsastar}
@@ -89,7 +94,7 @@ A modified approach to the precise path smoothing algorithm of Mat Buckland \cit
    \\When the simulation is started the Initialize method in StateMachine is called, this will preload all the scripts. All scripts are located in the scripts folder. The scripts are seperated into folders, each folder is linked, based on the name, to an entity type.
    The default states for every entity type are set in the \emph{settings.ini} file.
    \subsection {Scripting}
-   States are scripted in Lua. Each state for every entity type has its own script file. Each file has to have at least three functions: 
+   States are scripted in Lua \cite{nlua}. Each state for every entity type has its own script file. Each file has to have at least three functions: 
    \begin{itemize}
    \item \emph{enter(entity, world)}. This function is called when the entity switches to this state. In this function the necessary steeringbehaviours are added to the entity.
    \item \emph{execute(entity, world)}. This function is called on every tick that the state is active. This function should update relevant values for the entity. This function has to return the new state as a string, if the state should not change then it has to return the name of the current state.
@@ -187,9 +192,20 @@ Figure~\ref{fig:fuzzygraph} contains an example graph from the text file \emph{f
     \newpage
    %------------------------------------------------------------------------------------------------------------------------------------------------------- Conclusion
    \section {Conclusion}
+   \begin{itemize}
+   \item Tim\\
+	I myself am statisfied how the result took form.
+	That is not to say that I think the project turned out perfect, for there are quite a few problems I have with the result.
+	During the last part of the assignment when I was busy implementing time-sliced pathfinding I noticed our code was getting a mess.
+	It was part the abscence of design patterns, but also the lack of planning and design in the earlier stages of development.
+	Planning and design were difficult for this assignment as we had to implement new ideas as they took form, so it was nearly impossible to plan for them in advance.
+	For improvements I would suggest interfacing most classes of the codebase. This would make the application more extendable, and would have made it easier to apply design patterns, which in turn would greatly improve readability.
+	Although not related to the assignment, I did learn more about writing a report, especially using the \LaTeX\ language \cite{bibmisc}\cite{textut}.
+   \item Sjoerd
    
+   \end{itemize}
 
 \newpage
 \bibliography{report} 
-\bibliographystyle{ieeetr} % options: apalike for apa, ieeetr for ieee
+\bibliographystyle{apalike} % options: apalike for apa, ieeetr for ieee
 \end{document}
