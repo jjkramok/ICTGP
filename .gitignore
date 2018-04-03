@@ -64,6 +64,8 @@ cpp/sjoerd/cpp/.vs/*
 **/obj/*
 /CG/Sjoerd/CS/CG/_CG.csproj
 /CG/Sjoerd/CS/CG/_CG.sln
+/CG/Sjoerd/CPP/Assignment/Program1/Debug
+/CG/Sjoerd/CPP/Assignment/Debug
 /.gitattributes
 
 # CMake
@@ -72,6 +74,4 @@ cpp/sjoerd/cpp/.vs/*
 # latex
 /AAI/Assignment/Report/report.pdf
 *.synctex.gz
-/CG/Sjoerd/CPP/Assignment/Program1/Debug
 
-/CG/Sjoerd/CPP/Assignment/Debug
