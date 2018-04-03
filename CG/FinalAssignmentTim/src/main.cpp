@@ -58,10 +58,6 @@ int main() {
                 2, 3, 0,
         };
 
-        //unsigned int vao;
-        //GLCall(glGenVertexArrays(1, &vao));
-        //GLCall(glBindVertexArray(vao));
-
         VertexArray vao;
         VertexBuffer vbo(pos, 4 * 2 * sizeof(float));
         VertexBufferLayout layout;
@@ -70,12 +66,14 @@ int main() {
 
         IndexBuffer ibo(is, 6);
 
-        Shader shader("res/shaders/Basic.glsl");
+        Shader shader("./../res/shaders/Basic.glsl");
         shader.Bind();
         shader.SetUniform4f("u_Color", glm::vec4(0.8f, 0.3f, 0.8f, 1.0f));
-        shader.Unbind();
+
+        vao.Unbind();
         vbo.Unbind();
         ibo.Unbind();
+        shader.Unbind();
 
         // Animation variables
         float r = 1.0f;

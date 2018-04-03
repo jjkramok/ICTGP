@@ -97,6 +97,7 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
  */
 ShaderProgramSource Shader::ParseShader(const std::string& filepath) {
     std::ifstream stream(filepath);
+    ASSERT(stream.is_open());
     std::string line;
     std::stringstream ss[2];
     ShaderType type = ShaderType::NONE;

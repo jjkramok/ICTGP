@@ -105,8 +105,14 @@ namespace Assignment.World
 				topLeftCandidateY--;
 			}
 
-
-			return null;
+            foreach (Vertex v in vertices)
+            {
+                if (v != null)
+                {
+                    return v;
+                }
+            }
+            return null;
 		}
 
 		private void UpdateNearestVertex(Location loc, ref Vertex nearestVertex, ref double nearestDistance, int x, int y)
