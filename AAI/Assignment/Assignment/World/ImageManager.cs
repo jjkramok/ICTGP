@@ -67,7 +67,7 @@ namespace Assignment.World
         class RotatedImageContainer
         {
             Image[] rotations;
-            int AmountOfRotations = 8;
+            int AmountOfRotations = Settings.Instance.MaxPrerenderedRotatedImages;
 
             /// <summary>
             /// Constructs the container based on a sprite. Calculates all possible rotations and stores them.

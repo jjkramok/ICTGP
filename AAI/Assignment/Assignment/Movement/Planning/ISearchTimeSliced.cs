@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using static Assignment.World.Graph;
 
 namespace Assignment.Movement.Planning
 {
@@ -15,7 +16,7 @@ namespace Assignment.Movement.Planning
         /// Returns all edges that have been examined already
         /// </summary>
         /// <returns></returns>
-        List<World.Graph.Edge> GetSPT();
+        ICollection<Vertex> GetSPT();
 
         double CostToTarget();
         double HeuristicCostToTarget();
