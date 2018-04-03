@@ -13,6 +13,8 @@
 #include "texture.hpp"
 
 
+
+
 using namespace std;
 
 //--------------------------------------------------------------------------------
@@ -79,14 +81,82 @@ GLuint uniform_material_power;
 
 LightSource light;
 
+glm::vec3 eye = glm::vec3(0.0, 2.0, 6.0);
+glm::vec3 center = glm::vec3(1.5, 0.5, 0.0);
+
+// w: for walking, o for overview.
+unsigned char mode = 'o';
+
 //--------------------------------------------------------------------------------
 // Keyboard handling
 //--------------------------------------------------------------------------------
 
 void keyboardHandler(unsigned char key, int a, int b)
 {
-	if (key == 27)
-		glutExit();
+	const float speed = 0.1;
+
+	float angle = 0;
+	if (eye.x > center.x)
+		angle = atan((eye.y - center.y) / (eye.x - center.x));
+	else
+		angle = atan((eye.y - center.y) / (eye.x - center.x)) + glm::radians(180.0);
+
+	switch (key)
+	{
+		case 27:
+			glutExit();
+			break;
+		case 'w':
+			eye.x ;
+			eye.z ;
+
+			center.x -= (eye.x - center.x) * speed;
+			center.z -= (eye.z - center.z) * speed;
+			break;
+		case 'a':
+			eye.z -= (eye.x - center.x) * speed;
+			eye.x -= (eye.z - center.z) * speed;
+
+			center.z -= (eye.x - center.x) * speed;
+			center.x -= (eye.z - center.z) * speed;
+			break;
+		case 's':
+			eye.x += (eye.x - center.x) * speed;
+			eye.z += (eye.z - center.z) * speed;
+
+			center.x += (eye.x - center.x) * speed;
+			center.z += (eye.z - center.z) * speed;
+			break;
+		case 'd':
+			eye.z += (eye.x - center.x) * speed;
+			eye.x += (eye.z - center.z) * speed;
+
+			center.z += (eye.x - center.x) * speed;
+			center.x += (eye.z - center.z) * speed;
+			break;
+		case 'c':
+			if (mode == 'w') {
+				eye = glm::vec3(0.0, 2.0, 6.0);
+				center = glm::vec3(1.5, 0.5, 0.0);
+				mode = 'o';
+			}
+			else { // mode == 'o'
+				eye = glm::vec3(10, 1.75, 0);
+				center = glm::vec3(0, 1.75, 0);
+				mode = 'w';
+			}
+			break;
+		default:
+			break;
+	}
+	view = glm::lookAt(
+		eye,	
+		center,
+		glm::vec3(0.0, 1.0, 0.0));
+
+	for (int i = 0; i < objectCount; i++) {
+		objects[i].mv = view * objects[i].model;
+	}
 }
 
 #pragma region Render
@@ -196,17 +266,17 @@ void InitShaders()
 
 void InitMatrices()
 {
-	objects[0].model = glm::mat4();
-	objects[1].model = glm::translate(glm::mat4(), glm::vec3(3.0, 0.5, 0.0));;
+	objects[0].model = glm::translate(glm::mat4(), glm::vec3(5.0, 2.0, 0.0));
+	objects[1].model = glm::translate(glm::mat4(), glm::vec3(3.0, 0.5, 0.0));
 
 	view = glm::lookAt(
-		glm::vec3(0.0, 2.0, 6.0),
-		glm::vec3(1.5, 0.5, 0.0),
+		eye,
+		center,
 		glm::vec3(0.0, 1.0, 0.0));
 	projection = glm::perspective(
 		glm::radians(45.0f),
 		1.0f * WIDTH / HEIGHT, 0.1f,
-		20.0f);
+		200.0f);
 
 	for (int i = 0; i < objectCount; i++) {
 		objects[i].mv = view * objects[i].model;
@@ -219,11 +289,11 @@ void InitMatrices()
 
 void InitObjects()
 {
-	bool res = loadOBJ("Objects/teapot.obj", objects[0].vertices, objects[0].uvs, objects[0].normals);
-	res = loadOBJ("Objects/box.obj", objects[1].vertices, objects[1].uvs, objects[1].normals);
+	loadOBJ("Objects/torus.obj", objects[0].vertices, objects[0].uvs, objects[0].normals);
+	loadOBJ("Objects/box.obj", objects[1].vertices, objects[1].uvs, objects[1].normals);
 
 	objects[0].textureID = loadBMP("Textures/Yellobrk.bmp");
-	objects[1].textureID= loadBMP("Textures/uvtemplate.bmp");
+	objects[1].textureID = loadBMP("Textures/uvtemplate.bmp");
 }
 
 
