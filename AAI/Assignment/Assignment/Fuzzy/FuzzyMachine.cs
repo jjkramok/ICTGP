@@ -60,7 +60,6 @@ namespace Assignment.Fuzzy
 			}
 			return trees[bestIndex];
 		}
-
 #if DEBUG
 		public static void TestFuzzy()
 		{

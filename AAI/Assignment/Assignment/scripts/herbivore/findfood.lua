@@ -9,11 +9,12 @@ import ('Assignment.Fuzzy')
 function enter(entity, world)
 	local tree = FuzzyMachine.BestTree(entity)
 
-	if tree == NULL then
+	if tree == null then
+		Wander("")
 		entity:AddBehaviour(Wander())
 	else
 		local path
-		if (Settings.Instance.UseTimeSlicedNavigation)
+		if Settings.Instance.UseTimeSlicedNavigation then
 			path = PathFollowingTimeSliced(tree.Location)
 		else
 			path = PathFollowing(tree.Location)
@@ -36,8 +37,7 @@ function execute(entity, world)
 		end
 	end
 
-	local behaviour = entity:GetBehaviourByType("PathFollowing")
-	if behaviour == NULL then
+	if entity:GetBehaviourByType("PathFollowing") == NULL and entity:GetBehaviourByType("PathFollowingTimeSliced") == NULL then
 		return "eating"
 	end
 

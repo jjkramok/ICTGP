@@ -183,6 +183,11 @@ namespace Assignment.World
 			return ObjectFinder(GridEntity, location, radius);
 		}
 
+		public List<BaseEntity> EntitiesInArea(Location location, double radius, EntityType type)
+		{
+			return ObjectFinder(GridEntity, location, radius).Where(x => x.Type == type).ToList();
+		}
+
 		public List<ObstacleCircle> ObstaclesInArea(Location location, double radius, bool includeObstacleRadius = false)
 		{
 			return ObjectFinder(GridObstacle, location, radius, includeObstacleRadius);
