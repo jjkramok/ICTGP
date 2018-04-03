@@ -52,6 +52,16 @@ unsigned int Shader::CreateShader(const std::string& vs, const std::string& fs) 
     GLCall(glLinkProgram(program));
     GLCall(glValidateProgram(program));
 
+    GLint params = 0;
+    GLCall(glGetProgramiv(program, GL_LINK_STATUS, &params));
+    cout << "is program linked during createShader(): " << (params == GL_TRUE) << endl;
+
+    GLsizei length;
+    GLchar msg[100];
+    msg[3] = 'n';
+    GLCall(glGetProgramInfoLog(program, 100, &length, msg));
+    cout << "info log(" << length << "): " << msg << endl;
+
     GLCall(glDeleteShader(vsp));
     GLCall(glDeleteShader(fsp));
 

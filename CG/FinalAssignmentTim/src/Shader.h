@@ -13,6 +13,7 @@
 #include <sstream>
 #include <detail/type_mat.hpp>
 #include "Renderer.h"
+#include <dirent.h>
 
 struct ShaderProgramSource {
     std::string VertexSource;
