@@ -24,21 +24,21 @@
    \newpage
    \setcounter{page}{1}
    \section {Introduction}
-   This paper contains the documentation of the final assignment of the course Algorithms and Artificial Intelligence for Games. The task of this assignment was to build a game or simulation containing certain aspected that were taught during the course, namely:
+   This paper contains the documentation of the final assignment of the course Algorithms and Artificial Intelligence for Games. The task of this assignment was to build a game or simulation containing certain aspects that were taught during the course, such as:
    \begin{itemize}
       \item Steering behaviours
       \item Pathfinding
       \item States and scripting
       \item Fuzzy logic
    \end{itemize}
-   The premises of the application was a simulation of different animals and evolution. But soon due to time constraints the project turned out more as a toolbox styled with the natural world. The original idea was to contain evolving herbivores that had a certain fitness. Carnivores would then hunt the herbivores. Depending on the fitness certain herbivores could survive, and produce offspring, thereby passing on part of their fitness to their young.
+   The premise of the application was a simulation of different animals and evolution. Due to time constraints the project turned out more as a toolbox styled with the natural world. The original idea consisted of evolving herbivores that had a certain fitness. Carnivores would then hunt the herbivores. Depending on the fitness certain herbivores could survive and produce offspring, thereby passing on part of their fitness to their young.
    \newpage
 
    \tableofcontents{}
    \newpage
    %------------------------------------------------------------------------------------------------------------------------------------------------------- Steering behaviours
    \section{Steering behaviours}
-   The steeringbehaviours can be combined to create realistic looking movement patterns. There are three method for calculating the resulting force from the behaviours. The active method can be set by clicking the \emph{Steering calculation} button. These methods are implemented:
+   The steering behaviours can be combined to create realistic looking movement patterns. There are three method for calculating the resulting force from the behaviours. The active method can be set by clicking the \emph{Steering calculation} button. These methods are implemented:
    \begin{itemize}
    \item Weighted truncated sum
    \item Prioritization
@@ -53,17 +53,17 @@
    \subsubsection {Seek}
    This algorithm has the opposite behaviour from flee. However in this algorithm there is only one entity set to seek. If the specified entity to seek is to far away, then this behaviour will terminate itself.
    \subsubsection {Wander}
-  This algorithm will create a circle in front of the entity, on this circle there is a dot. This dot will move randomly along the circle. The entity will go towards the dot, the farther away the dot is from the entity the more force is applied. 
+  This algorithm will create a circle in front of the entity, on this circle there is a dot. This dot will move randomly along the circle. The entity will go towards the dot, the further away the dot is from the entity the more force is applied. 
   \subsection{Advanced steering behaviours}
   \subsubsection {Flocking}
-  First all entities of the same type are searched in a radius around the current entity, exluding itself. The current entity will do the following three behaviours: 
+  First all entities of the same type in a radius around the current entity are determined, exluding itself. The current entity will do the following three behaviours: 
   \begin{itemize}
   \item Alignment: the entity will calculate the average direction off all the entities in the area. After this the entity will try to have the same direction as the average.
   \item Cohesion: the entity will try gravitate towards the average location of all the entities in the area.
   \item Separation: the entity  will try to go away from all the entities in the area. 
   \end{itemize}
   \subsubsection {Obstacle avoidance}
-  First all obstacles are searched within a radius (default 60 units) around the entity. For every object the angle from the entity to the object and the direction of the entity are compared. If the difference is more than 90$^{\circ}$ then the object is ignored. For the remaining obstacles the distance at the closest point (if the entity keeps moving in a straight line) between the entity and the obstacle is calculated. If this distance is less then \(radius of obstacle + radius of entity\), then this behaviour will add a force to the entity to try to avoid the obstacle.
+  First all obstacles are searched within a radius (default 60 units) around the entity. For every object the angle from the entity to the object and the direction of the entity are compared. If the difference is more than 90$^{\circ}$ then the object is ignored. For the remaining obstacles the distance at the closest point (if the entity keeps moving in a straight line) between the entity and the obstacle is calculated. If this distance is less then \(radius\ of\ obstacle + radius\ of\ entity\), then this behaviour will add a force to the entity to try to avoid the obstacle.
   \subsubsection {Path following}
    This algorithm will create a path to a specified location using the A* algorithm. But only if the goal is not in plain view. After the A* algorithm has found a path then this path will be smoothed. When the smoothing is done the agent will follow the path. This is done using the arrive algorithm. 
    \subsection {Explore}
@@ -74,13 +74,13 @@
    \section {Pathfinding}
 This section will explain all techniques used in regard to pathfinding.
    \subsection {Graph}
-  A graph is used as underlying structure to allow pathfinding. Graph is a singleton and is its vertices are build along a grid of with a fixed cardinal distance between each vertex. Every time a vertex is placed the instantiation algorithm will determine if an agent will fit on that vertex without colliding with nearby obstancles. This is once again performed when all vertices are chained together with edges. Since no vectors were used in the underlying structure of this project other solutions needed to be introduced for aspects like collision detection or path viability. These previous two steps make heavy use of a helper function call Walkable(), which samples points along a line or edge, to determine if an agent will fit on that line\cite{tmrp}. The algorithm checks if the new edge is walkable for an entity before stitching vertices together using that edge.\\
-   Various settings like spacing between vertices can be set in the settings.ini file. Furthermore graph can be rendered to the screen by clicking the \emph{navigation} option under the \emph{view} button.
+  A graph is used as underlying structure to allow pathfinding. Graph is a singleton and is its vertices are built along a grid of with a fixed cardinal distance between each vertex. Every time a vertex is placed the instantiation algorithm will determine if an agent will fit on that vertex without colliding with nearby obstacles. This is once again performed when all vertices are chained together with edges. Since no vectors were used in the underlying structure of this project other solutions needed to be introduced for aspects like collision detection or path viability. These previous two steps make heavy use of a helper function call Walkable(), which samples points along a line or edge, to determine if an agent will fit on that line\cite{tmrp}. The algorithm checks if the new edge is walkable for an entity before stitching vertices together using that edge.\\
+   Various settings like spacing between vertices can be set in the settings.ini file. Furthermore the graph can be rendered to the screen by clicking the \emph{navigation} option under the \emph{view} button.
    \subsection {A*}\label{astar}
   Our application only uses A* since pathfinding is only used to travel to single locations. In fact there are two different A* implementation, the first one will be explained here, the second one will be discussed in section \ref{tsastar}.\\
   A* uses a heuristic based on the type of graph created. If there are only cardinal edges then the manhattan distance will be used. Otherwise the heuristic will use the euclidian distance. A* will prioritize its search through the use of a priority queue based on an array that sorts every new entry based on the heuristic cost \cite{shpq}. 
    \subsection {Path smoothing}
-A modified approach to the precise path smoothing algorithm of Mat Buckland \cite{pgaie} is used. This modified approach was suggested by a fellow student during the course. In our case there are few obstacles that an pathplanning agent needs to avoid, and therefore path smoothing from the first vertex to the goal vertex is always an \(O(n)\) best-case operation. To make path smoothing slightly more efficient path smoothing is performed backwards, evaluating from the goal vertex back location of the agent. This results in the same worst-case operation, but a better average and best-case operation.
+A modified approach to the precise path smoothing algorithm of Mat Buckland \cite{pgaie} is used. This modified approach was suggested by a fellow student during the course. In our case there are few obstacles that a pathplanning agent needs to avoid, and therefore path smoothing from the first vertex to the goal vertex is always an \(O(n)\) best-case operation. To make path smoothing slightly more efficient path smoothing is performed backwards, evaluating from the goal vertex back location of the agent. This results in the same worst-case operation, but a better average and best-case operation.
    \subsection {Time slicing} \label{tsastar}
   When multiple agents need to calculate a path in the game world the whole application would lock until they all received their path. To avoid this a new pathfollowing behaviour is created to communicate with a global pathplanning manager. The manager manages all pathfinding requests and distributes its resources equally among all requests. A observer pattern is used to register and unregister seperate path planners to the path planning manager.
    The path planning manager can be rendered to the screen by clicking the \emph{Path Planning Manager} option under the \emph{view} button.
@@ -93,7 +93,7 @@ A modified approach to the precise path smoothing algorithm of Mat Buckland \cit
    \caption{State class diagram}
    \label{fig:stateClassDiagram}
    \end{figure}
-   \\When the simulation is started the Initialize method in StateMachine is called, this will preload all the scripts. All scripts are located in the scripts folder. The scripts are seperated into folders, each folder is linked, based on the name, to an entity type.
+   \\When the simulation is started the Initialize method in StateMachine is called. This will preload all the scripts. All scripts are located in the scripts folder. The scripts are seperated into folders, each folder is linked, based on the name, to an entity type.
    The default states for every entity type are set in the \emph{settings.ini} file.
    \subsection {Scripting}
    States are scripted in Lua \cite{nlua}. Each state for every entity type has its own script file. Each file has to have at least three functions: 
@@ -106,11 +106,11 @@ A modified approach to the precise path smoothing algorithm of Mat Buckland \cit
    When the simulation is running the BaseEntity Update method will call the StateMachine Execute method. The stateMachine execute method will call the necessary methods in the scripts using the RunFunctionScript method. If the state changes the exit function of the previous state and the enter function of the new state are executed.
    
    \subsection{Explore State} \label{state_explore}
-   The explore state is implemented for herbivores in the findfood script. When a herbivore want to eat it will try to find the best tree using fuzzy logic. After it has found the best tree it will use A*, see section~\ref{astar}, to find the optimal path towards the best tree. Lastly the herbivore will follow the path towards the tree. 
+   The explore state is implemented for herbivores in the findfood script. When a herbivore wants to eat it will try to find the best tree using fuzzy logic. After it has found the best tree it will use A*, see section~\ref{astar}, to find the optimal path towards the best tree. Lastly the herbivore will follow the path towards the tree. 
    \newpage
    %------------------------------------------------------------------------------------------------------------------------------------------------------- Partitioning
    \section {Spatial partitioning}
-   The world is split into multiple cells. These cells are layed out in a grid pattern. The size of the cells can be set in the \emph{settings.ini} file. An entity is always in one of these cells. When an entity moves the corrresponding cell in which the entity is located is recalculated. Searching for entities in an area works in the following manner (the area to search in is always a circle):
+   The world is split into multiple cells. These cells are laid out in a grid pattern. The size of the cells can be set in the \emph{settings.ini} file. An entity is always in one of these cells. When an entity moves the corrresponding cell in which the entity is located is recalculated. Searching for entities in an area works in the following manner (the area to search in is always a circle):
    \begin{enumerate}
    \item Calculate which cells, in a square, contain (some of) the area of the search circle.
    \item Get all the entities from the cells in step 1.
@@ -139,7 +139,7 @@ Figure~\ref{fig:fuzzygraph} contains an example graph from the text file \emph{f
 		SECTIONS = Low, Okay, Loads\\
 		SPACING = 0, 10, 10, 30  \\
    }
-   \caption{Example graph}
+   \caption{Example text representation of single graph}
    \label{fig:fuzzygraph}
    \end{figure}\\
    
@@ -155,7 +155,7 @@ Figure~\ref{fig:fuzzygraph} contains an example graph from the text file \emph{f
    		IF Distance.Close AND Ammo.Okay THEN Weapon.Desirable \\
    		...
    }
-   \caption{Example ruleset}
+   \caption{Example text representation of part of a ruleset}
    \label{fig:ruleset}
    \end{figure}\\
    The execution for one rule works with these steps:
@@ -198,17 +198,17 @@ Figure~\ref{fig:fuzzygraph} contains an example graph from the text file \emph{f
    \section {Conclusion}
    \begin{itemize}
    \item Tim\\
-	I myself am statisfied how the result took form.
-	That is not to say that I think the project turned out perfect, for there are quite a few problems I have with the result.
-	During the last part of the assignment when I was busy implementing time-sliced pathfinding I noticed our code was getting a mess.
+	The form of the result of the assignment is something I am statisfied with.
+	The result runs smoothly and looks better then I anticipated, but there are a few problems I have with the result.
+	During the last part of the assignment when I was busy implementing time-sliced pathfinding I noticed our code was becoming a mess.
 	It was part the abscence of design patterns, but also the lack of planning and design in the earlier stages of development.
-	Planning and design were difficult for this assignment as we had to implement new ideas as they took form, so it was nearly impossible to plan for them in advance.
-	For improvements I would suggest interfacing most classes of the codebase. This would make the application more extendable, and would have made it easier to apply design patterns, which in turn would greatly improve readability.
+	This has caused difficulties, since we had to implement a number of features and ideas as we progressed, rather than having every idea planned at the start.
+	For improvements I would suggest interfacing most classes of the codebase. This would make the application more expandable, and would have made it easier to apply design patterns, which in turn would greatly improve readability.
 	Although not related to the assignment, I did learn more about writing a report, especially using the \LaTeX\ language \cite{bibmisc}\cite{textut}.
    \item Sjoerd\\
-   I think that the assignment went really good. Although a few things could have gone a bit better. At the start we didn't know how the different parts should work together. This let to the fact that we had to bodge in parts of the assignment, resulting in somewhat messy code. In future projects I would like to plan better in advance and try to reduce the amount of messy code.\\
+   I think that the assignment turned out really good, although a few things could have gone a bit better. At the start we didn't know how the different parts should work together. This led to the fact that we had to unfortunately pass up or change parts of the assignment, resulting in somewhat messy code. In future projects I would like to plan better in advance and try to reduce the amount of messy code.\\
 When I designed and implemented the script states I ran into some problems. I found it hard to find what I did wrong in the script files. This resulted in some frustations during the implementation.\\
-I have learned a lot from this assignment and the lectures. Most noteable how NPC's would make decisions and how this effects the resulting behaviours. \LaTeX\ was new for me and I learned how it works during the making of this report. \\
+I have learned a lot from this assignment and the lectures. Most notably how NPC's would make decisions and how this effects the resulting behaviours. \LaTeX\ was new for me and I learned how it works during the making of this report. \\
 
    \end{itemize}
 
