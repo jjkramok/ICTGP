@@ -218,8 +218,8 @@ namespace Assignment.Movement.Planning
                 if (inPQ != null)
                 {
                     Pen p = new Pen(Color.Orange);
-                    g.DrawEllipse(p, (float)inPQ.Vertex.Location.X - 5, (float)inPQ.Vertex.Location.Y - 5,
-                        10, 10);
+                    g.DrawEllipse(p, (float)inPQ.Vertex.Location.X - 4, (float)inPQ.Vertex.Location.Y - 4,
+                        8, 8);
                 }
             }
             foreach (var evaluatedVertex in ClosedSet)
@@ -227,8 +227,8 @@ namespace Assignment.Movement.Planning
                 Pen p = new Pen(Color.Red);
                 //g.DrawLine(p, (float) evaluatedVertex.Location.X, (float)evaluatedVertex.Location.Y,
                 //    (float)CameFrom[evaluatedVertex].Location.X, (float)CameFrom[evaluatedVertex].Location.Y);
-                g.DrawEllipse(p, (float) evaluatedVertex.Location.X - 4, (float)evaluatedVertex.Location.Y - 4, 
-                    8, 8);
+                g.DrawEllipse(p, (float) evaluatedVertex.Location.X - 3, (float)evaluatedVertex.Location.Y - 3, 
+                    6, 6);
             }
         }
     }
