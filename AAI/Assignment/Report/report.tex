@@ -70,7 +70,7 @@ This section will explain all techniques used in regard to pathfinding.
   A graph is used as underlying structure to allow pathfinding. Graph is a singleton and is its vertices are build along a grid of with a fixed cardinal distance between each vertex. Every time a vertex is placed the instantiation algorithm will determine if an agent will fit on that vertex without colliding with nearby obstancles. This is once again performed when all vertices are chained together with edges. The algorithm checks if the new edge is walkable for an entity before stitching vertices together using that edge.\\
    Various settings like spacing between vertices can be set in the settings.ini file. Furthermore graph can be rendered to the screen by clicking the \emph{navigation} option under the \emph{view} button.
    \subsection {A*}
-  Our application only uses A* since pathfinding is only used to travel to single locations. In fact there are two different A* implementation, the first one will be explained here, the second one will be discussed in the section \ref{tsastar}.\\
+  Our application only uses A* since pathfinding is only used to travel to single locations. In fact there are two different A* implementation, the first one will be explained here, the second one will be discussed in section \ref{tsastar}.\\
   A* uses a heuristic based on the type of graph created. If there are only cardinal edges then the manhattan distance will be used. Otherwise the heuristic will use the euclidian distance. A* will prioritize its search through the use of a priority queue based on an array that sorts every new entry based on the heuristic cost. 
    \subsection {Path smoothing}
 A modified approach to the precise path smoothing algorithm of Mat Buckland \cite{pgaie} is used. This modified approach was suggested by a fellow student during the course. In our case there are few obstacles that an pathplanning agent needs to avoid, and therefore path smoothing from the first vertex to the goal vertex is always an \(O(n)\) best-case operation. To make path smoothing slightly more efficient path smoothing is performed backwards, evaluating from the goal vertex back location of the agent. This results in the same worst-case operation, but a better average and best-case operation.
@@ -100,7 +100,7 @@ A modified approach to the precise path smoothing algorithm of Mat Buckland \cit
    
    \newpage
    %------------------------------------------------------------------------------------------------------------------------------------------------------- Partitioning
-   \section {Partitioning}
+   \section {Spatial partitioning}
    The world is split into multiple cells. These cells are layed out in a grid pattern. The size of the cells can be set in the \emph{settings.ini} file. An entity is always in one of these cells. When an entity moves the corrresponding cell in which the entity is located is recalculated. Searching for entities in an area works in the following manner (the area to search in is always a circle):
    \begin{enumerate}
    \item Calculate which cells, in a square, contain (some of) the area of the search circle.
@@ -121,6 +121,20 @@ A modified approach to the precise path smoothing algorithm of Mat Buckland \cit
    \item SECTIONS: the names of the sets in the graph.
    \item SPACING: the values where the sets should stop and begin (there should be \( (section count) \times 2 - 2\) values in spacing). These values have to be in ascending order.
    \end{itemize}
+Figure~\ref{fig:fuzzygraph} contains an example graph from the text file \emph{fuzzyrules/graphs.txt}.
+   \begin{figure}[h!]
+   {\ttfamily 
+   		Ammo\\
+		MIN = 0\\
+		MAX = 40\\
+		SECTIONS = Low, Okay, Loads\\
+		SPACING = 0, 10, 10, 30  \\
+   }
+   \caption{Example graph}
+   \label{fig:fuzzygraph}
+   \end{figure}\\
+   
+   
    \subsection{Fuzzy rules}
    All rules are specified in a text file \emph{fuzzyrules/graphs.txt}, this file is read on startup. For the ruleset the input graphs and output graph have to be specified. Only the \emph{and} statement is available in a rule, other statements like \emph{or} and \emph{not} are not available. An example ruleset is given in figure~\ref{fig:ruleset}.
    \begin{figure}[h!]
@@ -168,6 +182,12 @@ A modified approach to the precise path smoothing algorithm of Mat Buckland \cit
    \caption{Average of maxima example}
    \label{fig:maxAv}
    \end{figure}
+
+ 
+    \newpage
+   %------------------------------------------------------------------------------------------------------------------------------------------------------- Conclusion
+   \section {Conclusion}
+   
 
 \newpage
 \bibliography{report} 
