@@ -10,9 +10,9 @@ function enter(entity, world)
 end
 
 function execute(entity, world)
-	entity.SlowEnergy = entity.SlowEnergy + 1
-
-	if entity.SlowEnergy > 100 then
+	entity.QuickEnergy = entity.QuickEnergy + 1
+	
+	if entity.QuickEnergy > 100 then
 		return "attack"
 	end
 

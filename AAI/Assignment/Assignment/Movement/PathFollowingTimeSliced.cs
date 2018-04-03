@@ -21,7 +21,20 @@ namespace Assignment.Movement
             set { _goal = value; path = null; }
         }
 
-        public void NotifyOfSearchStatus(SearchStatus status)
+		public double SuccessDistance
+		{
+			get
+			{
+				return arrive[0].DistanceDone;
+			}
+			set
+			{
+				arrive[0].DistanceDone = value;
+				arrive[0].StopDistance = value + 15;
+			}
+		}
+
+		public void NotifyOfSearchStatus(SearchStatus status)
         {
             switch (status)
             {

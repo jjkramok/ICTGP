@@ -25,8 +25,10 @@ namespace Assignment.State
 
 				return script;
 			}
-			catch
+			catch(Exception e)
 			{
+				Console.WriteLine($"Script: {scriptName} could not be parsed.");
+				Console.WriteLine(e.Message);
 				return null;
 			}
 		}

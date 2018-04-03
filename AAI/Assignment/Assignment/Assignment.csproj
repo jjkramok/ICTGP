@@ -152,10 +152,10 @@
     <None Include="scripts\omnivore\attack.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="scripts\omnivore\patrol.lua">
+    <None Include="scripts\omnivore\eat.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="scripts\omnivore\hide.lua">
+    <None Include="scripts\omnivore\patrol.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="settings.ini">

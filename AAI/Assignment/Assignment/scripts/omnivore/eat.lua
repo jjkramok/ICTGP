@@ -5,18 +5,16 @@ import ('Assignment.Entity')
 import ('Assignment.World')
 
 function enter(entity, world)
-	entity:AddBehaviour(ObstacleAvoidance())
-	entity:AddBehaviour(Wander())
 end
 
 function execute(entity, world)
-	entity.SlowEnergy = entity.SlowEnergy + 1
+	entity.QuickEnergy = entity.QuickEnergy + 2
 
-	if entity.SlowEnergy > 100 then
+	if entity.QuickEnergy > 100 then
 		return "patrol"
 	end
 
-	return "hide"
+	return "eat"
 end 
 
 function exit(entity, world)

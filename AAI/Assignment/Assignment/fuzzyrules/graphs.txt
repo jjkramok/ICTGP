@@ -3,9 +3,9 @@
 
 Distance
 MIN = 0
-MAX = 700
+MAX = 1500
 SECTIONS = Close, Medium, Far
-SPACING = 100, 150, 300, 400
+SPACING = 100, 150, 300, 600
 
 FoodEntity
 MIN = 0

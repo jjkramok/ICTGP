@@ -5,23 +5,28 @@ import ('Assignment.Entity')
 import ('Assignment.World')
 
 function enter(entity, world)
-	local Goal = Location(400, 500)
-	local path
-	if (Settings.Instance.UseTimeSlicedNavigation)
-		path = PathFollowingTimeSliced(Goal)
-	else
-		path = PathFollowing(Goal)
-	end
+	local chaseEntities = world:EntitiesInArea(entity.Location, 100.0, EntityType.Herbivore)
+	if chaseEntities.Count > 0 then
+		local seek = Seek()
+		seek.ChaseEntity = chaseEntities[0]
+		seek.MaxDistance = 150
+		entity:AddBehaviour(seek)
 
+	end
 	entity:AddBehaviour(ObstacleAvoidance())
-	entity:AddBehaviour(path)
 end
 
 function execute(entity, world)
-	entity.SlowEnergy = entity.SlowEnergy - 1
+	entity.QuickEnergy = entity.QuickEnergy - 1
 
-	if entity.SlowEnergy < 50 then
-		return "hide"
+	local behaviour = entity:GetBehaviourByType("Seek")
+	if behaviour == NULL then
+		local chaseEntities = world:EntitiesInArea(entity.Location, 10.0, EntityType.Herbivore)
+		if chaseEntities.Count > 0 then
+			return "eat"
+		else
+			return "patrol"
+		end
 	end
 
 	return "attack"
