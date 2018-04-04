@@ -4,6 +4,14 @@
 
 #include "Renderer.h"
 
+void Renderer::Draw(const VertexArray &vao, const IndexBuffer &ibo, const Shader &shader) const {
+    shader.Bind();
+    ibo.Bind();
+    vao.Bind();
+
+    GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+}
+
 void GLClearErrors() {
     while (glGetError() != GL_NO_ERROR);
 }
