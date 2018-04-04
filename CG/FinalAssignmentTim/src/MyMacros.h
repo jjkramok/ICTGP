@@ -14,6 +14,8 @@
 #define DEBUG_BREAK __builtin_trap()
 #endif
 
+#include <iostream>
+
 /**
  * Basic assert function that toggles a dynamic breakpoint when resulting in false.
  */
@@ -26,4 +28,4 @@
     x;\
     ASSERT(GLLogCall(#x, __FILE__, __LINE__))
 
-#endif //FINALASSIGNMENTTIM_MYMACROS_H
+#endif // FINALASSIGNMENTTIM_MYMACROS_H
