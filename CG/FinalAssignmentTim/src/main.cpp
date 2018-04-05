@@ -8,6 +8,7 @@
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Texture.h"
 
 using namespace std;
 
@@ -48,11 +49,11 @@ int main() {
      *  This way any stack allocated objects will be destroyed before the context will be.
      **/
     {
-        float pos[8] = {
-                -0.5f, -0.5f,
-                0.5f, -0.5f,
-                0.5f, 0.5f,
-                -0.5f, 0.5f,
+        float pos[] = {
+                -0.5f, -0.5f, 0.0f, 0.0f, /* bottom left*/
+                0.5f, -0.5f, 1.0f, 0.0f, /* bottom right */
+                0.5f, 0.5f, 1.0f, 1.0f, /* top right */
+                -0.5f, 0.5f, 0.0f, 1.0f, /* top left */
         };
         unsigned int is[6] = {
                 0, 1, 2,
@@ -60,8 +61,9 @@ int main() {
         };
 
         VertexArray vao;
-        VertexBuffer vbo(pos, 4 * 2 * sizeof(float));
+        VertexBuffer vbo(pos, 4 * 4 * sizeof(float));
         VertexBufferLayout layout;
+        layout.PushFloat(2);
         layout.PushFloat(2);
         vao.AddBuffer(vbo, layout);
 
@@ -70,6 +72,11 @@ int main() {
         Shader shader("./../res/shaders/Basic.glsl");
         shader.Bind();
         shader.SetUniform4f("u_Color", glm::vec4(0.8f, 0.3f, 0.8f, 1.0f));
+
+        Texture texture("./../res/textures/blindguardian.png");
+        unsigned char textureSlot = 0;
+        texture.Bind(textureSlot);
+        shader.SetUniform1i("u_Texture", textureSlot);
 
         vao.Unbind();
         vbo.Unbind();
@@ -84,7 +91,7 @@ int main() {
 
         // Loop until window is closed by the user.
         while (!glfwWindowShouldClose(window)) {
-            GLCall(glClear(GL_COLOR_BUFFER_BIT));
+            renderer.Clear();
 
             shader.Bind();
             shader.SetUniform4f("u_Color", glm::vec4(r, 0.3f, 0.8f, 1.0f));
