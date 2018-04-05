@@ -15,6 +15,7 @@
 #include "Renderer.h"
 #include <dirent.h>
 #include <unordered_map>
+#include <glm.hpp>
 
 struct ShaderProgramSource {
     std::string VertexSource;

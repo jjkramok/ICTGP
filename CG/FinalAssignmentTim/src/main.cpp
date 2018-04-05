@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
+#include <detail/type_mat2x2.hpp>
+#include <gtc/matrix_transform.hpp>
 #include "MyMacros.h"
 #include "Renderer.h"
 #include "VertexBuffer.h"
@@ -61,6 +62,7 @@ int main() {
         };
 
         GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)); // Setup basic transparency rendering.
+        GLCall(glBlendEquation(GL_FUNC_ADD)); // Specify how to combine / handle overwriting on the target buffer.
         GLCall(glEnable(GL_BLEND)); // Enable transparency rendering.
 
         VertexArray vao;
@@ -72,6 +74,8 @@ int main() {
 
         IndexBuffer ibo(is, 6);
 
+        glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f); /* left edge, right edge, bottom edge, top edge, near plane, far plane. Everything outside will be culled */
+
         Shader shader("./../res/shaders/Basic.glsl");
         shader.Bind();
         shader.SetUniform4f("u_Color", glm::vec4(0.8f, 0.3f, 0.8f, 1.0f));
@@ -80,6 +84,7 @@ int main() {
         unsigned char textureSlot = 0;
         texture.Bind(textureSlot);
         shader.SetUniform1i("u_Texture", textureSlot);
+        shader.SetUniformMat4f("u_MVP", proj);
 
         vao.Unbind();
         vbo.Unbind();
