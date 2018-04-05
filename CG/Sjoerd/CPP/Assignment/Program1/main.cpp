@@ -25,7 +25,7 @@ const char * fragshader_name = "fragmentshader.fsh";
 const char * vertexshader_name = "vertexshader.vsh";
 const int WIDTH = 800, HEIGHT = 600;
 const int DELTA = 10;
-int objectCount = 11;
+int objectCount = 13;
 
 #pragma region TypeDef
 
@@ -81,16 +81,21 @@ GLuint uniform_material_power;
 
 LightSource light;
 
-glm::vec3 eye = glm::vec3(0.0, 2.0, 6.0);
-glm::vec2 lookdirection = glm::vec2(0, 0);
+glm::vec3 eye = glm::vec3(1, 1.75, 10);
+glm::vec2 lookdirection = glm::vec2(glm::radians(-90.0f), 0);
 //glm::vec3 center = glm::vec3(1.5, 0.5, 0.0);
 
 // w: for walking, o for overview.
 unsigned char keysPressing = 0;
-unsigned char mode = 'w';
+const unsigned char modeWander = 'w';
+const unsigned char modeOverview = 'o';
+unsigned char mode = modeWander;
 
 unsigned char swingState = 1;
 float swingSpeed = 0.024;
+
+float bouncyBallSpeed = 0;
+float bouncyBallState = 0;
 //--------------------------------------------------------------------------------
 // Keyboard handling
 //--------------------------------------------------------------------------------
@@ -100,8 +105,24 @@ void keyDown(unsigned char key, int a, int b)
 	if (key == 27)
 		glutExit();
 
-	if (key == 'c')
-		mode = mode == 'w' ? 'o' : 'w';
+	if (key == 'c') {
+		if (mode == modeOverview) {
+			mode = modeWander;
+			eye.x = 1;
+			eye.y = 1.75;
+			eye.z = 10;
+			lookdirection.x = glm::radians(-90.0f);
+			lookdirection.y = 0;
+		}
+		else {
+			mode = modeOverview;
+			eye.x = -15;
+			eye.y = 15;
+			eye.z = 10;
+			lookdirection.x = glm::radians(-30.0f);
+			lookdirection.y = glm::radians(-35.0f);
+		}
+	}
 
 	for (int i = 0; i < 12; i += 2) {
 		if (key == keys[i]) {
@@ -185,6 +206,7 @@ void Render(int n)
 }
 
 void mouseUpdate(int x, int y) {
+	if (mode == modeOverview) return;
 	const float mouseSpeed = 0.01;
 	lookdirection.x += (x - WIDTH / 2) * mouseSpeed;
 	lookdirection.y -= (y - HEIGHT / 2) * mouseSpeed;
@@ -200,7 +222,7 @@ void mouseUpdate(int x, int y) {
 }
 
 void updateCameraPosition() {
-	if (mode == 'o') return;
+	if (mode == modeOverview) return;
 
 	const float flyspeed = 0.02;
 	const float walkspeed = 0.05;
@@ -224,11 +246,11 @@ void updateCameraPosition() {
 		eye.z += sin(glm::radians(90.0) + lookdirection.x) * walkspeed;
 	}
 
-	if (keysPressing & keys[9]) { // shift
+	if (keysPressing & keys[9]) { // z
 		eye.y += flyspeed;
 	}
 
-	if (keysPressing & keys[11]) { // crtl
+	if (keysPressing & keys[11]) { // x
 		eye.y -= flyspeed;
 	}
 }
@@ -251,18 +273,28 @@ void UpdateCamera() {
 	}
 }
 
-void updateObjects() {
-
+void updateObjects()
+{
 	if (swingState)
 		swingSpeed += 0.0003;
 	else
 		swingSpeed -= 0.0003;
 
-	if (swingSpeed > 0.025 || swingSpeed < -0.025) {
+	if (swingSpeed > 0.025 || swingSpeed < -0.025)
 		swingState = !swingState;
-	}
+
 	objects[3].model = glm::rotate(objects[3].model, swingSpeed, glm::vec3(0.0f, 0.0f, 1.0f));
 	objects[4].model = glm::rotate(objects[4].model, -swingSpeed, glm::vec3(0.0f, 0.0f, 1.0f));
+
+	if (bouncyBallSpeed <= 0 || bouncyBallSpeed > 0.1)
+		bouncyBallState = !bouncyBallState;
+
+	if (bouncyBallState)
+		bouncyBallSpeed += 0.001;
+	else
+		bouncyBallSpeed -= 0.001;
+
+	objects[12].model = glm::translate(objects[12].model, glm::vec3(0.0, bouncyBallState ? -bouncyBallSpeed : bouncyBallSpeed, 0.0));
 }
 
 #pragma endregion
@@ -323,7 +355,8 @@ void InitMatrices()
 {
 	//house
 	objects[0].model = glm::scale(glm::translate(glm::mat4(), glm::vec3(5.0, 0.0, 0.0)), glm::vec3(5, 5, 5));
-	objects[1].model = glm::scale(glm::rotate(glm::translate(glm::mat4(), glm::vec3(5.0, 3.5, 2.5)), glm::radians(90.0f), glm::vec3(1.0,0.0,0.0)), glm::vec3(0.6, 0.6, 0.6));
+	objects[1].model = glm::scale(glm::rotate(glm::translate(glm::mat4(), glm::vec3(5.0, 3.5, 2.5)), glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0)), glm::vec3(0.6, 0.6, 0.6));
+	objects[11].model = glm::scale(glm::rotate(glm::translate(glm::mat4(), glm::vec3(5.0, 3.5, 2.5)), glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0)), glm::vec3(0.6, 0.1, 0.6));
 	//swing
 	objects[2].model = glm::translate(glm::mat4(), glm::vec3(-3.0, 0.5, 0.0));
 	objects[3].model = glm::translate(glm::mat4(), glm::vec3(-3.0, 2.22, -0.4));
@@ -336,6 +369,8 @@ void InitMatrices()
 	objects[9].model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, 250.0, 0.0)), glm::radians(180.0f), glm::vec3(1.0, 0.0, 0.0));
 	objects[10].model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, 0.0, 250.0)), glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
 
+	// bouncy ball
+	objects[12].model = glm::translate(glm::mat4(), glm::vec3(-3, 6.4, -4));
 
 	view = glm::lookAt(
 		eye,
@@ -368,6 +403,9 @@ void InitObjects()
 	loadOBJ("Objects/skyboxplane.obj", objects[8].vertices, objects[8].uvs, objects[8].normals);
 	loadOBJ("Objects/skyboxplane.obj", objects[9].vertices, objects[9].uvs, objects[9].normals);
 	loadOBJ("Objects/skyboxplane.obj", objects[10].vertices, objects[10].uvs, objects[10].normals);
+	loadOBJ("Objects/cylinder18.obj", objects[11].vertices, objects[11].uvs, objects[11].normals);
+	loadOBJ("Objects/sphere.obj", objects[12].vertices, objects[12].uvs, objects[12].normals);
+
 
 	objects[0].textureID = loadBMP("Textures/Yellobrk.bmp");
 	objects[2].textureID = loadBMP("Textures/swing.bmp");
@@ -391,22 +429,32 @@ void InitMaterialsLight()
 	light.position = glm::vec3(0.0, 0.0, 0.0);
 
 	for (int i = 0; i < objectCount; i++) {
-		objects[i].material.ambientColor = glm::vec3(0.5, 0.5, 0.5);
-		objects[i].material.diffuseColor = glm::vec3(0.5, 0.5, 0.5);
+		objects[i].material.ambientColor = glm::vec3(1, 1, 1);
+		objects[i].material.diffuseColor = glm::vec3(1, 1, 1);
 		objects[i].material.specular = glm::vec3(1.0);
 		objects[i].material.power = 128;
 		objects[i].apply_texture = true;
 	}
 
-	objects[1].material.ambientColor = glm::vec3(0.1, 0.1, 0.9);
-	objects[1].material.diffuseColor = glm::vec3(0.1, 0.1, 0.9);
+	objects[0].material.specular = glm::vec3(0);
+	objects[1].material.ambientColor = glm::vec3(0.9, 0.1, 0.0);
+	objects[1].material.diffuseColor = glm::vec3(0.9, 0.1, 0.0);
 	objects[1].apply_texture = false;
+	objects[11].material.ambientColor = glm::vec3(0.1, 0.1, 0.9);
+	objects[11].material.diffuseColor = glm::vec3(0.1, 0.1, 0.9);
+	objects[11].apply_texture = false;
+
+	objects[12].material.ambientColor = glm::vec3(0.1, 0.7, 0.1);
+	objects[12].material.diffuseColor = glm::vec3(0.1, 0.8, 0.1);
+	objects[12].apply_texture = false;
 
 	objects[2].material.specular = glm::vec3(0.3);
-
 	objects[3].material.specular = glm::vec3(0.3);
-
 	objects[4].material.specular = glm::vec3(0.3);
+
+	for (int i = 5; i <= 10; i++) {
+		objects[i].material.specular = glm::vec3(0.1);
+	}
 }
 
 //------------------------------------------------------------
