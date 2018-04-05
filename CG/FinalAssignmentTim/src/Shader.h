@@ -14,6 +14,7 @@
 #include <detail/type_mat.hpp>
 #include "Renderer.h"
 #include <dirent.h>
+#include <unordered_map>
 
 struct ShaderProgramSource {
     std::string VertexSource;
@@ -36,8 +37,7 @@ public:
 private:
     unsigned int m_RendererID;
     std::string m_FilePath;
-
-    // caching for uniforms
+    std::unordered_map<std::string, int> m_UniformLocationCache;
 
     int GetUniformLocation(const std::string& name);
 

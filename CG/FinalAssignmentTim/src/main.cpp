@@ -4,6 +4,7 @@
 #include "MyMacros.h"
 #include "Renderer.h"
 #include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
@@ -75,6 +76,8 @@ int main() {
         ibo.Unbind();
         shader.Unbind();
 
+        Renderer renderer;
+
         // Animation variables
         float r = 1.0f;
         float increment = 0.05f;
@@ -86,10 +89,7 @@ int main() {
             shader.Bind();
             shader.SetUniform4f("u_Color", glm::vec4(r, 0.3f, 0.8f, 1.0f));
 
-            ibo.Bind();
-            vao.Bind();
-
-            GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+            renderer.Draw(vao, ibo, shader);
 
             if (r > 1.0f) {
                 increment = -increment;

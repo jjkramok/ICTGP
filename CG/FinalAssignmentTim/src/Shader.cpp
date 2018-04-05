@@ -27,11 +27,16 @@ void Shader::SetUniform4f(const std::string &name, glm::vec4 values) {
     GLCall(glUniform4f(GetUniformLocation(name), values[0], values[1], values[2], values[3]));
 }
 
-int Shader::GetUniformLocation(const std::string &name) {
+int Shader::GetUniformLocation(const std::string& name) {
+    if (m_UniformLocationCache.find(name) != m_UniformLocationCache.end()) {
+        return m_UniformLocationCache[name];
+    }
+
     GLCall(int location = glGetUniformLocation(m_RendererID, name.c_str()));
     if (location == -1) {
         std::cout << "Warning: uniform '" << name << "' doesn't exist!" << std::endl;
     }
+    m_UniformLocationCache[name] = location;
     return location;
 }
 
