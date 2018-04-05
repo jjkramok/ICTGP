@@ -60,6 +60,9 @@ int main() {
                 2, 3, 0,
         };
 
+        GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)); // Setup basic transparency rendering.
+        GLCall(glEnable(GL_BLEND)); // Enable transparency rendering.
+
         VertexArray vao;
         VertexBuffer vbo(pos, 4 * 4 * sizeof(float));
         VertexBufferLayout layout;
