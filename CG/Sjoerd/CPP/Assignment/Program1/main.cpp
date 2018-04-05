@@ -25,7 +25,7 @@ const char * fragshader_name = "fragmentshader.fsh";
 const char * vertexshader_name = "vertexshader.vsh";
 const int WIDTH = 800, HEIGHT = 600;
 const int DELTA = 10;
-int objectCount = 2;
+int objectCount = 13;
 
 #pragma region TypeDef
 
@@ -81,77 +81,66 @@ GLuint uniform_material_power;
 
 LightSource light;
 
-glm::vec3 eye = glm::vec3(0.0, 2.0, 6.0);
-glm::vec2 lookdirection = glm::vec2(0, 0);
+glm::vec3 eye = glm::vec3(1, 1.75, 10);
+glm::vec2 lookdirection = glm::vec2(glm::radians(-90.0f), 0);
 //glm::vec3 center = glm::vec3(1.5, 0.5, 0.0);
 
 // w: for walking, o for overview.
-unsigned char mode = 'o';
+unsigned char keysPressing = 0;
+const unsigned char modeWander = 'w';
+const unsigned char modeOverview = 'o';
+unsigned char mode = modeWander;
 
+unsigned char swingState = 1;
+float swingSpeed = 0.024;
+
+float bouncyBallSpeed = 0;
+float bouncyBallState = 0;
 //--------------------------------------------------------------------------------
 // Keyboard handling
 //--------------------------------------------------------------------------------
-
-void keyboardHandler(unsigned char key, int a, int b)
+const unsigned char keys[] = { 'w', 1 << 0, 'a',1 << 1, 's',1 << 2, 'd', 1 << 3, 'z', 1 << 4, 'x', 1 << 5 };
+void keyDown(unsigned char key, int a, int b)
 {
 	if (key == 27)
 		glutExit();
 
-	//switch (key)
-	//{
-	//case 27:
-	//	glutExit();
-	//	break;
-	//case 'w':
-	//	eye.x -= tan(angle) * speed;
-	//	eye.z -= sin(angle) * speed;
+	if (key == 'c') {
+		if (mode == modeOverview) {
+			mode = modeWander;
+			eye.x = 1;
+			eye.y = 1.75;
+			eye.z = 10;
+			lookdirection.x = glm::radians(-90.0f);
+			lookdirection.y = 0;
+		}
+		else {
+			mode = modeOverview;
+			eye.x = -15;
+			eye.y = 15;
+			eye.z = 10;
+			lookdirection.x = glm::radians(-30.0f);
+			lookdirection.y = glm::radians(-35.0f);
+		}
+	}
 
-	//	center.x -= tan(angle) * speed;
-	//	center.z -= sin(angle) * speed;
-	//	cout << eye.x << "-" << eye.z << endl;
-	//	break;
-	//case 'a':
-	//	eye.z -= (eye.x - center.x) * speed;
-	//	eye.x -= (eye.z - center.z) * speed;
+	for (int i = 0; i < 12; i += 2) {
+		if (key == keys[i]) {
+			keysPressing |= keys[i + 1];
+		}
+	}
+}
 
-	//	center.z -= (eye.x - center.x) * speed;
-	//	center.x -= (eye.z - center.z) * speed;
-	//	break;
-	//case 's':
-	//	eye.x += tan(angle) * speed;
-	//	eye.z += sin(angle) * speed;
-
-	//	center.x += tan(angle) * speed;
-	//	center.z += sin(angle) * speed;
-	//	break;
-	//case 'd':
-	//	eye.z += (eye.x - center.x) * speed;
-	//	eye.x += (eye.z - center.z) * speed;
-
-	//	center.z += (eye.x - center.x) * speed;
-	//	center.x += (eye.z - center.z) * speed;
-	//	break;
-	//case 'c':
-	//	if (mode == 'w') {
-	//		eye = glm::vec3(0.0, 2.0, 6.0);
-	//		center = glm::vec3(1.5, 0.5, 0.0);
-	//		mode = 'o';
-	//	}
-	//	else { // mode == 'o'
-	//		eye = glm::vec3(10, 1.75, 0);
-	//		center = glm::vec3(0, 1.75, 0);
-	//		mode = 'w';
-	//	}
-	//	break;
-	//default:
-	//	break;
-	//}
-
+void keyUp(unsigned char key, int a, int b) {
+	for (int i = 0; i < 12; i += 2) {
+		if (key == keys[i]) {
+			keysPressing &= ~keys[i + 1];
+		}
+	}
 }
 
 #pragma region Render
 
-// center
 glm::vec3 getCenter()
 {
 	glm::vec3 center = glm::vec3(0, 1, 0);
@@ -167,14 +156,13 @@ glm::vec3 getCenter()
 //--------------------------------------------------------------------------------
 // Rendering
 //--------------------------------------------------------------------------------
-
+void updateObjects();
 void Render()
 {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	objects[0].model = glm::rotate(objects[0].model, 0.01f, glm::vec3(0.0f, 0.0f, 0.0f));
-	objects[1].model = glm::rotate(objects[1].model, 0.05f, glm::vec3(0.0f, 0.0f, 0.5f));
+	updateObjects();
 
 	glUseProgram(shaderID);
 
@@ -205,7 +193,6 @@ void Render()
 }
 
 
-
 //------------------------------------------------------------
 // void Render(int n)
 // Render method that is called by the timer function
@@ -219,23 +206,62 @@ void Render(int n)
 }
 
 void mouseUpdate(int x, int y) {
+	if (mode == modeOverview) return;
 	const float mouseSpeed = 0.01;
 	lookdirection.x += (x - WIDTH / 2) * mouseSpeed;
 	lookdirection.y -= (y - HEIGHT / 2) * mouseSpeed;
 
-	if (lookdirection.y > glm::radians(89.9)) {
-		lookdirection.y = glm::radians(89.9);
+	if (lookdirection.y > glm::radians(89.99)) {
+		lookdirection.y = glm::radians(89.99);
 	}
-	if (lookdirection.y < -glm::radians(89.9)) {
-		lookdirection.y = -glm::radians(89.9);
+	if (lookdirection.y < -glm::radians(89.99)) {
+		lookdirection.y = -glm::radians(89.99);
+	}
+
+	glutWarpPointer(WIDTH / 2, HEIGHT / 2);
+}
+
+void updateCameraPosition() {
+	if (mode == modeOverview) return;
+
+	const float flyspeed = 0.02;
+	const float walkspeed = 0.05;
+	if (keysPressing & keys[1]) { // w
+		eye.x += cos(lookdirection.x) * walkspeed;
+		eye.z += sin(lookdirection.x) * walkspeed;
+	}
+
+	if (keysPressing & keys[3]) { // a
+		eye.x += cos(glm::radians(-90.0) + lookdirection.x) * walkspeed;
+		eye.z += sin(glm::radians(-90.0) + lookdirection.x) * walkspeed;
+	}
+
+	if (keysPressing & keys[5]) { // s
+		eye.x += cos(glm::radians(180.0) + lookdirection.x) * walkspeed;
+		eye.z += sin(glm::radians(180.0) + lookdirection.x) * walkspeed;
+	}
+
+	if (keysPressing & keys[7]) { // d
+		eye.x += cos(glm::radians(90.0) + lookdirection.x) * walkspeed;
+		eye.z += sin(glm::radians(90.0) + lookdirection.x) * walkspeed;
+	}
+
+	if (keysPressing & keys[9]) { // z
+		eye.y += flyspeed;
+	}
+
+	if (keysPressing & keys[11]) { // x
+		eye.y -= flyspeed;
 	}
 }
+
 
 void UpdateCamera() {
 	// mouse
 	glutSetCursor(GLUT_CURSOR_NONE);
 	glutPassiveMotionFunc(mouseUpdate);
-	glutWarpPointer(WIDTH / 2, HEIGHT / 2);
+
+	updateCameraPosition();
 
 	view = glm::lookAt(
 		eye,
@@ -245,6 +271,30 @@ void UpdateCamera() {
 	for (int i = 0; i < objectCount; i++) {
 		objects[i].mv = view * objects[i].model;
 	}
+}
+
+void updateObjects()
+{
+	if (swingState)
+		swingSpeed += 0.0003;
+	else
+		swingSpeed -= 0.0003;
+
+	if (swingSpeed > 0.025 || swingSpeed < -0.025)
+		swingState = !swingState;
+
+	objects[3].model = glm::rotate(objects[3].model, swingSpeed, glm::vec3(0.0f, 0.0f, 1.0f));
+	objects[4].model = glm::rotate(objects[4].model, -swingSpeed, glm::vec3(0.0f, 0.0f, 1.0f));
+
+	if (bouncyBallSpeed <= 0 || bouncyBallSpeed > 0.1)
+		bouncyBallState = !bouncyBallState;
+
+	if (bouncyBallState)
+		bouncyBallSpeed += 0.001;
+	else
+		bouncyBallSpeed -= 0.001;
+
+	objects[12].model = glm::translate(objects[12].model, glm::vec3(0.0, bouncyBallState ? -bouncyBallSpeed : bouncyBallSpeed, 0.0));
 }
 
 #pragma endregion
@@ -266,7 +316,10 @@ void InitGlutGlew(int argc, char **argv)
 	glutInitWindowSize(WIDTH, HEIGHT);
 	glutCreateWindow("Hello OpenGL");
 	glutDisplayFunc(Render);
-	glutKeyboardFunc(keyboardHandler);
+	glutKeyboardFunc(keyDown);
+
+	glutKeyboardUpFunc(keyUp);
+
 	glutTimerFunc(DELTA, Render, 0);
 
 	glEnable(GL_MULTISAMPLE);
@@ -300,8 +353,24 @@ void InitShaders()
 
 void InitMatrices()
 {
-	objects[0].model = glm::translate(glm::mat4(), glm::vec3(0.0, 1.0, 0.0));
-	objects[1].model = glm::translate(glm::mat4(), glm::vec3(3.0, 0.5, 0.0));
+	//house
+	objects[0].model = glm::scale(glm::translate(glm::mat4(), glm::vec3(5.0, 0.0, 0.0)), glm::vec3(5, 5, 5));
+	objects[1].model = glm::scale(glm::rotate(glm::translate(glm::mat4(), glm::vec3(5.0, 3.5, 2.5)), glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0)), glm::vec3(0.6, 0.6, 0.6));
+	objects[11].model = glm::scale(glm::rotate(glm::translate(glm::mat4(), glm::vec3(5.0, 3.5, 2.5)), glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0)), glm::vec3(0.6, 0.1, 0.6));
+	//swing
+	objects[2].model = glm::translate(glm::mat4(), glm::vec3(-3.0, 0.5, 0.0));
+	objects[3].model = glm::translate(glm::mat4(), glm::vec3(-3.0, 2.22, -0.4));
+	objects[4].model = glm::translate(glm::mat4(), glm::vec3(-3.0, 2.22, 0.4));
+	// skybox
+	objects[5].model = glm::rotate(glm::rotate(glm::translate(glm::mat4(), glm::vec3(-250.0, 0.0, 0.0)), glm::radians(-90.0f), glm::vec3(0.0, 0.0, 1.0)), glm::radians(-90.0f), glm::vec3(0.0, 1.0, 0.0));
+	objects[6].model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, -250.0, 0.0)), glm::radians(0.0f), glm::vec3(1.0, 0.0, 0.0));
+	objects[7].model = glm::rotate(glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, 0.0, -250.0)), glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0)), glm::radians(180.0f), glm::vec3(0.0, 1.0, 0.0));
+	objects[8].model = glm::rotate(glm::rotate(glm::translate(glm::mat4(), glm::vec3(250.0, 0.0, 0.0)), glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0)), glm::radians(90.0f), glm::vec3(0.0, 1.0, 0.0));
+	objects[9].model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, 250.0, 0.0)), glm::radians(180.0f), glm::vec3(1.0, 0.0, 0.0));
+	objects[10].model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, 0.0, 250.0)), glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
+
+	// bouncy ball
+	objects[12].model = glm::translate(glm::mat4(), glm::vec3(-3, 6.4, -4));
 
 	view = glm::lookAt(
 		eye,
@@ -310,7 +379,7 @@ void InitMatrices()
 	projection = glm::perspective(
 		glm::radians(45.0f),
 		1.0f * WIDTH / HEIGHT, 0.1f,
-		200.0f);
+		2000.0f);
 
 	for (int i = 0; i < objectCount; i++) {
 		objects[i].mv = view * objects[i].model;
@@ -323,11 +392,31 @@ void InitMatrices()
 
 void InitObjects()
 {
-	loadOBJ("Objects/torus.obj", objects[0].vertices, objects[0].uvs, objects[0].normals);
-	loadOBJ("Objects/box.obj", objects[1].vertices, objects[1].uvs, objects[1].normals);
+	loadOBJ("Objects/box.obj", objects[0].vertices, objects[0].uvs, objects[0].normals);
+	loadOBJ("Objects/torus.obj", objects[1].vertices, objects[1].uvs, objects[1].normals);
+	loadOBJ("Objects/swing1.obj", objects[2].vertices, objects[2].uvs, objects[2].normals);
+	loadOBJ("Objects/swing2.obj", objects[3].vertices, objects[3].uvs, objects[3].normals);
+	loadOBJ("Objects/swing2.obj", objects[4].vertices, objects[4].uvs, objects[4].normals);
+	loadOBJ("Objects/skyboxplane.obj", objects[5].vertices, objects[5].uvs, objects[5].normals);
+	loadOBJ("Objects/skyboxplane.obj", objects[6].vertices, objects[6].uvs, objects[6].normals);
+	loadOBJ("Objects/skyboxplane.obj", objects[7].vertices, objects[7].uvs, objects[7].normals);
+	loadOBJ("Objects/skyboxplane.obj", objects[8].vertices, objects[8].uvs, objects[8].normals);
+	loadOBJ("Objects/skyboxplane.obj", objects[9].vertices, objects[9].uvs, objects[9].normals);
+	loadOBJ("Objects/skyboxplane.obj", objects[10].vertices, objects[10].uvs, objects[10].normals);
+	loadOBJ("Objects/cylinder18.obj", objects[11].vertices, objects[11].uvs, objects[11].normals);
+	loadOBJ("Objects/sphere.obj", objects[12].vertices, objects[12].uvs, objects[12].normals);
+
 
 	objects[0].textureID = loadBMP("Textures/Yellobrk.bmp");
-	objects[1].textureID = loadBMP("Textures/uvtemplate.bmp");
+	objects[2].textureID = loadBMP("Textures/swing.bmp");
+	objects[3].textureID = loadBMP("Textures/swing.bmp");
+	objects[4].textureID = loadBMP("Textures/swing.bmp");
+	objects[5].textureID = loadBMP("Textures/negx.bmp");
+	objects[6].textureID = loadBMP("Textures/negy.bmp");
+	objects[7].textureID = loadBMP("Textures/negz.bmp");
+	objects[8].textureID = loadBMP("Textures/posx.bmp");
+	objects[9].textureID = loadBMP("Textures/posy.bmp");
+	objects[10].textureID = loadBMP("Textures/posz.bmp");
 }
 
 
@@ -337,21 +426,36 @@ void InitObjects()
 
 void InitMaterialsLight()
 {
-	light.position = glm::vec3(4.0, 4.0, 4.0);
+	light.position = glm::vec3(0.0, 0.0, 0.0);
 
-	objects[0].material.ambientColor = glm::vec3(0.0, 0.0, 0.0);
-	objects[0].material.diffuseColor = glm::vec3(0.0, 0.0, 0.0);
-	objects[0].material.specular = glm::vec3(1.0);
-	objects[0].material.power = 128;
-	objects[0].apply_texture = true;
+	for (int i = 0; i < objectCount; i++) {
+		objects[i].material.ambientColor = glm::vec3(1, 1, 1);
+		objects[i].material.diffuseColor = glm::vec3(1, 1, 1);
+		objects[i].material.specular = glm::vec3(1.0);
+		objects[i].material.power = 128;
+		objects[i].apply_texture = true;
+	}
 
-	objects[1].material.ambientColor = glm::vec3(0.3, 0.3, 0.0);
-	objects[1].material.diffuseColor = glm::vec3(0.5, 0.5, 0.0);
-	objects[1].material.specular = glm::vec3(1.0);
-	objects[1].material.power = 128;
+	objects[0].material.specular = glm::vec3(0);
+	objects[1].material.ambientColor = glm::vec3(0.9, 0.1, 0.0);
+	objects[1].material.diffuseColor = glm::vec3(0.9, 0.1, 0.0);
 	objects[1].apply_texture = false;
-}
+	objects[11].material.ambientColor = glm::vec3(0.1, 0.1, 0.9);
+	objects[11].material.diffuseColor = glm::vec3(0.1, 0.1, 0.9);
+	objects[11].apply_texture = false;
 
+	objects[12].material.ambientColor = glm::vec3(0.1, 0.7, 0.1);
+	objects[12].material.diffuseColor = glm::vec3(0.1, 0.8, 0.1);
+	objects[12].apply_texture = false;
+
+	objects[2].material.specular = glm::vec3(0.3);
+	objects[3].material.specular = glm::vec3(0.3);
+	objects[4].material.specular = glm::vec3(0.3);
+
+	for (int i = 5; i <= 10; i++) {
+		objects[i].material.specular = glm::vec3(0.1);
+	}
+}
 
 //------------------------------------------------------------
 // void InitBuffers()
@@ -442,6 +546,8 @@ int main(int argc, char ** argv)
 
 	HWND hWnd = GetConsoleWindow();
 	ShowWindow(hWnd, SW_HIDE);
+
+	glutWarpPointer(WIDTH / 2, HEIGHT / 2);
 
 	glutMainLoop();
 
