@@ -362,12 +362,12 @@ void InitMatrices()
 	objects[3].model = glm::translate(glm::mat4(), glm::vec3(-3.0, 2.22, -0.4));
 	objects[4].model = glm::translate(glm::mat4(), glm::vec3(-3.0, 2.22, 0.4));
 	// skybox
-	objects[5].model = glm::rotate(glm::rotate(glm::translate(glm::mat4(), glm::vec3(-250.0, 0.0, 0.0)), glm::radians(-90.0f), glm::vec3(0.0, 0.0, 1.0)), glm::radians(-90.0f), glm::vec3(0.0, 1.0, 0.0));
-	objects[6].model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, -250.0, 0.0)), glm::radians(0.0f), glm::vec3(1.0, 0.0, 0.0));
-	objects[7].model = glm::rotate(glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, 0.0, -250.0)), glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0)), glm::radians(180.0f), glm::vec3(0.0, 1.0, 0.0));
-	objects[8].model = glm::rotate(glm::rotate(glm::translate(glm::mat4(), glm::vec3(250.0, 0.0, 0.0)), glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0)), glm::radians(90.0f), glm::vec3(0.0, 1.0, 0.0));
-	objects[9].model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, 250.0, 0.0)), glm::radians(180.0f), glm::vec3(1.0, 0.0, 0.0));
-	objects[10].model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, 0.0, 250.0)), glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
+	objects[5].model = glm::rotate(glm::rotate(glm::translate(glm::mat4(), glm::vec3(-50.0, 0.0, 0.0)), glm::radians(-90.0f), glm::vec3(0.0, 0.0, 1.0)), glm::radians(-90.0f), glm::vec3(0.0, 1.0, 0.0));
+	objects[6].model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, 0.0, 0.0)), glm::radians(0.0f), glm::vec3(1.0, 0.0, 0.0));
+	objects[7].model = glm::rotate(glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, 0.0, -50.0)), glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0)), glm::radians(180.0f), glm::vec3(0.0, 1.0, 0.0));
+	objects[8].model = glm::rotate(glm::rotate(glm::translate(glm::mat4(), glm::vec3(50.0, 0.0, 0.0)), glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0)), glm::radians(90.0f), glm::vec3(0.0, 1.0, 0.0));
+	objects[9].model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, 50.0, 0.0)), glm::radians(180.0f), glm::vec3(1.0, 0.0, 0.0));
+	objects[10].model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, 0.0, 50.0)), glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
 
 	// bouncy ball
 	objects[12].model = glm::translate(glm::mat4(), glm::vec3(-3, 6.4, -4));
