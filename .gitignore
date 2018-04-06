@@ -66,6 +66,7 @@ cpp/sjoerd/cpp/.vs/*
 /CG/Sjoerd/CS/CG/_CG.sln
 /CG/Sjoerd/CPP/Assignment/Program1/Debug
 /CG/Sjoerd/CPP/Assignment/Debug
+!/CG/Sjoerd/CPP/Assignment/Program1/Objects
 /.gitattributes
 
 # CMake

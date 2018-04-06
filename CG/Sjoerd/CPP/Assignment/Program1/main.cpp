@@ -12,9 +12,6 @@
 #include "objloader.hpp"
 #include "texture.hpp"
 
-
-
-
 using namespace std;
 
 //--------------------------------------------------------------------------------
@@ -83,9 +80,7 @@ LightSource light;
 
 glm::vec3 eye = glm::vec3(1, 1.75, 10);
 glm::vec2 lookdirection = glm::vec2(glm::radians(-90.0f), 0);
-//glm::vec3 center = glm::vec3(1.5, 0.5, 0.0);
 
-// w: for walking, o for overview.
 unsigned char keysPressing = 0;
 const unsigned char modeWander = 'w';
 const unsigned char modeOverview = 'o';
@@ -105,7 +100,7 @@ void keyDown(unsigned char key, int a, int b)
 	if (key == 27)
 		glutExit();
 
-	if (key == 'c') {
+	if (key == 'c') { // change mode.
 		if (mode == modeOverview) {
 			mode = modeWander;
 			eye.x = 1;
@@ -206,7 +201,6 @@ void Render(int n)
 }
 
 void mouseUpdate(int x, int y) {
-	if (mode == modeOverview) return;
 	const float mouseSpeed = 0.01;
 	lookdirection.x += (x - WIDTH / 2) * mouseSpeed;
 	lookdirection.y -= (y - HEIGHT / 2) * mouseSpeed;
@@ -362,15 +356,15 @@ void InitMatrices()
 	objects[3].model = glm::translate(glm::mat4(), glm::vec3(-3.0, 2.22, -0.4));
 	objects[4].model = glm::translate(glm::mat4(), glm::vec3(-3.0, 2.22, 0.4));
 	// skybox
-	objects[5].model = glm::rotate(glm::rotate(glm::translate(glm::mat4(), glm::vec3(-250.0, 0.0, 0.0)), glm::radians(-90.0f), glm::vec3(0.0, 0.0, 1.0)), glm::radians(-90.0f), glm::vec3(0.0, 1.0, 0.0));
-	objects[6].model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, -250.0, 0.0)), glm::radians(0.0f), glm::vec3(1.0, 0.0, 0.0));
-	objects[7].model = glm::rotate(glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, 0.0, -250.0)), glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0)), glm::radians(180.0f), glm::vec3(0.0, 1.0, 0.0));
-	objects[8].model = glm::rotate(glm::rotate(glm::translate(glm::mat4(), glm::vec3(250.0, 0.0, 0.0)), glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0)), glm::radians(90.0f), glm::vec3(0.0, 1.0, 0.0));
-	objects[9].model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, 250.0, 0.0)), glm::radians(180.0f), glm::vec3(1.0, 0.0, 0.0));
-	objects[10].model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, 0.0, 250.0)), glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
+	objects[5].model = glm::rotate(glm::rotate(glm::translate(glm::mat4(), glm::vec3(-50.0, 0.0, 0.0)), glm::radians(-90.0f), glm::vec3(0.0, 0.0, 1.0)), glm::radians(-90.0f), glm::vec3(0.0, 1.0, 0.0));
+	objects[6].model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, -50.0, 0.0)), glm::radians(0.0f), glm::vec3(1.0, 0.0, 0.0));
+	objects[7].model = glm::rotate(glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, 0.0, -50.0)), glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0)), glm::radians(180.0f), glm::vec3(0.0, 1.0, 0.0));
+	objects[8].model = glm::rotate(glm::rotate(glm::translate(glm::mat4(), glm::vec3(50.0, 0.0, 0.0)), glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0)), glm::radians(90.0f), glm::vec3(0.0, 1.0, 0.0));
+	objects[9].model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, 50.0, 0.0)), glm::radians(180.0f), glm::vec3(1.0, 0.0, 0.0));
+	objects[10].model = glm::rotate(glm::translate(glm::mat4(), glm::vec3(0.0, 0.0, 50.0)), glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
 
 	// bouncy ball
-	objects[12].model = glm::translate(glm::mat4(), glm::vec3(-3, 6.4, -4));
+	objects[12].model = glm::translate(glm::mat4(), glm::vec3(-3, 6.6, -4));
 
 	view = glm::lookAt(
 		eye,
@@ -426,7 +420,7 @@ void InitObjects()
 
 void InitMaterialsLight()
 {
-	light.position = glm::vec3(0.0, 0.0, 0.0);
+	light.position = glm::vec3(40.0, 40.0, 40.0);
 
 	for (int i = 0; i < objectCount; i++) {
 		objects[i].material.ambientColor = glm::vec3(1, 1, 1);
