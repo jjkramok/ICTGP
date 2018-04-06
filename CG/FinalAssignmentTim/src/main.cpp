@@ -61,18 +61,27 @@ void HandleKeyPress(GLFWwindow* window, int key, int scancode, int action, int m
             camera.direction.y = 0;
         }
         cout << "changed mode to: " << (mode ? "Walking" : "Birds Eye") << endl;
-    } else if (key == GLFW_KEY_W && action == GLFW_REPEAT) {
-        camera.pos.x += cos(camera.direction.x) * speed;
-        camera.pos.z += sin(camera.direction.x) * speed;
-    } else if (key == GLFW_KEY_A && action == GLFW_REPEAT) {
-        camera.pos.x += cos(camera.direction.x + glm::radians(-90.0f)) * speed;
-        camera.pos.z += sin(camera.direction.x + glm::radians(-90.0f)) * speed;
-    } else if (key == GLFW_KEY_S && action == GLFW_REPEAT) {
-        camera.pos.x += cos(camera.direction.x + glm::radians(180.0f)) * speed;
-        camera.pos.z += sin(camera.direction.x + glm::radians(180.0f)) * speed;
-    } else if (key == GLFW_KEY_D && action == GLFW_REPEAT) {
-        camera.pos.x += cos(camera.direction.x + glm::radians(90.0f)) * speed;
-        camera.pos.z += sin(camera.direction.x + glm::radians(90.0f)) * speed;
+    }
+
+    if (action == GLFW_REPEAT) {
+        switch (key) {
+            case GLFW_KEY_W:
+                camera.pos.x += cos(camera.direction.x) * speed;
+                camera.pos.z += sin(camera.direction.x) * speed;
+                break;
+            case GLFW_KEY_A:
+                camera.pos.x += cos(camera.direction.x + glm::radians(-90.0f)) * speed;
+                camera.pos.z += sin(camera.direction.x + glm::radians(-90.0f)) * speed;
+                break;
+            case GLFW_KEY_S:
+                camera.pos.x += cos(camera.direction.x + glm::radians(180.0f)) * speed;
+                camera.pos.z += sin(camera.direction.x + glm::radians(180.0f)) * speed;
+                break;
+            case GLFW_KEY_D:
+                camera.pos.x += cos(camera.direction.x + glm::radians(90.0f)) * speed;
+                camera.pos.z += sin(camera.direction.x + glm::radians(90.0f)) * speed;
+                break;
+        }
     }
 
     cout << "camera at (x, y, z): " << camera.pos.x << ", " <<  camera.pos.y << ", " <<  camera.pos.z << endl;
