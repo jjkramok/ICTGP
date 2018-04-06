@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
+#include <detail/type_mat2x2.hpp>
+#include <gtc/matrix_transform.hpp>
 #include "MyMacros.h"
 #include "Renderer.h"
 #include "VertexBuffer.h"
@@ -8,6 +9,7 @@
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Texture.h"
 
 using namespace std;
 
@@ -48,28 +50,41 @@ int main() {
      *  This way any stack allocated objects will be destroyed before the context will be.
      **/
     {
-        float pos[8] = {
-                -0.5f, -0.5f,
-                0.5f, -0.5f,
-                0.5f, 0.5f,
-                -0.5f, 0.5f,
+        float pos[] = {
+                -0.5f, -0.5f, 0.0f, 0.0f, /* bottom left*/
+                0.5f, -0.5f, 1.0f, 0.0f, /* bottom right */
+                0.5f, 0.5f, 1.0f, 1.0f, /* top right */
+                -0.5f, 0.5f, 0.0f, 1.0f, /* top left */
         };
         unsigned int is[6] = {
                 0, 1, 2,
                 2, 3, 0,
         };
 
+        GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)); // Setup basic transparency rendering.
+        GLCall(glBlendEquation(GL_FUNC_ADD)); // Specify how to combine / handle overwriting on the target buffer.
+        GLCall(glEnable(GL_BLEND)); // Enable transparency rendering.
+
         VertexArray vao;
-        VertexBuffer vbo(pos, 4 * 2 * sizeof(float));
+        VertexBuffer vbo(pos, 4 * 4 * sizeof(float));
         VertexBufferLayout layout;
+        layout.PushFloat(2);
         layout.PushFloat(2);
         vao.AddBuffer(vbo, layout);
 
         IndexBuffer ibo(is, 6);
 
+        glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f); /* left edge, right edge, bottom edge, top edge, near plane, far plane. Everything outside will be culled */
+
         Shader shader("./../res/shaders/Basic.glsl");
         shader.Bind();
         shader.SetUniform4f("u_Color", glm::vec4(0.8f, 0.3f, 0.8f, 1.0f));
+
+        Texture texture("./../res/textures/blindguardian.png");
+        unsigned char textureSlot = 0;
+        texture.Bind(textureSlot);
+        shader.SetUniform1i("u_Texture", textureSlot);
+        shader.SetUniformMat4f("u_MVP", proj);
 
         vao.Unbind();
         vbo.Unbind();
@@ -84,7 +99,7 @@ int main() {
 
         // Loop until window is closed by the user.
         while (!glfwWindowShouldClose(window)) {
-            GLCall(glClear(GL_COLOR_BUFFER_BIT));
+            renderer.Clear();
 
             shader.Bind();
             shader.SetUniform4f("u_Color", glm::vec4(r, 0.3f, 0.8f, 1.0f));

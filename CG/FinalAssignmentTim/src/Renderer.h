@@ -30,6 +30,7 @@ bool GLLogCall(const char* function, const char* file, int line);
 
 class Renderer {
 public:
+    void Clear() const;
     void Draw(const VertexArray &vao, const IndexBuffer &ibo, const Shader &shader) const;
 
 private:
