@@ -9,7 +9,7 @@
 
 class Texture {
 public:
-    Texture(const std::string& path);
+    explicit Texture(const std::string& path);
     ~Texture();
 
     void Bind(unsigned int slot = 0) const;
@@ -17,6 +17,10 @@ public:
 
     inline int GetWidth() const { return m_Width; }
     inline int GetHeight() const { return m_Height; }
+    inline int GetBPP() const { return m_BPP; }
+
+    static Texture *CreateBMP(const std::string &path);
+    static Texture *CreatePNG(const std::string &path);
 
 private:
     unsigned int m_RendererID;

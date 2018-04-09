@@ -12,7 +12,7 @@
 #include <fstream>
 #include <sstream>
 #include <detail/type_mat.hpp>
-#include "Renderer.h"
+#include "../Renderer.h"
 #include <dirent.h>
 #include <unordered_map>
 #include <glm.hpp>
