@@ -15,13 +15,6 @@
 using namespace std;
 
 /* Typedefs*/
-struct Object {
-    VertexArray vao;
-
-    glm::mat4 model;
-    glm::mat4 model_view;
-};
-
 enum ViewMode {None = -1, Walking = 0, BirdsEye = 1};
 struct Camera {
     glm::vec3 pos;

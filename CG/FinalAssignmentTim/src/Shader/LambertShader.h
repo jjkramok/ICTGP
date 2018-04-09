@@ -4,7 +4,7 @@
 #include <string>
 
 #include "Shader.h"
-#include "../model/Model.h"
+#include "../Model.h"
 #include "../worldObjects/D3Object.hpp"
 
 class LambertShader : public Shader
