@@ -21,9 +21,9 @@ Texture *Texture::CreatePNG(const std::string &path) {
     Texture *texture = new Texture(path);
 
     stbi_set_flip_vertically_on_load(1);
-    texture->m_LocalBuffer = stbi_load(path.c_str(), &m_Width, &m_Height, &m_BPP, 4);
+    texture->m_LocalBuffer = stbi_load(path.c_str(), &(texture->m_Width), &(texture->m_Height), &(texture->m_BPP), 4);
 
-    GLCall(glGenTextures(1, &m_RendererID));
+    GLCall(glGenTextures(1, &(texture->m_RendererID)));
     texture->Bind();
 
     GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));

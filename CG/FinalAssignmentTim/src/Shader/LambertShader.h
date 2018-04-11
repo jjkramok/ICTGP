@@ -5,7 +5,7 @@
 
 #include "Shader.h"
 #include "../Model.h"
-#include "../worldObjects/D3Object.hpp"
+#include "../Object.h"
 
 class LambertShader : public Shader
 {
@@ -14,23 +14,23 @@ private:
 public:
     LambertShader();
 
-    void SetUMV(glm::mat4 mat4);
+    void SetUniformMV(glm::mat4 mvs);
 
-    void SetUProjection(glm::mat4 mat4);
+    void SetUniformProjection(glm::mat4 proj);
 
-    void SetULightPos(glm::vec3 vec3);
+    void SetUniformLightPos(glm::vec3 lightPos);
 
-    void SetUApplyTexture(bool b);
+    void SetUniformApplyTexture(bool useTexture);
 
-    void SetUMatAmbient(glm::vec3 vec3);
+    void SetUniformMatAmbient(glm::vec3 ambient);
 
-    void SetUMatDiffuse(glm::vec3 vec3);
+    void SetUniformMatDiffuse(glm::vec3 diffuse);
 
-    void SetUMatSpecular(glm::vec3 vec3);
+    void SetUniformMatSpecular(glm::vec3 specular);
 
-    void SetUMatPower(float f);
+    void SetUniformMatPower(float power);
 
-    void SetPreRenderUniforms(const D3Object &d3Object, const glm::mat4 &view, const glm::mat4 &projection) override;
+    void SetPreRenderUniforms(const Object &d3Object, const glm::mat4 &view, const glm::mat4 &projection) override;
 };
 
 

@@ -13,6 +13,7 @@
 #include <sstream>
 #include <detail/type_mat.hpp>
 #include "../Renderer.h"
+#include "../Object.h"
 #include <dirent.h>
 #include <unordered_map>
 #include <glm.hpp>
@@ -24,7 +25,7 @@ struct ShaderProgramSource {
 
 class Shader {
 public:
-    Shader(const std::string& filepath);
+    explicit Shader(const std::string& filepath);
     ~Shader();
 
     void Bind() const;
@@ -34,7 +35,14 @@ public:
     void SetUniform1f(const std::string &name, float value);
     void SetUniform4f(const std::string& name, glm::vec4 values);
     void SetUniform1i(const std::string& name, int v0);
+    void SetUniform3f(const std::string& name, glm::vec3 values);
     void SetUniformMat4f(const std::string& name, const glm::mat4& matrix);
+
+    virtual void SetPreRenderUniforms(
+            const Object &object,
+            const glm::mat4 &view,
+            const glm::mat4 &projection
+    ) = 0;
 
 private:
     unsigned int m_RendererID;

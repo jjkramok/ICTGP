@@ -3,8 +3,6 @@
 //
 
 #include "Model.h"
-#include <iostream>
-#include "vendor/objloader.h"
 
 Model::Model(const std::string &modelPath) :
     m_VBOVertices(nullptr),

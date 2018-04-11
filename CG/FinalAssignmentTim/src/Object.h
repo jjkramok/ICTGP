@@ -7,14 +7,18 @@
 
 
 #include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
 #include <vector>
 #include <string>
-#include <functional>
 
 #include "Shader/Shader.h"
 #include "VertexArray.h"
 #include "Texture.h"
 #include "Model.h"
+
+class Shader; // Forward declaration
+class Texture; // Forward declaration
+class Model; // Forward declaration
 
 struct Material {
     glm::vec3 ambientColor;
@@ -46,26 +50,29 @@ public:
 
     inline bool HasTexture() const { return m_Texture != nullptr; };
 
-    inline bool HasRenderModelMatrixChanged() const { return m_RenderModelMatrixChanged; }
+    /* Matrix operations */
+    void Scale(float x, float y, float z);
 
-    void Scale(float x, float y, float z, bool editBase);
+    void Translate(float x, float y, float z);
 
-    void Translate(float x, float y, float z, bool editBase);
-
-    void Rotate(float x, float y, float z, bool editBase);
+    void Rotate(float x, float y, float z);
 
     void Bind() const;
 
 private:
+    /* All components that make up an object. */
     Model *m_Model;
     Material *m_Material;
     Texture *m_Texture;
     Shader *m_Shader;
 
+    /* The original model matrix */
     glm::mat4 m_ModelMatrix;
-    mutable glm::mat4 m_RenderModelMatrix;
-    mutable bool m_RenderModelMatrixChanged;
 
+    /* Contains the result of all matrix operations on the original model matrix */
+    glm::mat4 m_RenderModelMatrix;
+
+    /* Variables that contain temporary result of matrix operations on the original model matrix */
     glm::vec3 m_ScaleVector;
     glm::vec3 m_TranslateVector;
     float m_RotateX;

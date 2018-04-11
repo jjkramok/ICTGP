@@ -12,6 +12,7 @@
 #include "IndexBuffer.h"
 #include "VertexBufferLayout.h"
 #include "Shader/Shader.h"
+#include "Object.h"
 
 using namespace std;
 
@@ -19,6 +20,7 @@ using namespace std;
 class IndexBuffer;
 class Shader;
 class VertexArray;
+class Object;
 
 enum class ShaderType {
     NONE = -1, VERTEX = 0, FRAGMENT = 1,
@@ -32,6 +34,7 @@ class Renderer {
 public:
     void Clear() const;
     void Draw(const VertexArray &vao, const IndexBuffer &ibo, const Shader &shader) const;
+    void Draw(const Object &object, glm::mat4 &view, glm::mat4 &proj);
 
 private:
 

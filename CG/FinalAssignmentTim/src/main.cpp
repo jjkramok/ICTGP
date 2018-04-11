@@ -2,7 +2,12 @@
 #include <GLFW/glfw3.h>
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
+#include <gtc/matrix_inverse.hpp>
+#include <gtc/matrix_access.hpp>
+#include <gtc/matrix_integer.hpp>
+#include <ext.hpp>
 #include <stdio.h>
+#include "Model.h"
 #include "MyMacros.h"
 #include "Renderer.h"
 #include "VertexBuffer.h"
@@ -10,23 +15,20 @@
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader/Shader.h"
+#include "Object.h"
 #include "Texture.h"
+#include "Camera.h"
+#include "Shader/LambertShader.h"
 
 using namespace std;
 
 /* Typedefs*/
 enum ViewMode {None = -1, Walking = 0, BirdsEye = 1};
-struct Camera {
-    glm::vec3 pos;
-    glm::vec3 direction;
-    glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
-    glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-};
 
 /* Constants and global variables */
 const int Width = 960, Height = 540;
 ViewMode mode = Walking;
-Camera camera = {glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f)};
+Camera *camera = new Camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 float deltaTime = 0.0f; // Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
@@ -38,7 +40,6 @@ glm::mat4 view = glm::mat4();//glm::translate(glm::mat4(1.0f), glm::vec3(-100, 0
 glm::mat4 model = glm::mat4();//glm::translate(glm::mat4(1.0f), glm::vec3(200, 200, 0));
 
 const unsigned int amountOfObjects = 10;
-Object *objects;
 
 float speed = 0.05f;
 
@@ -50,14 +51,12 @@ void HandleKeyPress(GLFWwindow* window, int key, int scancode, int action, int m
     } else if (key == GLFW_KEY_C && action == GLFW_RELEASE) {
         if (mode == Walking) {
             mode = BirdsEye;
-            camera.pos = glm::vec3(0.0f, 0.0f, 0.0f);
-            camera.direction.x = glm::radians(-45.0f);
-            camera.direction.y = glm::radians(-45.0f);
+            camera->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+            camera->SetDirection(glm::vec3(glm::radians(-45.0f), glm::radians(-45.0f), 0));
         } else {
             mode = Walking;
-            camera.pos = glm::vec3(0.0f, 0.0f, 0.0f);
-            camera.direction.x = glm::radians(-90.0f);
-            camera.direction.y = 0;
+            camera->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+            camera->SetDirection(glm::vec3(glm::radians(-90.0f), 0, 0));
         }
         cout << "changed mode to: " << (mode ? "Walking" : "Birds Eye") << endl;
     }
@@ -65,33 +64,22 @@ void HandleKeyPress(GLFWwindow* window, int key, int scancode, int action, int m
     if (action == GLFW_PRESS) {
         switch (key) {
             case GLFW_KEY_W:
-                camera.pos += speed * camera.front;
+                camera->SetPosition(camera->GetPosition() + (speed * camera->GetFrontVector()));
                 break;
             case GLFW_KEY_A:
-                camera.pos -= glm::normalize(glm::cross(camera.front, camera.up)) * speed;
+                camera->SetPosition(camera->GetPosition() - (glm::normalize( glm::cross(camera->GetFrontVector(), camera->GetUpVector()) ) * speed));
+                //camera.pos -= glm::normalize(glm::cross(camera.front, camera.up)) * speed;
                 break;
             case GLFW_KEY_S:
-                camera.pos -= speed * camera.front;
+                camera->SetPosition(camera->GetPosition() - (speed * camera->GetFrontVector()));
                 break;
             case GLFW_KEY_D:
-                camera.pos += glm::normalize(glm::cross(camera.front, camera.up)) * speed;
+                camera->SetPosition(camera->GetPosition() + (glm::normalize( glm::cross(camera->GetFrontVector(), camera->GetUpVector()) ) * speed));
                 break;
         }
     }
 
-    cout << "camera at (x, y, z): " << camera.pos.x << ", " <<  camera.pos.y << ", " <<  camera.pos.z << endl;
-}
-
-/**
- * Updates the global view matrix and the the model view matrix of all objects to match the new camera state.
- */
-void UpdateCamera() {
-    // Update view matrix based on camera position
-    view = glm::lookAt(camera.pos, camera.pos + camera.front, camera.up);
-
-//    for (int i = 0; i < amountOfObjects; i++) {
-//        objects[i] .model_view = view * objects[i].model;
-//    }
+    cout << "camera at (x, y, z): " << camera->GetPosition().x << ", " <<  camera->GetPosition().y << ", " <<  camera->GetPosition().z << endl;
 }
 
 int main() {
@@ -128,8 +116,6 @@ int main() {
 
     glfwSetKeyCallback(window, HandleKeyPress);
 
-    objects = new Object[amountOfObjects];
-
     /*
      *  Scope that ends just before destroying the GL rendering context.
      *  This way any stack allocated objects will be destroyed before the context will be.
@@ -146,7 +132,7 @@ int main() {
 
         Renderer renderer;
 
-        UpdateCamera(); // update view matrix
+        view = camera->UpdateView(); // instantiate the view matrix
 
         proj = glm::perspective(glm::radians(45.0f), // fov
                                 (float) Width / (float) Height, // aspect ratio
@@ -156,6 +142,17 @@ int main() {
 
         Texture *yellowbrk = Texture::CreateBMP("./../res/textures/Yellobrk.bmp");
 
+        Model *model = new Model("../res/objs/box.obj");
+
+        Material *material = new Material;
+        material->ambientColor = glm::vec3(0.3f, 0.3f, 0.2f);
+        material->diffuseColor = glm::vec3(0.4f, 0.4f, 0.0f);
+        material->specular = glm::vec3(1.0f);
+        material->power = 100;
+
+        Shader *lambert = new LambertShader();
+
+        Object *object = new Object(model, yellowbrk, lambert, material);
 
         // Loop until window is closed by the user.
         while (!glfwWindowShouldClose(window)) {
@@ -167,15 +164,16 @@ int main() {
             deltaTime = currentFrame - lastFrame;
             lastFrame = currentFrame;
 
-            UpdateCamera(); // Update view matrix
-            mvp = proj * view * model;
+            view = camera->UpdateView(); // Update view matrix
+            //mvp = proj * view * model; // OpenGL uses column major ordering, so multiple in reverse order.
+            renderer.Draw(*object, view, proj);
 
             glfwSwapBuffers(window);
         }
     }
 
     /* Destroy all (non-stack) allocated memory */
-    delete[] objects;
+    delete camera;
 
     glfwTerminate();
     return 0;

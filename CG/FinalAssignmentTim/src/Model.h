@@ -8,6 +8,11 @@
 #include <glm.hpp>
 #include "VertexBuffer.h"
 #include "VertexArray.h"
+#include <iostream>
+#include "vendor/objloader.h"
+
+class VertexBuffer; // forward declaration
+class VertexArray; // forward declaration
 
 class Model
 {
@@ -32,7 +37,5 @@ public:
     VertexArray *m_VAO;
 
 };
-
-
 
 #endif //FINALASSIGNMENTTIM_MODEL_H

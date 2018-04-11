@@ -6,6 +6,7 @@
 #define FINALASSIGNMENTTIM_TEXTURE_H
 
 #include "Renderer.h"
+#include <string>
 
 class Texture {
 public:
