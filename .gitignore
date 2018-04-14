@@ -69,6 +69,10 @@ cpp/sjoerd/cpp/.vs/*
 !/CG/Sjoerd/CPP/Assignment/Program1/Objects
 /.gitattributes
 
+# vs tim
+**/Debug/
+
+
 # CMake
 **/cmake-build-debug/
 
