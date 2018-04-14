@@ -26,10 +26,6 @@ enum class ShaderType {
     NONE = -1, VERTEX = 0, FRAGMENT = 1,
 };
 
-
-void GLClearErrors();
-bool GLLogCall(const char* function, const char* file, int line);
-
 class Renderer {
 public:
     void Clear() const;

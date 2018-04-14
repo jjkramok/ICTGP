@@ -67,10 +67,10 @@ private:
     Shader *m_Shader;
 
     /* The original model matrix */
-    glm::mat4 m_ModelMatrix;
+    mutable glm::mat4 m_ModelMatrix;
 
     /* Contains the result of all matrix operations on the original model matrix */
-    glm::mat4 m_RenderModelMatrix;
+    mutable glm::mat4 m_RenderModelMatrix;
 
     /* Variables that contain temporary result of matrix operations on the original model matrix */
     glm::vec3 m_ScaleVector;

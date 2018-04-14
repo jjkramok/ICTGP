@@ -7,17 +7,17 @@
 #include <gtc/matrix_integer.hpp>
 #include <ext.hpp>
 #include <stdio.h>
-#include "Model.h"
-#include "MyMacros.h"
+
 #include "Renderer.h"
+#include "Texture.h"
+#include "Camera.h"
+#include "MyMacros.h"
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader/Shader.h"
 #include "Object.h"
-#include "Texture.h"
-#include "Camera.h"
 #include "Shader/LambertShader.h"
 
 using namespace std;

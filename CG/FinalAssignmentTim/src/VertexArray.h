@@ -6,7 +6,6 @@
 #define FINALASSIGNMENTTIM_VERTEXARRAY_H
 
 #include "VertexBuffer.h"
-#include "Renderer.h"
 
 // Forward declaration
 class VertexBufferLayout;

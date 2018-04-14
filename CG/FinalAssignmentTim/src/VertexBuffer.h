@@ -6,7 +6,6 @@
 #define FINALASSIGNMENTTIM_VERTEXBUFFER_H
 
 #include <GL/glew.h>
-#include "Renderer.h"
 #include "MyMacros.h"
 
 class VertexBuffer {

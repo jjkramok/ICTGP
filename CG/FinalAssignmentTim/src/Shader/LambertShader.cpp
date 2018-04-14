@@ -4,7 +4,7 @@
 
 #include "LambertShader.h"
 
-LambertShader::LambertShader() : Shader("../../res/shaders/Lambert.glsl") {}
+LambertShader::LambertShader() : Shader("../res/shaders/Lambert.glsl") {}
 
 void LambertShader::SetUniformMV(glm::mat4 mvs) {
     SetUniformMat4f("mv", mvs);

@@ -15,6 +15,7 @@
 #endif
 
 #include <iostream>
+#include <GL/glew.h>
 
 /**
  * Basic assert function that toggles a dynamic breakpoint when resulting in false.
@@ -24,8 +25,13 @@
 /**
  * Calls function x and logs any GL errors that were thrown to the console
  */
-#define GLCall(x) GLClearErrors();\
+#define GLCall(x) MyMacros::GLClearErrors();\
     x;\
-    ASSERT(GLLogCall(#x, __FILE__, __LINE__))
+    ASSERT(MyMacros::GLLogCall(#x, __FILE__, __LINE__))
+
+namespace MyMacros {
+    void GLClearErrors();
+    bool GLLogCall(const char* function, const char* file, int line);
+};
 
 #endif // FINALASSIGNMENTTIM_MYMACROS_H

@@ -8,8 +8,11 @@
 #include <glm.hpp>
 #include "VertexBuffer.h"
 #include "VertexArray.h"
+#include "VertexBufferLayout.h"
 #include <iostream>
 #include "vendor/objloader.h"
+
+using namespace std;
 
 class VertexBuffer; // forward declaration
 class VertexArray; // forward declaration
