@@ -1,0 +1,7 @@
+﻿  main.cpp
+c:\users\tim\source\repos\ictgp\cg\finalassignmentvs\program1\main.cpp(119): warning C4316: 'Object': object allocated on the heap may not be aligned 16
+c:\users\tim\source\repos\ictgp\cg\finalassignmentvs\program1\main.cpp(138): warning C4018: '<': signed/unsigned mismatch
+c:\users\tim\source\repos\ictgp\cg\finalassignmentvs\program1\main.cpp(198): warning C4018: '<': signed/unsigned mismatch
+c:\users\tim\source\repos\ictgp\cg\finalassignmentvs\program1\main.cpp(333): warning C4018: '<': signed/unsigned mismatch
+c:\users\tim\source\repos\ictgp\cg\finalassignmentvs\program1\main.cpp(373): warning C4018: '<': signed/unsigned mismatch
+  Program1.vcxproj -> C:\Users\Tim\source\repos\ICTGP\CG\FinalAssignmentVS\Debug\Program1.exe
