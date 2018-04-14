@@ -49,7 +49,7 @@ enum ViewMode
 char keysPressed; // Keeps track of keys that remain pressed during render cycles.
 enum MyKeys
 {
-	W = 0, S = 1, A = 2, D = 3, // keysPressed layout
+	W = 0, S = 1, A = 2, D = 3, I, K, J, L, // keysPressed layout
 };
 
 struct Camera 
@@ -59,11 +59,16 @@ struct Camera
 	glm::vec3 up = glm::vec3(0.0, 1.0f, 0);
 	ViewMode mode = Walking;
 	float speed = 0.1f;
+	float viewSpeed = 0.01f;
 
 	glm::mat4 GetView() 
 	{
 		return glm::lookAt(pos, pos + front, up);
 	}
+	//gluLookAt(camera[0], camera[1], camera[2], /* look from camera XYZ */ 0, 0, 0, /* look at the origin */ 0, 1, 0); /* positive Y up vector */ 
+	//glRotatef(orbitDegrees, 0.f, 1.f, 0.f);/* orbit the Y axis */ /* ...where orbitDegrees is derived from mouse motion */ 
+	//glCallList(SCENE); /* draw the scene */
+	
 
 	void UpdatePosition() {
 		if (mode == BirdsEye)
@@ -79,6 +84,18 @@ struct Camera
 		}
 		else if (CHECK_BIT(keysPressed, D)) {
 			pos = pos + (glm::normalize(glm::cross(front, up)) * speed);
+		} 
+		else if (CHECK_BIT(keysPressed, I)) {
+			front = front + glm::normalize(front + up) * viewSpeed; // can't use up vector, since it always points up (and not orthogonal to the front vect)
+		}
+		else if (CHECK_BIT(keysPressed, K)) {
+			front = front + glm::normalize(front - up) * viewSpeed;
+		}
+		else if (CHECK_BIT(keysPressed, J)) {
+			front = front - glm::normalize(glm::cross(front, up)) * viewSpeed;
+		}
+		else if (CHECK_BIT(keysPressed, L)) {
+			front = front + glm::normalize(glm::cross(front, up)) * viewSpeed; // first speed then normal? Or other way around
 		}
 	}
 
@@ -89,8 +106,8 @@ struct Camera
 			front = glm::vec3(0, 0, -1.0);
 		}
 		else {
-			pos = glm::vec3(0.0f, 10.0f, 10.0f);
-			//front = glm::vec3(0, -1.0, 0);
+			pos = glm::vec3(0.0f, 5.0f, 10.0f);
+			front = glm::vec3(0, -0.4, -1.0); // bird eye angle vector
 		}
 	}
 
@@ -166,6 +183,18 @@ void KeyDown(unsigned char key, int a, int b)
 		case 'd':
 			keysPressed |= (1 << D);
 			break;
+		case 'i':
+			keysPressed |= (1 << I);
+			break;
+		case 'k':
+			keysPressed |= (1 << K);
+			break;
+		case 'j':
+			keysPressed |= (1 << J);
+			break;
+		case 'l':
+			keysPressed |= (1 << L);
+			break;
 	}
 }
 
@@ -182,6 +211,18 @@ void KeyRelease(unsigned char key, int a, int b) {
 		break;
 	case 'd':
 		keysPressed &= ~(1 << D);
+		break;
+	case 'i':
+		keysPressed &= ~(1 << I);
+		break;
+	case 'k':
+		keysPressed &= ~(1 << K);
+		break;
+	case 'j':
+		keysPressed &= ~(1 << J);
+		break;
+	case 'l':
+		keysPressed &= ~(1 << L);
 		break;
 	}
 }
