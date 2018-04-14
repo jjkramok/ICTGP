@@ -15,7 +15,8 @@ Camera::Camera(glm::vec3 pos, glm::vec3 dir, glm::vec3 front, glm::vec3 up) :
 Camera::Camera(glm::vec3 pos, glm::vec3 dir) :
         m_Pos(pos),
         m_Direction(dir) {
-
+        m_Front = glm::vec3(0.0, 0.0, -1.0);
+        m_Up = glm::vec3(0.0, 1.0, 0.0);
 }
 
 Camera::~Camera() {}

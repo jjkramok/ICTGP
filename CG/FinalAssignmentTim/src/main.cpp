@@ -19,6 +19,7 @@
 #include "Shader/Shader.h"
 #include "Object.h"
 #include "Shader/LambertShader.h"
+#include "Shader/BasicShader.h"
 
 using namespace std;
 
@@ -28,12 +29,11 @@ enum ViewMode {None = -1, Walking = 0, BirdsEye = 1};
 /* Constants and global variables */
 const int Width = 960, Height = 540;
 ViewMode mode = Walking;
-Camera *camera = new Camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+Camera *camera = new Camera(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 float deltaTime = 0.0f; // Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 
-glm::mat4 mvp;
 glm::mat4 proj = glm::mat4();//glm::perspective(glm::radians(45.0f), (float) Width / (float) Height, 0.1f, 100.0f); /* fov / zoom, aspect ratio, near clipping plane, far clipping plane*/
 //glm::mat4 proj = glm::ortho(0.0f, Width * 1.0f, 0.0f, Height * 1.0f, -1.0f, 1.0f); /* left edge, right edge, bottom edge, top edge, near plane, far plane. Everything outside will be culled */
 glm::mat4 view = glm::mat4();//glm::translate(glm::mat4(1.0f), glm::vec3(-100, 0, 0));
@@ -45,17 +45,17 @@ float speed = 0.05f;
 
 /* Main functions */
 void HandleKeyPress(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    speed = 25.0f * deltaTime;
+    speed = 150.0f * deltaTime;
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwDestroyWindow(window);
     } else if (key == GLFW_KEY_C && action == GLFW_RELEASE) {
         if (mode == Walking) {
             mode = BirdsEye;
-            camera->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+            camera->SetPosition(glm::vec3(0.0f, 25.0f, 0.0f));
             camera->SetDirection(glm::vec3(glm::radians(-45.0f), glm::radians(-45.0f), 0));
         } else {
             mode = Walking;
-            camera->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+            camera->SetPosition(glm::vec3(0.0f, 0.0f, 10.0f));
             camera->SetDirection(glm::vec3(glm::radians(-90.0f), 0, 0));
         }
         cout << "changed mode to: " << (mode ? "Walking" : "Birds Eye") << endl;
@@ -106,6 +106,9 @@ int main() {
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
 
+    GLCall(glEnable(GL_DEPTH_TEST));
+    GLCall(glClear(GL_DEPTH_BUFFER_BIT));
+
     // Initialize OpenGL rendering context.
     if (glewInit() != GLEW_OK) {
         cout << "Glew couldn't initialize!" << endl;
@@ -123,7 +126,7 @@ int main() {
     {
         // Enable alpha rendering / blending
         GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)); // Setup basic transparency rendering.
-        GLCall(glBlendEquation(GL_FUNC_ADD)); // Specify how to combine / handle overwriting on the target buffer.
+        //GLCall(glBlendEquation(GL_FUNC_ADD)); // Specify how to combine / handle overwriting on the target buffer.
         GLCall(glEnable(GL_BLEND)); // Enable transparency rendering.
 
         // Specify culling method
@@ -140,9 +143,30 @@ int main() {
                                 100.0f // far cull plane
         );
 
+        float ps[] = {
+                -0.5f, -0.5f,
+                0.5f, -0.5f,
+                0.5f, 0.5f,
+                -0.5f, 0.5f,
+        };
+
+        unsigned int is[] = {
+                0, 1, 2,
+                2, 3, 0,
+        };
+
+        VertexArray vao;
+        VertexBuffer vertexBuffer(ps, 2 * 4 * sizeof(float));
+        VertexBufferLayout vbl;
+        vbl.PushFloat(3);
+        vao.AddBuffer(vertexBuffer, vbl);
+        vao.Unbind();
+        IndexBuffer ibo(is, 6);
+
         Texture *yellowbrk = Texture::CreateBMP("./../res/textures/Yellobrk.bmp");
 
-        Model *model = new Model("../res/objs/box.obj");
+        Model *boxModel = new Model("../res/objs/box.obj");
+        Model *teaModel = new Model("../res/objs/teapot.obj");
 
         Material *material = new Material;
         material->ambientColor = glm::vec3(0.3f, 0.3f, 0.2f);
@@ -151,12 +175,22 @@ int main() {
         material->power = 100;
 
         Shader *lambert = new LambertShader();
+        Shader *basic = new BasicShader();
 
-        Object *object = new Object(model, yellowbrk, lambert, material);
+        Object *boxObj = new Object(boxModel, yellowbrk, lambert, material);
+        Object *teaObj = new Object(teaModel, nullptr, basic, nullptr);
 
+        vector<Object*> objs;
+        objs.push_back(boxObj);
+        objs.push_back(teaObj);
+
+        for (auto &&obj : objs) {
+            obj->Translate(0, 0, 0);
+        }
+
+        int count = 0;
         // Loop until window is closed by the user.
         while (!glfwWindowShouldClose(window)) {
-            glfwPollEvents();
             renderer.Clear();
 
             /* Update a delta time variable to average out movement on different setups. */
@@ -164,11 +198,21 @@ int main() {
             deltaTime = currentFrame - lastFrame;
             lastFrame = currentFrame;
 
+            count += 1;
+            if (!(count % 80))
+                cout << "rendering" << endl;
+
             view = camera->UpdateView(); // Update view matrix
             //mvp = proj * view * model; // OpenGL uses column major ordering, so multiple in reverse order.
-            renderer.Draw(*object, view, proj);
+            for (auto &&obj : objs) {
+                renderer.Draw(*obj, view, proj);
+            }
+            vao.Bind();
+            renderer.Draw(vao, ibo, *basic);
+            vao.Unbind();
 
             glfwSwapBuffers(window);
+            glfwPollEvents();
         }
     }
 

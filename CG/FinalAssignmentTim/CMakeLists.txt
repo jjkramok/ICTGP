@@ -35,7 +35,7 @@ find_package(GLEW REQUIRED)
 find_package(PkgConfig)
 find_package(OpenGL REQUIRED)
 
-add_executable(${PROJECT_NAME} src/main.cpp src/Renderer.cpp src/Renderer.h src/MyMacros.h src/VertexBuffer.cpp src/VertexBuffer.h src/IndexBuffer.cpp src/IndexBuffer.h src/VertexArray.cpp src/VertexArray.h src/VertexBufferLayout.cpp src/VertexBufferLayout.h src/Shader/Shader.cpp src/Shader/Shader.h src/vendor/stb_images/stb_image.h src/vendor/stb_images/std_image.h.cpp src/Texture.cpp src/Texture.h src/vendor/objloader.cpp src/vendor/objloader.h src/vendor/texture.cpp src/vendor/texture.h src/Shader/LambertShader.cpp src/Shader/LambertShader.h src/Model.cpp src/Model.h src/Object.cpp src/Object.h src/Camera.cpp src/Camera.h src/MyMacros.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp src/Renderer.cpp src/Renderer.h src/MyMacros.h src/VertexBuffer.cpp src/VertexBuffer.h src/IndexBuffer.cpp src/IndexBuffer.h src/VertexArray.cpp src/VertexArray.h src/VertexBufferLayout.cpp src/VertexBufferLayout.h src/Shader/Shader.cpp src/Shader/Shader.h src/vendor/stb_images/stb_image.h src/vendor/stb_images/std_image.h.cpp src/Texture.cpp src/Texture.h src/vendor/objloader.cpp src/vendor/objloader.h src/vendor/texture.cpp src/vendor/texture.h src/Shader/LambertShader.cpp src/Shader/LambertShader.h src/Model.cpp src/Model.h src/Object.cpp src/Object.h src/Camera.cpp src/Camera.h src/MyMacros.cpp src/Shader/BasicShader.cpp src/Shader/BasicShader.h)
 
 # Very important to ensure GLEW links staticly.
 target_compile_definitions(${PROJECT_NAME} PRIVATE GLEW_STATIC)

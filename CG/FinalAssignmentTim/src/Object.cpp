@@ -35,23 +35,28 @@ void Object::Bind() const {
 
 void Object::CalculateRenderModelMatrix() const {
     m_RenderModelMatrix = m_ModelMatrix;
-    m_RenderModelMatrix = glm::translate(m_RenderModelMatrix, m_TranslateVector);
-    m_RenderModelMatrix = glm::scale(m_RenderModelMatrix, m_ScaleVector);
-    m_RenderModelMatrix = glm::rotate(m_RenderModelMatrix, glm::radians(m_RotateX), glm::vec3(1.f, 0.f, 0.f));
-    m_RenderModelMatrix = glm::rotate(m_RenderModelMatrix, glm::radians(m_RotateY), glm::vec3(0.f, 1.f, 0.f));
-    m_RenderModelMatrix = glm::rotate(m_RenderModelMatrix, glm::radians(m_RotateZ), glm::vec3(0.f, 0.f, 1.f));
+    //m_RenderModelMatrix = glm::translate(m_RenderModelMatrix, m_TranslateVector);
+    //m_RenderModelMatrix = glm::scale(m_RenderModelMatrix, m_ScaleVector);
+    //m_RenderModelMatrix = glm::rotate(m_RenderModelMatrix, glm::radians(m_RotateX), glm::vec3(1.f, 0.f, 0.f));
+    //m_RenderModelMatrix = glm::rotate(m_RenderModelMatrix, glm::radians(m_RotateY), glm::vec3(0.f, 1.f, 0.f));
+    //m_RenderModelMatrix = glm::rotate(m_RenderModelMatrix, glm::radians(m_RotateZ), glm::vec3(0.f, 0.f, 1.f));
 }
 
 void Object::Scale(float x, float y, float z) {
-    m_ScaleVector = glm::vec3(x, y, z);
+    m_ModelMatrix = glm::scale(m_ModelMatrix, glm::vec3(x, y, z));
+    //m_ScaleVector = glm::vec3(x, y, z);
 }
 
 void Object::Translate(float x, float y, float z) {
-    m_TranslateVector = glm::vec3(x, y, z);
+    m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(x, y, z));
+    //m_TranslateVector = glm::vec3(x, y, z);
 }
 
 void Object::Rotate(float x, float y, float z) {
-    m_RotateX = x;
-    m_RotateY = y;
-    m_RotateZ = z;
+    cout << " Rotate currently not supported!! " << endl;
+    // TODO: angle
+    //m_ModelMatrix = glm::rotate(m_ModelMatrix, 45, glm::vec3(x, y, z));
+    //m_RotateX = x;
+    //m_RotateY = y;
+    //m_RotateZ = z;
 }

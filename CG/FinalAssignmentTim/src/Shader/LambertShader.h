@@ -30,7 +30,7 @@ public:
 
     void SetUniformMatPower(float power);
 
-    void SetPreRenderUniforms(const Object &d3Object, const glm::mat4 &view, const glm::mat4 &projection) override;
+    void SetPreRenderUniforms(const Object &object, const glm::mat4 &view, const glm::mat4 &projection) override;
 };
 
 
