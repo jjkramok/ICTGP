@@ -16,6 +16,7 @@ uniform vec3 matAmbient;
 uniform vec3 matDiffuse;
 uniform vec3 matSpecular;
 uniform float matPower;
+uniform vec3 u_Colour;
 
 uniform sampler2D texsampler;
 
@@ -45,5 +46,11 @@ void main()
     vec3 specular = pow(max(dot(R, V), 0.0), matPower) * matSpecular;
 
     // Write final color to the framebuffer
-    gl_FragColor = vec4(ambient + diffuse + specular, 1.0);
+	if (applyTexture == 1) {
+		gl_FragColor = vec4(ambient + diffuse + specular, 1.0);
+	} 
+	else 
+	{
+		gl_FragColor = vec4(u_Colour, 1.0);
+	}
 }

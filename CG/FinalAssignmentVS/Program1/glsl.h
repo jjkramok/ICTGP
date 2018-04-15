@@ -4,6 +4,8 @@
 #include <GL/freeglut.h>
 #include <fstream>
 
+#include "MyMacros.h"
+
 using namespace std;
 
 class glsl

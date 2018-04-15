@@ -27,15 +27,15 @@ char* glsl::readFile(const char* filename)
 bool glsl::compiledStatus(GLint shaderID)
 {
 	GLint compiled = 0;
-	glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compiled);
+	GLCall(glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compiled));
 	if (compiled) {
 		return true;
 	}
 	else {
 		GLint logLength;
-		glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &logLength);
+		GLCall(glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &logLength));
 		char* msgBuffer = new char[logLength];
-		glGetShaderInfoLog(shaderID, logLength, NULL, msgBuffer);
+		GLCall(glGetShaderInfoLog(shaderID, logLength, NULL, msgBuffer));
 		printf("%s\n", msgBuffer);
 		delete (msgBuffer);
 		return false;
@@ -44,9 +44,9 @@ bool glsl::compiledStatus(GLint shaderID)
 
 GLuint glsl::makeVertexShader(const char* shaderSource)
 {
-	GLuint vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShaderID, 1, (const GLchar**)&shaderSource, NULL);
-	glCompileShader(vertexShaderID);
+	GLCall(GLuint vertexShaderID = glCreateShader(GL_VERTEX_SHADER));
+	GLCall(glShaderSource(vertexShaderID, 1, (const GLchar**)&shaderSource, NULL));
+	GLCall(glCompileShader(vertexShaderID));
 	bool compiledCorrectly = compiledStatus(vertexShaderID);
 	if (compiledCorrectly)
 	{
@@ -57,9 +57,9 @@ GLuint glsl::makeVertexShader(const char* shaderSource)
 
 GLuint glsl::makeFragmentShader(const char* shaderSource)
 {
-	GLuint fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShaderID, 1, (const GLchar**)&shaderSource, NULL);
-	glCompileShader(fragmentShaderID);
+	GLCall(GLuint fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER));
+	GLCall(glShaderSource(fragmentShaderID, 1, (const GLchar**)&shaderSource, NULL));
+	GLCall(glCompileShader(fragmentShaderID));
 	//delete[] source;
 	bool compiledCorrectly = compiledStatus(fragmentShaderID);
 	if (compiledCorrectly) {
@@ -70,9 +70,9 @@ GLuint glsl::makeFragmentShader(const char* shaderSource)
 
 GLuint glsl::makeShaderProgram(GLuint vertexShaderID, GLuint fragmentShaderID)
 {
-	GLuint shaderID = glCreateProgram();
-	glAttachShader(shaderID, vertexShaderID);
-	glAttachShader(shaderID, fragmentShaderID);
-	glLinkProgram(shaderID);
+	GLCall(GLuint shaderID = glCreateProgram());
+	GLCall(glAttachShader(shaderID, vertexShaderID));
+	GLCall(glAttachShader(shaderID, fragmentShaderID));
+	GLCall(glLinkProgram(shaderID));
 	return shaderID;
 }
