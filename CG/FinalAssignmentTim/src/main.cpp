@@ -143,30 +143,10 @@ int main() {
                                 100.0f // far cull plane
         );
 
-        float ps[] = {
-                -0.5f, -0.5f,
-                0.5f, -0.5f,
-                0.5f, 0.5f,
-                -0.5f, 0.5f,
-        };
-
-        unsigned int is[] = {
-                0, 1, 2,
-                2, 3, 0,
-        };
-
-        VertexArray vao;
-        VertexBuffer vertexBuffer(ps, 2 * 4 * sizeof(float));
-        VertexBufferLayout vbl;
-        vbl.PushFloat(3);
-        vao.AddBuffer(vertexBuffer, vbl);
-        vao.Unbind();
-        IndexBuffer ibo(is, 6);
-
         Texture *yellowbrk = Texture::CreateBMP("./../res/textures/Yellobrk.bmp");
 
         Model *boxModel = new Model("../res/objs/box.obj");
-        Model *teaModel = new Model("../res/objs/teapot.obj");
+        //Model *teaModel = new Model("../res/objs/teapot.obj");
 
         Material *material = new Material;
         material->ambientColor = glm::vec3(0.3f, 0.3f, 0.2f);
@@ -178,11 +158,11 @@ int main() {
         Shader *basic = new BasicShader();
 
         Object *boxObj = new Object(boxModel, yellowbrk, lambert, material);
-        Object *teaObj = new Object(teaModel, nullptr, basic, nullptr);
+        //Object *teaObj = new Object(teaModel, nullptr, basic, nullptr);
 
         vector<Object*> objs;
         objs.push_back(boxObj);
-        objs.push_back(teaObj);
+        //objs.push_back(teaObj);
 
         for (auto &&obj : objs) {
             obj->Translate(0, 0, 0);
@@ -207,9 +187,6 @@ int main() {
             for (auto &&obj : objs) {
                 renderer.Draw(*obj, view, proj);
             }
-            vao.Bind();
-            renderer.Draw(vao, ibo, *basic);
-            vao.Unbind();
 
             glfwSwapBuffers(window);
             glfwPollEvents();
