@@ -147,6 +147,7 @@ int main() {
 
         Model *boxModel = new Model("../res/objs/box.obj");
         //Model *teaModel = new Model("../res/objs/teapot.obj");
+        Model *planeModel = new Model("../res/objs/MyPlane.obj");
 
         Material *material = new Material;
         material->ambientColor = glm::vec3(0.3f, 0.3f, 0.2f);
@@ -157,12 +158,15 @@ int main() {
         Shader *lambert = new LambertShader();
         Shader *basic = new BasicShader();
 
-        Object *boxObj = new Object(boxModel, yellowbrk, lambert, material);
+        Object *boxObj = new Object(boxModel, yellowbrk, basic, material);
         //Object *teaObj = new Object(teaModel, nullptr, basic, nullptr);
+        Object *planeObj = new Object(planeModel, yellowbrk, basic, nullptr);
+        planeObj->SetModel(glm::scale(glm::mat4(), glm::vec3(3, 1, 3)));
 
         vector<Object*> objs;
         objs.push_back(boxObj);
         //objs.push_back(teaObj);
+        objs.push_back(planeObj);
 
         // TODO remove
         for (auto &&obj : objs) {
