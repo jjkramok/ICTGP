@@ -164,6 +164,7 @@ int main() {
         objs.push_back(boxObj);
         //objs.push_back(teaObj);
 
+        // TODO remove
         for (auto &&obj : objs) {
             obj->Translate(0, 0, 0);
         }
